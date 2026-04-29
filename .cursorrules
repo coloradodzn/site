@@ -1,0 +1,21 @@
+You are helping build a personal portfolio website for a Media Design student.
+
+## Project
+- Static HTML/CSS/JS site, no frameworks
+- Files: index.html, bio.html, portfolio.html, lavoro-1/2/3.html, contatti.html
+- CSS in /css/style.css, images in /img/, scripts in /js/main.js
+
+## Design system
+- Primary: #FF4D0A
+- Accent: #000000
+- Background: #ffffff
+- Text: #FF4D0A
+- Title font: Public Sans
+- Body font: Inter
+
+## Rules
+- Always use CSS custom properties (--color-primary, etc.), never hardcode colors
+- Use semantic HTML5 tags (header, main, section, article, nav, footer)
+- All images must have descriptive alt attributes
+- CSS organized in sections: reset, variables, typography, layout, components, pages
+- Mobile-first: breakpoints at 768px (tablet) and 1024px (desktop)
