@@ -104,4 +104,24 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
 - Il pulsante `☰` è stato reinserito in tutti i file HTML ma controlla solo le icone social
 - Su mobile: `☰` mostra/nasconde i social con classe `.is-open`; da 768px il toggle scompare e i social sono sempre visibili
 - `main.js` aggiornato: il toggle gestisce `.navbar__social` invece di `.navbar__menu`
+
+### [1.8] — Dropdown social su mobile con nomi testuali
+- Su mobile il `☰` apre un dropdown verticale posizionato in assoluto sotto il pulsante, allineato a destra
+- Sfondo dropdown nero (`--color-accent`), testi con font Inter bold, colore `--color-primary`
+- Le icone SVG sono nascoste su mobile, mostrano solo il nome testuale (Instagram, Behance, LinkedIn)
+- Su desktop rimane tutto invariato: icone visibili, nomi nascosti, social in riga orizzontale
+
+### [1.9] — Fix dropdown social mobile
+- Rimossa sottolineatura viola sui nomi social (`text-decoration: none` su `.navbar__social-link`)
+- Dropdown bianco in light mode, nero in dark mode tramite `prefers-color-scheme`
+
+### [2.0] — Hero section 16:9 su mobile
+- Su mobile la hero usa `aspect-ratio: 16 / 9` invece di coprire tutta la viewport
+- Da 768px in su rimane fullscreen (`100dvh - 72px`)
+
+### [2.1] — Hover icone social allineato ai link navbar
+- Hover sulle icone social unificato con quello di Bio/Portfolio/Contatti: `scale(1.1) translateY(-2px)`
+- Light mode: le icone diventano nere al hover (`filter: brightness(0)`)
+- Dark mode: le icone diventano bianche al hover (`filter: brightness(0) invert(1)`)
+- Aggiornamento automatico su tutte le pagine tramite `style.css`
 - Hero aggiornata a `100dvh` per compatibilità con i browser mobile che hanno barre dell'interfaccia dinamiche
