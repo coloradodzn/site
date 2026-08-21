@@ -230,6 +230,18 @@
   display: block;
 }
 
+/* ───────────── TEST ───────────── */
+
+.test-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
 /* ───────────── FONT ───────────── */
 
 /* font titoli */

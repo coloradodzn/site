@@ -119,6 +119,11 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
 - Su mobile la hero usa `aspect-ratio: 16 / 9` invece di coprire tutta la viewport
 - Da 768px in su rimane fullscreen (`100dvh - 72px`)
 
+### [2.2] — Shadow on scroll
+- Aggiunto event listener su `window scroll` in `main.js`: quando `scrollY > 50` aggiunge classe `.scrolled` all'header
+- CSS: `.site-header.scrolled` con `box-shadow` evidente e padding navbar ridotto (`0.5rem`)
+- Transizione smooth su `box-shadow` e `padding` (`0.3s ease`)
+
 ### [2.1] — Hover icone social allineato ai link navbar
 - Hover sulle icone social unificato con quello di Bio/Portfolio/Contatti: `scale(1.1) translateY(-2px)`
 - Light mode: le icone diventano nere al hover (`filter: brightness(0)`)
