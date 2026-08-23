@@ -130,3 +130,24 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
 - Dark mode: le icone diventano bianche al hover (`filter: brightness(0) invert(1)`)
 - Aggiornamento automatico su tutte le pagine tramite `style.css`
 - Hero aggiornata a `100dvh` per compatibilità con i browser mobile che hanno barre dell'interfaccia dinamiche
+
+### [2.3] — Immagine hero aggiornata
+- Sostituita l'immagine di copertina della hero con `img/mainback.jpg`
+
+### [2.4] — Dark mode estesa a tutto il sito
+- Le CSS custom properties vengono ridefinite dentro `@media (prefers-color-scheme: dark)` su `:root`: essendo tutto basato su `var(--color-*)`, il tema scuro si applica automaticamente a tutte le pagine e sezioni, non più solo alla navbar
+- Dark mode: `--color-bg` → `#0d0d0d`, `--color-accent` → `#ffffff`; primary/text/surface (arancione) invariati
+- Aggiunta regola base su `body` che usa `var(--color-bg)` e `var(--color-text)`, così lo sfondo dell'intera pagina segue il tema
+- Consolidati gli hover della navbar: rimossi i blocchi duplicati light/dark, ora usano le variabili; mantenuto un solo blocco dark per il filtro delle icone social
+- Rimosso l'override che forzava lo sfondo dell'header al colore accent in dark (ora segue `--color-bg`)
+
+### [2.5] — Navbar in overlay sulla hero a tutta viewport
+- Aggiunta classe `home` al `<body>` della homepage per limitare l'overlay a questa pagina
+- `.home .site-header` reso `position: absolute` e trasparente: la navbar si sovrappone alla hero invece di stare in una barra separata
+- Hero portata a tutta la viewport (`100vh` con fallback `100dvh`), rimossi `aspect-ratio: 16/9` e la media query `calc(100dvh - 72px)`
+
+### [2.6] — URL homepage pulito (niente nome file visibile)
+- La homepage resta il file `index.html`: è l'unico nome servito di default alla radice del dominio e quindi mai mostrato nell'URL
+- I link del logo di tutte le pagine puntano ora alla radice `/` invece che a un file: cliccando il logo l'URL resta `coloradodesign.it/` senza `index.html` o altri nomi visibili
+- Eliminato `home.html` e il redirect provvisorio (avrebbero mostrato `/home.html` nell'URL)
+- Mantenuti sulla home la navbar in overlay, la hero fullscreen e la classe `home` sul `<body>`

@@ -37,6 +37,15 @@ body {
   background-color: var(--color-bg);
 }
 
+/* sulla home la navbar si sovrappone alla hero: header trasparente e in overlay */
+.home .site-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+}
+
 .navbar {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -209,15 +218,9 @@ body {
 
 .hero {
   width: 100vw;
-  aspect-ratio: 16 / 9;
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
-}
-
-@media (min-width: 768px) {
-  .hero {
-    height: calc(100dvh - 72px);
-    aspect-ratio: unset;
-  }
 }
 
 .hero__img {
