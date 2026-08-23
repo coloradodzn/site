@@ -151,3 +151,11 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
 - I link del logo di tutte le pagine puntano ora alla radice `/` invece che a un file: cliccando il logo l'URL resta `coloradodesign.it/` senza `index.html` o altri nomi visibili
 - Eliminato `home.html` e il redirect provvisorio (avrebbero mostrato `/home.html` nell'URL)
 - Mantenuti sulla home la navbar in overlay, la hero fullscreen e la classe `home` sul `<body>`
+
+### [2.7] — Navbar home trasparente con cambio colore allo scroll
+- Sulla home la navbar è `position: fixed`, resta visibile e in overlay sulla hero
+- In cima (stato `:not(.scrolled)`): elementi della navbar bianchi (link, toggle, logo e — su desktop — icone social) tramite la nuova variabile `--color-navbar-overlay`
+- Allo scroll (`> 50px`) `main.js` aggiunge la classe `.scrolled` all'header: sfondo pieno (`--color-bg`), ombra leggera ed elementi che tornano al colore di default (arancione `--color-primary`)
+- Transizioni morbide su sfondo, ombra, colore testi e filtro di logo/icone
+- Mantenute invariate le proprietà hover esistenti degli elementi della navbar (scale + colore)
+- Comportamento coerente in dark/light mode (lo stato scrollato segue il tema tramite le variabili)

@@ -7,3 +7,13 @@ if (toggle && social) {
     toggle.setAttribute('aria-expanded', isOpen);
   });
 }
+
+const header = document.querySelector('.site-header');
+
+if (header) {
+  const updateScrolled = () => {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  };
+  updateScrolled();
+  window.addEventListener('scroll', updateScrolled, { passive: true });
+}

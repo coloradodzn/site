@@ -1,11 +1,12 @@
 /* ───────────── VARIABILI ───────────── */
 
 :root {
-  --color-primary:    #FF4D0A;   /* colore principale del brand */
-  --color-accent:     #000000;   /* colore secondario / CTA */
-  --color-bg:         #ffffff;   /* sfondo generale */
-  --color-text:       #FF4D0A;   /* testo principale */
-  --color-surface:    #FF4D0A;   /* sfondo card o sezioni alternate */
+  --color-primary:        #FF4D0A;   /* colore principale del brand */
+  --color-accent:         #000000;   /* colore secondario / CTA */
+  --color-bg:             #ffffff;   /* sfondo generale */
+  --color-text:           #FF4D0A;   /* testo principale */
+  --color-surface:        #FF4D0A;   /* sfondo card o sezioni alternate */
+  --color-navbar-overlay: #ffffff;   /* elementi navbar sopra la hero (resta bianco in entrambi i temi) */
 }
 
 /* le stesse variabili cambiano valore quando il dispositivo è in dark mode,
@@ -37,13 +38,38 @@ body {
   background-color: var(--color-bg);
 }
 
-/* sulla home la navbar si sovrappone alla hero: header trasparente e in overlay */
+/* sulla home la navbar si sovrappone alla hero: header trasparente e in overlay,
+   fisso in alto così resta visibile e cambia aspetto allo scroll */
 .home .site-header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   background-color: transparent;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* home, in cima (non ancora scrollata): elementi della navbar bianchi sopra la hero */
+.home .site-header:not(.scrolled) .navbar__link,
+.home .site-header:not(.scrolled) .navbar__toggle {
+  color: var(--color-navbar-overlay);
+}
+
+.home .site-header:not(.scrolled) .navbar__logo-img {
+  filter: brightness(0) invert(1);
+}
+
+/* home, dopo lo scroll: sfondo pieno, ombra e ritorno degli elementi al colore di default (arancione) */
+.home .site-header.scrolled {
+  background-color: var(--color-bg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* su desktop le icone social sono nella barra sopra la hero: bianche in cima */
+@media (min-width: 768px) {
+  .home .site-header:not(.scrolled) .navbar__social-link img {
+    filter: brightness(0) invert(1);
+  }
 }
 
 .navbar {
@@ -64,6 +90,7 @@ body {
   height: 40px;
   width: auto;
   display: block;
+  transition: filter 0.3s ease;
 }
 
 .navbar__toggle {
@@ -75,7 +102,7 @@ body {
   cursor: pointer;
   grid-column: 3;
   justify-self: end;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, color 0.3s ease;
 }
 
 .navbar__toggle:hover {
@@ -139,6 +166,7 @@ body {
   width: auto;
   display: block;
   filter: brightness(0) saturate(100%) invert(38%) sepia(90%) saturate(1800%) hue-rotate(358deg) brightness(108%);
+  transition: filter 0.3s ease;
 }
 
 .navbar__social-name {
