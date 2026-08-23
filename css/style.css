@@ -8,6 +8,26 @@
   --color-surface:    #FF4D0A;   /* sfondo card o sezioni alternate */
 }
 
+/* le stesse variabili cambiano valore quando il dispositivo è in dark mode,
+   così l'intero sito (tutte le pagine e sezioni) segue il tema automaticamente */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary:  #FF4D0A;   /* l'arancione del brand resta invariato */
+    --color-accent:   #ffffff;   /* il secondario diventa chiaro per contrasto */
+    --color-bg:       #0d0d0d;   /* sfondo generale scuro */
+    --color-text:     #FF4D0A;   /* testo principale */
+    --color-surface:  #FF4D0A;   /* sfondo card o sezioni alternate */
+  }
+}
+
+/* ───────────── BASE ───────────── */
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Inter", sans-serif;
+}
+
 /* ───────────── NAVBAR ───────────── */
 
 .site-header {
@@ -157,53 +177,31 @@
   }
 }
 
-/* ── LIGHT MODE ── */
-@media (prefers-color-scheme: light) {
-  .navbar__link:hover {
-    color: var(--color-accent);
-  }
-
-  .navbar__social-link:hover {
-    transform: scale(1.1) translateY(-2px);
-  }
-
-  .navbar__social-link:hover img {
-    filter: brightness(0);
-  }
-
-  .navbar__social-link:hover .navbar__social-name {
-    color: var(--color-accent);
-  }
-
-  .navbar__social.is-open {
-    background-color: var(--color-bg);
-  }
+/* stati hover: usano le variabili, quindi funzionano sia in light che in dark */
+.navbar__link:hover {
+  color: var(--color-accent);
 }
 
-/* ── DARK MODE ── */
+.navbar__social-link:hover {
+  transform: scale(1.1) translateY(-2px);
+}
+
+.navbar__social-link:hover img {
+  filter: brightness(0);
+}
+
+.navbar__social-link:hover .navbar__social-name {
+  color: var(--color-accent);
+}
+
+.navbar__social.is-open {
+  background-color: var(--color-bg);
+}
+
+/* in dark mode l'icona social all'hover deve diventare chiara invece che nera */
 @media (prefers-color-scheme: dark) {
-  .site-header {
-    background-color: var(--color-accent);
-  }
-
-  .navbar__link:hover {
-    color: var(--color-bg);
-  }
-
-  .navbar__social-link:hover {
-    transform: scale(1.1) translateY(-2px);
-  }
-
   .navbar__social-link:hover img {
     filter: brightness(0) invert(1);
-  }
-
-  .navbar__social-link:hover .navbar__social-name {
-    color: var(--color-bg);
-  }
-
-  .navbar__social.is-open {
-    background-color: var(--color-accent);
   }
 }
 
