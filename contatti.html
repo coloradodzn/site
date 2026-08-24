@@ -3,32 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contatti — Portfolio</title>
-  <meta name="description" content="Contatta [Nome Cognome] — studente di Media Design disponibile per collaborazioni e progetti.">
+  <title data-i18n="title.contatti">Contatti — Portfolio</title>
+  <meta name="description" content="Contatta [Nome Cognome] — studente di Media Design disponibile per collaborazioni e progetti." data-i18n-content="desc.contatti">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <header class="site-header">
-    <nav class="navbar" aria-label="Navigazione principale">
-      <a href="/" class="navbar__logo" aria-label="Torna alla homepage">
-        <img src="img/mylogo.png" alt="Logo — homepage" class="navbar__logo-img">
+    <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
+      <a href="/" class="navbar__logo" aria-label="Torna alla homepage" data-i18n-aria-label="a11y.home">
+        <img src="img/mylogo.png" alt="Logo — homepage" class="navbar__logo-img" data-i18n-alt="logo.alt">
       </a>
       <ul class="navbar__menu" id="navbar-menu">
-        <li><a href="bio.html" class="navbar__link">Bio</a></li>
-        <li><a href="portfolio.html" class="navbar__link">Portfolio</a></li>
-        <li><a href="contatti.html" class="navbar__link">Contatti</a></li>
+        <li><a href="bio.html" class="navbar__link" data-i18n="nav.bio">Bio</a></li>
+        <li><a href="portfolio.html" class="navbar__link" data-i18n="nav.portfolio">Portfolio</a></li>
+        <li><a href="contatti.html" class="navbar__link" data-i18n="nav.contatti">Contatti</a></li>
       </ul>
-      <button class="navbar__toggle" aria-label="Apri social" aria-expanded="false" aria-controls="navbar-social">☰</button>
-      <ul class="navbar__social" id="navbar-social">
-        <li><a href="https://www.instagram.com/colorado.design/" class="navbar__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="img/icon-instagram.svg" alt="Instagram"><span class="navbar__social-name">Instagram</span></a></li>
-        <li><a href="https://www.behance.net/coloradodzn" class="navbar__social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer"><img src="img/icon-behance.svg" alt="Behance"><span class="navbar__social-name">Behance</span></a></li>
-        <li><a href="https://www.linkedin.com/in/colorado-design-977297308/" class="navbar__social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><img src="img/icon-linkedin.svg" alt="LinkedIn"><span class="navbar__social-name">LinkedIn</span></a></li>
-      </ul>
+      <div class="navbar__actions">
+        <div class="navbar__lang" role="group" aria-label="Selettore lingua" data-i18n-aria-label="a11y.lang">
+          <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
+          <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
+          <button type="button" class="navbar__lang-btn" data-lang="fr">FR</button>
+          <button type="button" class="navbar__lang-btn" data-lang="es">ES</button>
+        </div>
+        <button type="button" class="navbar__theme-toggle" aria-label="Cambia tema" data-i18n-aria-label="a11y.theme">☾</button>
+        <button class="navbar__toggle" aria-label="Apri social" data-i18n-aria-label="a11y.openSocial" aria-expanded="false" aria-controls="navbar-social">☰</button>
+        <ul class="navbar__social" id="navbar-social">
+          <li><a href="https://www.instagram.com/colorado.design/" class="navbar__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="img/icon-instagram.svg" alt="Instagram"><span class="navbar__social-name">Instagram</span></a></li>
+          <li><a href="https://www.behance.net/coloradodzn" class="navbar__social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer"><img src="img/icon-behance.svg" alt="Behance"><span class="navbar__social-name">Behance</span></a></li>
+          <li><a href="https://www.linkedin.com/in/colorado-design-977297308/" class="navbar__social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><img src="img/icon-linkedin.svg" alt="LinkedIn"><span class="navbar__social-name">LinkedIn</span></a></li>
+        </ul>
+      </div>
     </nav>
   </header>
 
@@ -37,5 +46,6 @@
   </main>
 
   <script src="js/main.js"></script>
+  <script src="js/i18n.js"></script>
 </body>
 </html>

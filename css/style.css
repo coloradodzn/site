@@ -7,12 +7,15 @@
   --color-text:           #FF4D0A;   /* testo principale */
   --color-surface:        #FF4D0A;   /* sfondo card o sezioni alternate */
   --color-navbar-overlay: #ffffff;   /* elementi navbar sopra la hero (resta bianco in entrambi i temi) */
+  --font-title:           "Outfit", sans-serif;   /* titoli */
+  --font-body:            "Inter", sans-serif;    /* testi */
 }
 
 /* le stesse variabili cambiano valore quando il dispositivo è in dark mode,
-   così l'intero sito (tutte le pagine e sezioni) segue il tema automaticamente */
+   così l'intero sito (tutte le pagine e sezioni) segue il tema automaticamente.
+   Il :not([data-theme="light"]) permette all'utente di forzare il tema chiaro dal pulsante. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --color-primary:  #FF4D0A;   /* l'arancione del brand resta invariato */
     --color-accent:   #ffffff;   /* il secondario diventa chiaro per contrasto */
     --color-bg:       #0d0d0d;   /* sfondo generale scuro */
@@ -21,12 +24,25 @@
   }
 }
 
+/* scelta manuale dal pulsante: forza il tema scuro indipendentemente dal dispositivo */
+:root[data-theme="dark"] {
+  --color-primary:  #FF4D0A;
+  --color-accent:   #ffffff;
+  --color-bg:       #0d0d0d;
+  --color-text:     #FF4D0A;
+  --color-surface:  #FF4D0A;
+}
+
 /* ───────────── BASE ───────────── */
 
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
 }
 
 /* ───────────── NAVBAR ───────────── */
@@ -51,12 +67,22 @@ body {
 
 /* home, in cima (non ancora scrollata): elementi della navbar bianchi sopra la hero */
 .home .site-header:not(.scrolled) .navbar__link,
-.home .site-header:not(.scrolled) .navbar__toggle {
+.home .site-header:not(.scrolled) .navbar__toggle,
+.home .site-header:not(.scrolled) .navbar__lang-btn,
+.home .site-header:not(.scrolled) .navbar__theme-toggle {
   color: var(--color-navbar-overlay);
 }
 
 .home .site-header:not(.scrolled) .navbar__logo-img {
   filter: brightness(0) invert(1);
+}
+
+/* home, navbar trasparente: al passaggio del mouse gli elementi diventano arancioni */
+.home .site-header:not(.scrolled) .navbar__link:hover,
+.home .site-header:not(.scrolled) .navbar__toggle:hover,
+.home .site-header:not(.scrolled) .navbar__lang-btn:hover,
+.home .site-header:not(.scrolled) .navbar__theme-toggle:hover {
+  color: var(--color-primary);
 }
 
 /* home, dopo lo scroll: sfondo pieno, ombra e ritorno degli elementi al colore di default (arancione) */
@@ -69,6 +95,11 @@ body {
 @media (min-width: 768px) {
   .home .site-header:not(.scrolled) .navbar__social-link img {
     filter: brightness(0) invert(1);
+  }
+
+  /* al passaggio del mouse tornano arancioni come gli altri elementi */
+  .home .site-header:not(.scrolled) .navbar__social-link:hover img {
+    filter: brightness(0) saturate(100%) invert(38%) sepia(90%) saturate(1800%) hue-rotate(358deg) brightness(108%);
   }
 }
 
@@ -93,6 +124,63 @@ body {
   transition: filter 0.3s ease;
 }
 
+/* contenitore degli elementi a destra: selettore lingua, toggle e social */
+.navbar__actions {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* selettore lingua */
+.navbar__lang {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.navbar__lang-btn {
+  background: none;
+  border: none;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 0.15rem 0.2rem;
+  opacity: 0.55;
+  transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.navbar__lang-btn:hover {
+  transform: scale(1.1) translateY(-2px);
+}
+
+.navbar__lang-btn.is-active {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* pulsante cambio tema (light/dark) */
+.navbar__theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 0.15rem 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.navbar__theme-toggle:hover {
+  transform: scale(1.1) translateY(-2px);
+}
+
 .navbar__toggle {
   display: block;
   background: none;
@@ -100,8 +188,6 @@ body {
   font-size: 1.5rem;
   color: var(--color-primary);
   cursor: pointer;
-  grid-column: 3;
-  justify-self: end;
   transition: transform 0.2s ease, color 0.3s ease;
 }
 
@@ -191,6 +277,19 @@ body {
     font-size: 1rem;
   }
 
+  .navbar__actions {
+    gap: 1.25rem;
+  }
+
+  .navbar__lang {
+    gap: 0.25rem;
+  }
+
+  .navbar__lang-btn {
+    font-size: 0.85rem;
+    padding: 0.15rem 0.3rem;
+  }
+
   .navbar__social {
     display: flex;
     flex-direction: row;
@@ -274,8 +373,8 @@ body {
 /* ───────────── FONT ───────────── */
 
 /* font titoli */
-.public-sans {
-  font-family: "Public Sans", sans-serif;
+.outfit {
+  font-family: var(--font-title);
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
@@ -283,7 +382,7 @@ body {
 
 /* font testi */
 .inter {
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-body);
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;

@@ -159,3 +159,32 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
 - Transizioni morbide su sfondo, ombra, colore testi e filtro di logo/icone
 - Mantenute invariate le proprietà hover esistenti degli elementi della navbar (scale + colore)
 - Comportamento coerente in dark/light mode (lo stato scrollato segue il tema tramite le variabili)
+
+### [2.8] — Sito multilingua (IT / EN / FR / ES)
+- Aggiunto selettore lingua nella navbar di **tutte le pagine** (sigle IT / EN / FR / ES, dentro il nuovo contenitore `.navbar__actions` insieme a toggle e social)
+- Creato `js/i18n.js`: dizionario delle traduzioni per italiano, inglese, francese e spagnolo + logica di applicazione
+- Traduzione dinamica via attributi `data-i18n` (testo), `data-i18n-alt`, `data-i18n-aria-label` e `data-i18n-content` (per `alt`, `aria-label` e `meta description`)
+- Tradotti: link di navigazione, `<title>` e meta description di ogni pagina, aria-label e alt, testo di prova della home
+- Alla prima visita la lingua viene rilevata dal browser (fallback italiano); la scelta dell'utente viene salvata in `localStorage` e mantenuta tra pagine e visite
+- L'attributo `lang` di `<html>` viene aggiornato in base alla lingua selezionata
+- Stile del selettore coerente con overlay/scrollato e dark/light mode; compatto su mobile e più ampio da 768px
+- Incluso `js/i18n.js` in tutte le 7 pagine
+
+### [2.9] — Hover arancione sulla navbar trasparente (home)
+- Ripristinato l'effetto hover con cambio colore quando la navbar è trasparente in cima alla home: link, toggle e sigle lingua diventano arancioni (`--color-primary`) al passaggio del mouse
+- Su desktop anche le icone social (bianche in overlay) tornano arancioni all'hover
+- Prima, nello stato trasparente, la regola del colore bianco aveva la precedenza e l'hover cambiava solo la scala, non il colore
+- Lo stato scrollato (navbar bianca) mantiene il comportamento hover già presente
+
+### [3.0] — Pulsante tema chiaro/scuro manuale
+- Aggiunto pulsante di cambio tema nella navbar (`.navbar__theme-toggle`) in tutte le pagine, accanto al selettore lingua (icona provvisoria ☾/☀, in attesa dell'icona definitiva)
+- Rifattorizzata la dark mode: oltre all'automatico `@media (prefers-color-scheme: dark)`, il tema si può forzare via attributo `data-theme` su `<html>` (`:root[data-theme="dark"]` e `:root:not([data-theme="light"])`)
+- Logica in `main.js`: alla prima visita si segue il sistema; al click la scelta diventa manuale e viene salvata in `localStorage` (mantenuta tra pagine e visite)
+- Aggiunta chiave di traduzione `a11y.theme` (IT/EN/FR/ES) per l'etichetta accessibile del pulsante
+- Stile del pulsante coerente con overlay/scrollato e hover arancione della navbar
+
+### [3.1] — Font titoli: Outfit
+- Sostituito **Public Sans** con **Outfit** come font dei titoli; **Inter** resta per i testi (coppia da 2 font, come richiesto dal brief)
+- Link Google Fonts aggiornato su tutte le pagine: `Outfit` (pesi 100–900) + `Inter`
+- Aggiunte variabili `--font-title` e `--font-body`; heading (`h1`–`h6`) usano Outfit di default
+- Classe `.public-sans` sostituita da `.outfit`; aggiornato `.cursorrules`
