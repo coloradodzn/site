@@ -1,12 +1,95 @@
+const nav = document.querySelector('.navbar');
 const toggle = document.querySelector('.navbar__toggle');
-const social = document.querySelector('.navbar__social');
+const menu = document.querySelector('.navbar__menu');
+const langRoot = document.querySelector('.navbar__lang');
+const langToggle = document.querySelector('.navbar__lang-toggle');
+const DESKTOP_NAV = 768;
 
-if (toggle && social) {
-  toggle.addEventListener('click', () => {
-    const isOpen = social.classList.toggle('is-open');
-    toggle.setAttribute('aria-expanded', isOpen);
+function isDesktopNav() {
+  return window.innerWidth >= DESKTOP_NAV;
+}
+
+function setMenuOpen(open) {
+  if (!toggle || !menu) return;
+  const next = open && !isDesktopNav();
+  menu.classList.toggle('is-open', next);
+  toggle.classList.toggle('is-open', next);
+  toggle.setAttribute('aria-expanded', String(next));
+  document.body.classList.toggle('nav-open', next);
+}
+
+function setLangOpen(open) {
+  if (!langRoot || !langToggle) return;
+  const next = open && !isDesktopNav();
+  langRoot.classList.toggle('is-open', next);
+  langToggle.setAttribute('aria-expanded', String(next));
+}
+
+if (toggle && menu) {
+  setMenuOpen(false);
+
+  toggle.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const open = !menu.classList.contains('is-open');
+    setLangOpen(false);
+    setMenuOpen(open);
   });
 }
+
+if (langToggle && langRoot) {
+  langToggle.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const open = !langRoot.classList.contains('is-open');
+    setMenuOpen(false);
+    setLangOpen(open);
+  });
+}
+
+document.querySelectorAll('.navbar__lang-btn').forEach((btn) => {
+  btn.addEventListener('click', () => setLangOpen(false));
+});
+
+document.addEventListener('click', (event) => {
+  if (!nav || nav.contains(event.target)) return;
+  setMenuOpen(false);
+  setLangOpen(false);
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  setMenuOpen(false);
+  setLangOpen(false);
+});
+
+window.addEventListener('resize', () => {
+  if (!isDesktopNav()) return;
+  setMenuOpen(false);
+  setLangOpen(false);
+  alignPortfolioDropdown();
+});
+
+function alignPortfolioDropdown() {
+  const label = document.querySelector('.navbar__dropdown-label');
+  const dropdown = document.querySelector('.navbar__dropdown');
+  const item = document.querySelector('.navbar__item--dropdown');
+  if (!label || !dropdown || !item) return;
+
+  if (!isDesktopNav()) {
+    dropdown.style.removeProperty('left');
+    return;
+  }
+
+  if (typeof CSS !== 'undefined' && CSS.supports('anchor-name', '--portfolio-label')) {
+    dropdown.style.removeProperty('left');
+    return;
+  }
+
+  const itemRect = item.getBoundingClientRect();
+  const labelRect = label.getBoundingClientRect();
+  dropdown.style.left = `${labelRect.left - itemRect.left}px`;
+}
+
+alignPortfolioDropdown();
 
 const header = document.querySelector('.site-header');
 
@@ -44,5 +127,53 @@ if (themeToggle) {
   themeToggle.addEventListener('click', () => {
     const next = (document.documentElement.getAttribute('data-theme') || currentTheme()) === 'dark' ? 'light' : 'dark';
     applyTheme(next, true);
+  });
+}
+
+const contactForm = document.querySelector('.contact-form');
+
+if (contactForm) {
+  const statusEl = contactForm.querySelector('.contact-form__status');
+
+  contactForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!statusEl) return;
+
+    statusEl.hidden = false;
+    statusEl.classList.remove('is-ok', 'is-err');
+    statusEl.textContent = '';
+
+    try {
+      const data = new FormData(contactForm);
+      const picked = contactForm.querySelector('input[name="subject"]:checked');
+      if (picked) {
+        const label = picked.closest('.contact-feather')?.querySelector('.contact-feather__name')?.textContent?.trim();
+        if (label) data.set('subject', label);
+        data.set('_subject', 'Nuovo contatto — ' + (label || picked.value));
+      }
+
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' }
+      });
+
+      const lang = document.documentElement.lang || 'it';
+      const dict = (typeof I18N !== 'undefined' && I18N[lang]) ? I18N[lang] : {};
+
+      if (response.ok) {
+        contactForm.reset();
+        statusEl.classList.add('is-ok');
+        statusEl.textContent = dict['contact.ok'] || 'Sent.';
+      } else {
+        statusEl.classList.add('is-err');
+        statusEl.textContent = dict['contact.err'] || 'Error.';
+      }
+    } catch (err) {
+      const lang = document.documentElement.lang || 'it';
+      const dict = (typeof I18N !== 'undefined' && I18N[lang]) ? I18N[lang] : {};
+      statusEl.classList.add('is-err');
+      statusEl.textContent = dict['contact.err'] || 'Error.';
+    }
   });
 }

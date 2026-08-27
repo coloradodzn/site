@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="title.bio">Bio — Portfolio</title>
-  <meta name="description" content="Biografia e background di [Nome Cognome], studente di Media Design." data-i18n-content="desc.bio">
+  <title data-i18n="title.about">About — Colorado</title>
+  <meta name="description" content="Colorado Creative Studio — media design practice. Identity, motion, print and digital." data-i18n-content="desc.about">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="page-cover page-bio">
+<body class="page-cover page-about">
 
   <div class="page-cover__bg" aria-hidden="true">
-    <img src="img/colosnow.jpeg" alt="Paesaggio innevato del Colorado, sfondo della pagina Bio">
+    <img src="img/colocanyon.jpeg" alt="Canyon del Colorado, sfondo della pagina About">
   </div>
   <div class="page-cover__scrim" aria-hidden="true"></div>
 
@@ -24,8 +24,8 @@
         <img src="img/mylogo.png" alt="Logo — homepage" class="navbar__logo-img" data-i18n-alt="logo.alt">
       </a>
       <ul class="navbar__menu" id="navbar-menu">
-          <li><a href="about.html" class="navbar__link">About</a></li>
-          <li><a href="bio.html" class="navbar__link is-active">Bio</a></li>
+          <li><a href="about.html" class="navbar__link is-active">About</a></li>
+          <li><a href="bio.html" class="navbar__link">Bio</a></li>
           <li class="navbar__item navbar__item--dropdown">
             <a href="portfolio.html" class="navbar__link navbar__dropdown-trigger" aria-haspopup="true" aria-expanded="false" id="navbar-portfolio-trigger"><span class="navbar__dropdown-label">Portfolio</span><span class="navbar__dropdown-chevron" aria-hidden="true"></span></a>
             <ul class="navbar__dropdown" id="navbar-portfolio-menu" role="menu" aria-label="Portfolio">
@@ -66,8 +66,8 @@
     </nav>
   </header>
 
-  <main>
-    
+  <main class="about">
+    <h1 id="about-title" class="visually-hidden">About</h1>
   </main>
 
   <footer class="site-footer">

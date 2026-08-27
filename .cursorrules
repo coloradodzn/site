@@ -13,6 +13,11 @@ You are helping build a personal portfolio website for a Media Design student.
 - Title font: Outfit
 - Body font: Inter
 
+## Design references (stile / layout)
+Principali: Drams, Williams, Stetson, Kemo Sabe, Filson, Sage East, Paper Crowns.
+Direzione: western/heritage + editorial portfolio + chiarezza minimal Rams.
+Dettaglio: `.cursor/rules/design-references.mdc`
+
 ## Rules
 - Always use CSS custom properties (--color-primary, etc.), never hardcode colors
 - Use semantic HTML5 tags (header, main, section, article, nav, footer)

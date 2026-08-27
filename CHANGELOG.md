@@ -7,6 +7,14 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
 
 ## [Unreleased]
 
+### [3.8] — Footer spacing + Privacy Policy
+- Colonne laterali del footer avvicinate di 50px al blocco centrale (desktop)
+- Nuova pagina `privacy.html` (informativa GDPR: titolare, dati, finalità, Formspree, diritti, cookie/localStorage)
+
+### [3.7] — FAQ Contatti + footer bianco
+- Aggiunta sezione FAQ accordion sotto il form (layout due colonne da tablet, testi provvisori)
+- Footer Contatti con sfondo bianco e testo brand (colore definitivo da definire)
+
 ### [0.1] — Struttura base e design system
 - Creata struttura completa di file e cartelle: `index.html`, `bio.html`, `portfolio.html`, `lavoro-1/2/3.html`, `contatti.html`, `/css`, `/img`, `/js`, `README.md`, `CHANGELOG.md`, `.cursorrules`
 - Aggiunte CSS custom properties in `style.css`: `--color-primary: #FF4D0A`, `--color-accent: #000000`, `--color-bg: #ffffff`, `--color-text: #FF4D0A`, `--color-surface: #FF4D0A`
@@ -188,3 +196,26 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
 - Link Google Fonts aggiornato su tutte le pagine: `Outfit` (pesi 100–900) + `Inter`
 - Aggiunte variabili `--font-title` e `--font-body`; heading (`h1`–`h6`) usano Outfit di default
 - Classe `.public-sans` sostituita da `.outfit`; aggiornato `.cursorrules`
+
+### [3.2] — Pagina Contact
+- [contatti.html](contatti.html): sfondo `mainback.jpg` a tutta viewport con overlay, navbar e footer **senza barra piena** (solo testi/icone, come la navbar overlay)
+- Layout: tavola `formcontact.png` al centro. Overlay: nome, email, 5 piume con etichetta visibile (soggetto, spiegazione accanto al titolo), messaggio con scrollbar, privacy tra messaggio e Send (25px più in basso, testo visibile ma contenuto). Timeline sulla colonna destra. Campi senza bordo. La piuma scelta arriva in mail come campo `subject` (es. Identità) e nell’oggetto Formspree. Nascosti i marker arancioni della lista timeline (niente più elenco numerato) e i pallini nativi dei radio sulle piume.
+- Form POST a Formspree `https://formspree.io/f/xnpaeboj`; conferma/errore in pagina via `main.js` (niente numero di telefono né nel form né tra i recapiti)
+- Footer a 3 colonne (My Info, Navigation, Social) + copyright e link Privacy
+- Navbar su tutte le pagine: About, Bio, Portfolio, Contact. About è la pagina professionale (`about.html`, contenuti ancora da inserire).
+
+### [3.3] — Menu hamburger mobile
+- Solo sotto i 768px: barra con logo + globo + tema + hamburger; About, Bio, Portfolio, Contatti nella tendina. Da desktop la navbar resta in linea (voci al centro, lingue, tema, social), hamburger e globo nascosti
+- Su Contact/About la header torna `position: fixed` overlay come la home: una regola successiva la forzava a `relative`, quindi la barra non restava agganciata e lo scroll si comportava diversamente
+
+### [3.4] — Form contatto più compatto
+- Ridotta la larghezza massima della tavola (`36rem` / `40rem` da 1024px): overlay in % e font in `cqi` scalano insieme, senza rifare i posizionamenti
+
+### [3.5] — Contact mobile (ripristinato)
+- Tolto il layout mobile che staccava il flusso dalla grafica e rimpiccioliva troppo la tavola (testi form sfasati). Overlay di nuovo come prima. In attesa di una versione PNG del form **senza** colonna flusso
+
+### [3.6] — Nuovo form Contact (card + rail)
+- Sostituita la tavola `formcontact.png` con layout HTML/CSS da design: card bianca + timeline laterale (Contact / Review / Kickoff / Launch)
+- Campi nativi (nome, email, select spedizione, messaggio), privacy, Formspree invariato
+- Mobile: card sopra, rail in riga sotto; da 768px form + colonna verticale a destra
+- Nuove chiavi i18n IT/EN/FR/ES per copy expedition

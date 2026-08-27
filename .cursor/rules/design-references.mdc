@@ -1,0 +1,25 @@
+---
+description: Design/layout references for Colorado portfolio pages
+alwaysApply: true
+---
+
+# Design references (prossime pagine)
+
+Usare queste reference come direzione primaria per stile, layout e atmosfera. Non copiare pixel-perfect: adattare al design system Colorado (primary `#FF4D0A`, Outfit/Inter, HTML/CSS/JS statico).
+
+## Reference
+- [Drams](https://drams.framer.website/?ref=httpster.net) — chiarezza Rams: poco chrome, gerarchia tipografica netta, UI onesta/funzionale
+- [Williams](https://williamss.webflow.io/) — portfolio: headline forti, sezioni numerate, process/servizi/FAQ editoriali, liste progetti
+- [Stetson](https://stetson.com/) — heritage western: full-bleed photo, storytelling craft, tipografia sicura
+- [Kemo Sabe](https://www.kemosabe.com/) — western premium, product/brand come eroe visuale
+- [Filson](https://www.filson.com/) — outdoor durable: grid merce/lavoro, authenticity, aria e contrasto
+- [Sage East](https://www.sageeast.com/work/serena-williams) — editorial photo: UI sparsa, immagini grandi, focus sul lavoro
+- [Paper Crowns](https://papercrowns.com/) — agency: brand forte, layout marketing pulito
+
+## Principi da applicare
+- Una composizione per viewport (no dashboard clutter)
+- Brand/immagine dominante; testo secondario breve
+- Full-bleed o piani visuali ampi dove ha senso (hero, cover, work)
+- Spazio generoso; tipografia espressiva ma leggibile
+- Atmosfera western/heritage + chiarezza minimal (Drams/Williams), non template generico AI
+- Mantenere variabili CSS e pattern già presenti nel sito

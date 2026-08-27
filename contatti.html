@@ -3,15 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="title.contatti">Contatti — Portfolio</title>
-  <meta name="description" content="Contatta [Nome Cognome] — studente di Media Design disponibile per collaborazioni e progetti." data-i18n-content="desc.contatti">
+  <title data-i18n="title.contatti">Contact — Colorado</title>
+  <meta name="description" content="Get in touch with Colorado Creative Studio for collaborations and projects." data-i18n-content="desc.contatti">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="page-cover page-contact">
+
+  <div class="page-cover__bg" aria-hidden="true">
+    <img src="img/mainback.jpg" alt="Paesaggio del Colorado al tramonto, sfondo della pagina contatti">
+  </div>
+  <div class="page-cover__scrim" aria-hidden="true"></div>
 
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
@@ -19,19 +24,39 @@
         <img src="img/mylogo.png" alt="Logo — homepage" class="navbar__logo-img" data-i18n-alt="logo.alt">
       </a>
       <ul class="navbar__menu" id="navbar-menu">
-        <li><a href="bio.html" class="navbar__link" data-i18n="nav.bio">Bio</a></li>
-        <li><a href="portfolio.html" class="navbar__link" data-i18n="nav.portfolio">Portfolio</a></li>
-        <li><a href="contatti.html" class="navbar__link" data-i18n="nav.contatti">Contatti</a></li>
-      </ul>
+          <li><a href="about.html" class="navbar__link">About</a></li>
+          <li><a href="bio.html" class="navbar__link">Bio</a></li>
+          <li class="navbar__item navbar__item--dropdown">
+            <a href="portfolio.html" class="navbar__link navbar__dropdown-trigger" aria-haspopup="true" aria-expanded="false" id="navbar-portfolio-trigger"><span class="navbar__dropdown-label">Portfolio</span><span class="navbar__dropdown-chevron" aria-hidden="true"></span></a>
+            <ul class="navbar__dropdown" id="navbar-portfolio-menu" role="menu" aria-label="Portfolio">
+              <li role="none"><a href="portfolio.html#success-projects" class="navbar__dropdown-link" role="menuitem">Success Projects</a></li>
+              <li role="none"><a href="portfolio.html#independent-projects" class="navbar__dropdown-link" role="menuitem">Independent Projects</a></li>
+            </ul>
+          </li>
+          <li><a href="contatti.html" class="navbar__link is-active" data-i18n="nav.contatti">Contatti</a></li>
+        </ul>
       <div class="navbar__actions">
         <div class="navbar__lang" role="group" aria-label="Selettore lingua" data-i18n-aria-label="a11y.lang">
-          <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
-          <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
-          <button type="button" class="navbar__lang-btn" data-lang="fr">FR</button>
-          <button type="button" class="navbar__lang-btn" data-lang="es">ES</button>
+          <button type="button" class="navbar__lang-toggle" aria-label="Selettore lingua" data-i18n-aria-label="a11y.lang" aria-expanded="false" aria-controls="navbar-langs">
+            <svg class="navbar__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.75"/>
+              <ellipse cx="12" cy="12" rx="4" ry="9" fill="none" stroke="currentColor" stroke-width="1.75"/>
+              <path d="M3.5 12h17" fill="none" stroke="currentColor" stroke-width="1.75"/>
+            </svg>
+          </button>
+          <div class="navbar__lang-list" id="navbar-langs">
+            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
+            <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
+            <button type="button" class="navbar__lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="navbar__lang-btn" data-lang="es">ES</button>
+          </div>
         </div>
         <button type="button" class="navbar__theme-toggle" aria-label="Cambia tema" data-i18n-aria-label="a11y.theme">☾</button>
-        <button class="navbar__toggle" aria-label="Apri social" data-i18n-aria-label="a11y.openSocial" aria-expanded="false" aria-controls="navbar-social">☰</button>
+        <button type="button" class="navbar__toggle" aria-label="Menu" data-i18n-aria-label="a11y.menu" aria-expanded="false" aria-controls="navbar-menu">
+          <span class="navbar__toggle-bar" aria-hidden="true"></span>
+          <span class="navbar__toggle-bar" aria-hidden="true"></span>
+          <span class="navbar__toggle-bar" aria-hidden="true"></span>
+        </button>
         <ul class="navbar__social" id="navbar-social">
           <li><a href="https://www.instagram.com/colorado.design/" class="navbar__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="img/icon-instagram.svg" alt="Instagram"><span class="navbar__social-name">Instagram</span></a></li>
           <li><a href="https://www.behance.net/coloradodzn" class="navbar__social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer"><img src="img/icon-behance.svg" alt="Behance"><span class="navbar__social-name">Behance</span></a></li>
@@ -41,9 +66,248 @@
     </nav>
   </header>
 
-  <main>
-    
+  <main class="contact">
+    <div class="contact__stage">
+    <header class="contact__banner">
+      <p class="contact__kicker" data-i18n="contact.lead">Hai un progetto in mente?</p>
+      <h1 id="contact-title" class="contact__cta-line" data-i18n="contact.cta">Contattami</h1>
+    </header>
+
+    <section class="contact__layout" aria-labelledby="contact-title">
+      <div class="contact-dispatch">
+        <div class="contact-card">
+        <form class="contact-card__form contact-form" action="https://formspree.io/f/xnpaeboj" method="POST">
+          <div class="contact-card__fields">
+            <div class="contact-field">
+              <label class="contact-field__label" for="contact-name" data-i18n="contact.label.name">Il tuo nome</label>
+              <input id="contact-name" class="contact-field__control" name="name" type="text" required autocomplete="name" data-i18n-placeholder="contact.ph.name" placeholder="Il tuo nome qui">
+            </div>
+
+            <div class="contact-field">
+              <label class="contact-field__label" for="contact-email" data-i18n="contact.label.email">La tua email</label>
+              <input id="contact-email" class="contact-field__control" name="email" type="email" required autocomplete="email" data-i18n-placeholder="contact.ph.email" placeholder="La tua email qui">
+            </div>
+
+            <div class="contact-field">
+              <p class="contact-field__label contact-field__label--inline" id="contact-subject-label">
+                <span data-i18n="contact.label.subject">Soggetto</span>
+                <span class="contact-field__hint">(<span data-i18n="contact.subject.hint">Clicca una piuma per il tipo di progetto</span>)</span>
+              </p>
+              <fieldset class="contact-feathers" aria-labelledby="contact-subject-label">
+                <legend class="visually-hidden" data-i18n="contact.label.subject">Soggetto</legend>
+                <label class="contact-feather">
+                  <input type="radio" name="subject" value="brand-identity" required>
+                  <svg class="contact-feather__art" viewBox="0 0 32 56" aria-hidden="true"><path d="M16 2C9 16 7 30 16 54C25 30 23 16 16 2Z"/><path class="contact-feather__shaft" d="M16 8v42"/><path class="contact-feather__vein" d="M16 14l-6 4M16 20l6 4M16 26l-6 4M16 32l6 3"/></svg>
+                  <span class="contact-feather__name" data-i18n="contact.subject.brand">Brand Identity</span>
+                </label>
+                <label class="contact-feather">
+                  <input type="radio" name="subject" value="visual-communication">
+                  <svg class="contact-feather__art" viewBox="0 0 32 56" aria-hidden="true"><path d="M14 2C20 14 24 30 16 54C8 32 6 14 14 2Z"/><path class="contact-feather__shaft" d="M15 8v42"/><path class="contact-feather__vein" d="M15 15l6 3M15 21l-6 3M15 27l6 3"/></svg>
+                  <span class="contact-feather__name" data-i18n="contact.subject.visual">Visual Communication</span>
+                </label>
+                <label class="contact-feather">
+                  <input type="radio" name="subject" value="web-design">
+                  <svg class="contact-feather__art" viewBox="0 0 32 56" aria-hidden="true"><path d="M16 1C12 12 6 28 16 55C26 28 20 12 16 1Z"/><path class="contact-feather__shaft" d="M16 7v44"/><path class="contact-feather__vein" d="M16 12l-5 6M16 18l5 6M16 24l-5 5M16 30l5 4"/></svg>
+                  <span class="contact-feather__name" data-i18n="contact.subject.web">Web Design</span>
+                </label>
+                <label class="contact-feather">
+                  <input type="radio" name="subject" value="motion-design">
+                  <svg class="contact-feather__art" viewBox="0 0 32 56" aria-hidden="true"><path d="M18 3C8 18 10 32 15 54C26 34 28 16 18 3Z"/><path class="contact-feather__shaft" d="M17 9v41"/><path class="contact-feather__vein" d="M17 16l-7 3M17 22l7 3M17 28l-7 3"/></svg>
+                  <span class="contact-feather__name" data-i18n="contact.subject.motion">Motion Design</span>
+                </label>
+                <label class="contact-feather">
+                  <input type="radio" name="subject" value="other">
+                  <svg class="contact-feather__art" viewBox="0 0 32 56" aria-hidden="true"><path d="M16 4C11 15 9 31 16 53C23 31 21 15 16 4Z"/><path class="contact-feather__shaft" d="M16 10v40"/><path class="contact-feather__vein" d="M16 16l-5 3M16 22l5 3M16 28l-5 3M16 34l5 2"/></svg>
+                  <span class="contact-feather__name" data-i18n="contact.subject.other">Altro</span>
+                </label>
+              </fieldset>
+            </div>
+
+            <div class="contact-field">
+              <label class="contact-field__label" for="contact-message" data-i18n="contact.label.message">Il tuo messaggio</label>
+              <textarea id="contact-message" class="contact-field__control contact-field__textarea" name="message" required rows="5" data-i18n-placeholder="contact.ph.message" placeholder="Descrivi il progetto, più dettagli hai e meglio è."></textarea>
+            </div>
+
+            <p class="contact-field contact-field--privacy">
+              <input id="contact-privacy" name="privacy" type="checkbox" value="accepted" required>
+              <label for="contact-privacy">
+                <span data-i18n="contact.privacy">Acconsento al trattamento dei dati come descritto nella</span>
+                <a href="privacy.html" data-i18n="contact.privacyLink">Privacy Policy</a>.
+              </label>
+            </p>
+
+            <div class="contact-card__actions">
+              <button type="submit" class="contact-card__submit">
+                <span data-i18n="contact.submit">Invia</span>
+                <span class="contact-card__submit-arrow" aria-hidden="true">↗</span>
+              </button>
+            </div>
+          </div>
+
+          <p class="contact-form__status" role="status" aria-live="polite" hidden></p>
+        </form>
+
+        <aside class="contact-rail" aria-label="Next Milestone" data-i18n-aria-label="contact.flow.kicker">
+          <p class="contact-rail__depart" data-i18n="contact.flow.depart">Next Milestone</p>
+          <div class="contact-rail__step">
+            <span class="contact-rail__icon" aria-hidden="true"></span>
+            <span class="contact-rail__label" data-i18n="contact.flow.1">Contattaci</span>
+          </div>
+          <div class="contact-rail__connector">
+            <span class="contact-rail__arrow" aria-hidden="true"></span>
+            <span class="contact-rail__eta" data-i18n="contact.flow.1eta">24 ore</span>
+          </div>
+          <div class="contact-rail__step">
+            <span class="contact-rail__icon" aria-hidden="true"></span>
+            <span class="contact-rail__label" data-i18n="contact.flow.2">Briefing</span>
+          </div>
+          <div class="contact-rail__connector">
+            <span class="contact-rail__arrow" aria-hidden="true"></span>
+            <span class="contact-rail__eta" data-i18n="contact.flow.2eta">48 ore</span>
+          </div>
+          <div class="contact-rail__step">
+            <span class="contact-rail__icon" aria-hidden="true"></span>
+            <span class="contact-rail__label" data-i18n="contact.flow.3">Kick off</span>
+          </div>
+          <div class="contact-rail__connector" aria-hidden="true">
+            <span class="contact-rail__arrow"></span>
+          </div>
+          <div class="contact-rail__step">
+            <span class="contact-rail__icon" aria-hidden="true">
+              <svg class="contact-rail__glyph" viewBox="0 0 24 24" focusable="false">
+                <path d="M7 3.5h8.2c1.4 0 2.5 1.1 2.5 2.5v12.8c0 .9-1 1.4-1.7.9l-1.8-1.3-1.8 1.3c-.4.3-1 .3-1.4 0L9.2 18.4l-1.8 1.3c-.7.5-1.7 0-1.7-.9V5.2C5.7 4.3 6.3 3.5 7 3.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M9 8h6.5M9 11.2h6.5M9 14.4h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="contact-rail__label" data-i18n="contact.flow.4">Progetto completo</span>
+          </div>
+          <div class="contact-rail__connector" aria-hidden="true">
+            <span class="contact-rail__arrow"></span>
+          </div>
+          <div class="contact-rail__step">
+            <span class="contact-rail__icon" aria-hidden="true">
+              <svg class="contact-rail__glyph" viewBox="0 0 24 24" focusable="false">
+                <path d="M12 2.5C8.2 8.2 7.2 13.2 12 21.5C16.8 13.2 15.8 8.2 12 2.5Z" fill="currentColor"/>
+                <path d="M12 5.5v14" fill="none" stroke="var(--color-contact-chip)" stroke-width="1.3" stroke-linecap="round"/>
+                <path d="M12 8.2 8.6 10.2M12 11.2l3.4 2M12 14.2l-3.2 1.8" fill="none" stroke="var(--color-contact-chip)" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="contact-rail__label" data-i18n="contact.flow.5">Feedback</span>
+          </div>
+        </aside>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <section class="faq" aria-labelledby="faq-title">
+      <div class="faq__inner">
+        <header class="faq__intro">
+          <h2 id="faq-title" class="faq__title">FAQ</h2>
+          <p class="faq__lead">Risposte rapide su processo, servizi e modo di lavorare. Testi provvisori — li aggiornerò a breve.</p>
+        </header>
+
+        <div class="faq__list">
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span>Come affronti un nuovo progetto di design?</span>
+              <span class="faq__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <p>Parto da un briefing chiaro, poi definisco obiettivi, mood e vincoli. Solo dopo passo a concept e visual.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span>Lavori con startup o anche con aziende strutturate?</span>
+              <span class="faq__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <p>Con entrambi: adatto ritmo e metodo al contesto, dalla prima idea al brand già consolidato.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span>Puoi ridisegnare un sito o un’app già esistenti?</span>
+              <span class="faq__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <p>Sì: parto da un’analisi di ciò che funziona e di ciò che no, poi propongo un restyling coerente.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span>SEO e digital marketing sono inclusi?</span>
+              <span class="faq__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <p>Di base lavoro su design e comunicazione visiva; SEO e ads si possono valutare a parte se servono.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span>Quanto dura in media un progetto?</span>
+              <span class="faq__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <p>Dipende dallo scope: un’identità può richiedere poche settimane, un pacchetto più ampio diversi mesi.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__identity">
+          <div class="site-footer__brand">
+            <img src="img/Coloradologo.svg" alt="" class="site-footer__logo-img" width="48" height="48">
+            <p class="site-footer__name">COLORADO</p>
+          </div>
+          <p class="site-footer__location">Rome, Italy · 41°50′01″N 12°28′15″E</p>
+        </div>
+
+      <div class="site-footer__cta">
+        <p class="site-footer__cta-lead" data-i18n="footer.cta">Hai un progetto in mente?</p>
+        <div class="site-footer__cta-row">
+          <a class="site-footer__email" href="mailto:info.coloradodesign@gmail.com">
+            info.coloradodesign@gmail.com
+            <span class="site-footer__email-arrow" aria-hidden="true">↗</span>
+          </a>
+          <div class="site-footer__menus">
+            <nav class="site-footer__nav" aria-label="Footer" data-i18n-aria-label="a11y.footerNav">
+              <h2 class="site-footer__heading" data-i18n="footer.nav">Navigation</h2>
+              <ul class="site-footer__links">
+                <li><a href="/">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="bio.html">Bio</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="contatti.html" data-i18n="nav.contatti">Contatti</a></li>
+              </ul>
+            </nav>
+            <section class="site-footer__social-block" aria-label="Socials">
+              <h2 class="site-footer__heading">Socials</h2>
+              <ul class="site-footer__social">
+                <li><a href="https://www.instagram.com/colorado.design/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                <li><a href="https://www.behance.net/coloradodzn" target="_blank" rel="noopener noreferrer">Behance</a></li>
+                <li><a href="https://www.linkedin.com/in/colorado-design-977297308/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <p class="site-footer__legal">
+        <span data-i18n="footer.copy">© 2026 Colorado — All rights reserved</span>
+        · <a href="privacy.html">Privacy</a>
+      </p>
+    </div>
+  </footer> 
 
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
