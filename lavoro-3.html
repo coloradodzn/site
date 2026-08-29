@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="title.lavoro3">Lavoro 3 — Portfolio</title>
-  <meta name="description" content="Dettaglio del terzo progetto del portfolio di [Nome Cognome], studente di Media Design." data-i18n-content="desc.lavoro3">
+  <link rel="icon" href="img/Coloradologo.svg" type="image/svg+xml">
+  <title data-i18n="title.lavoro3">Analisi del Cinema — Colorado Design</title>
+  <meta name="description" content="Analisi del Cinema — presentazione accademica su teoria e linguaggio cinematografico." data-i18n-content="desc.lavoro3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/seo.js"></script>
 </head>
 <body>
 
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
       <a href="/" class="navbar__logo" aria-label="Torna alla homepage" data-i18n-aria-label="a11y.home">
-        <img src="img/mylogo.png" alt="Logo — homepage" class="navbar__logo-img" data-i18n-alt="logo.alt">
+        <img src="img/Coloradologo.svg" alt="Logo — homepage" class="navbar__logo-img" width="40" height="40" data-i18n-alt="logo.alt">
       </a>
       <ul class="navbar__menu" id="navbar-menu">
           <li><a href="about.html" class="navbar__link">About</a></li>
@@ -24,8 +26,8 @@
           <li class="navbar__item navbar__item--dropdown">
             <a href="portfolio.html" class="navbar__link navbar__dropdown-trigger is-active" aria-haspopup="true" aria-expanded="false" id="navbar-portfolio-trigger"><span class="navbar__dropdown-label">Portfolio</span><span class="navbar__dropdown-chevron" aria-hidden="true"></span></a>
             <ul class="navbar__dropdown" id="navbar-portfolio-menu" role="menu" aria-label="Portfolio">
-              <li role="none"><a href="portfolio.html#success-projects" class="navbar__dropdown-link" role="menuitem">Success Projects</a></li>
-              <li role="none"><a href="portfolio.html#independent-projects" class="navbar__dropdown-link" role="menuitem">Independent Projects</a></li>
+              <li role="none"><a href="success-projects.html" class="navbar__dropdown-link" role="menuitem">Success Projects</a></li>
+              <li role="none"><a href="independent-projects.html" class="navbar__dropdown-link" role="menuitem">Independent Projects</a></li>
             </ul>
           </li>
           <li><a href="contatti.html" class="navbar__link" data-i18n="nav.contatti">Contatti</a></li>
@@ -61,22 +63,47 @@
     </nav>
   </header>
 
-  <main>
-    
+  <main class="work">
+    <header class="work-hero">
+      <p class="work-hero__eyebrow" data-i18n="work3.eyebrow">Independent Project</p>
+      <h1 class="work-hero__title" data-i18n="work3.title">Analisi del Cinema</h1>
+      <p class="work-hero__lead" data-i18n="work3.lead">Studio accademico sul linguaggio cinematografico: metodo di analisi, riferimenti teorici e lettura critica di opere selezionate.</p>
+    </header>
+
+    <article class="work-content">
+      <section class="work-section" aria-labelledby="work3-context">
+        <h2 id="work3-context" class="work-section__title" data-i18n="work3.context.title">Contesto</h2>
+        <p data-i18n="work3.context">Progetto personale sviluppato nell'ambito del percorso di Progettazione Multimediale. La ricerca esplora come struttura, montaggio, inquadratura e sound design costruiscano il significato in un film.</p>
+      </section>
+
+      <section class="work-section" aria-labelledby="work3-method">
+        <h2 id="work3-method" class="work-section__title" data-i18n="work3.method.title">Metodo</h2>
+        <p data-i18n="work3.method">Il lavoro è organizzato come presentazione editoriale: introduzione teorica, framework di analisi e casi studio applicati. Il PDF raccoglie l'intero percorso con slide e note.</p>
+      </section>
+
+      <section class="work-section work-section--pdf" aria-labelledby="work3-pdf">
+        <h2 id="work3-pdf" class="work-section__title" data-i18n="work3.pdf.title">Presentazione</h2>
+        <p data-i18n="work3.pdf.lead">La versione completa del progetto è disponibile in PDF. Puoi aprirla nel browser o scaricarla per consultarla offline.</p>
+        <a class="work-download" href="img/esame-analisi-cinema.pdf" target="_blank" rel="noopener noreferrer" data-i18n="work3.pdf.cta">
+          Apri la presentazione PDF
+          <span class="work-download__arrow" aria-hidden="true">↗</span>
+        </a>
+      </section>
+    </article>
   </main>
 
   <footer class="site-footer">
     <div class="site-footer__inner">
       <div class="site-footer__identity">
           <div class="site-footer__brand">
-            <img src="img/Coloradologo.svg" alt="" class="site-footer__logo-img" width="48" height="48">
+            <img src="img/Coloradologo.svg" alt="Logo Colorado Creative Studio" data-i18n-alt="footer.logo.alt" class="site-footer__logo-img" width="48" height="48">
             <p class="site-footer__name">COLORADO</p>
           </div>
           <p class="site-footer__location">Rome, Italy · 41°50′01″N 12°28′15″E</p>
         </div>
 
       <div class="site-footer__cta">
-        <p class="site-footer__cta-lead" data-i18n="footer.cta">Hai un progetto in mente?</p>
+        <p class="site-footer__cta-lead" data-i18n="footer.cta">Diamo forma alla prossima idea.</p>
         <div class="site-footer__cta-row">
           <a class="site-footer__email" href="mailto:info.coloradodesign@gmail.com">
             info.coloradodesign@gmail.com
@@ -107,7 +134,8 @@
 
       <p class="site-footer__legal">
         <span data-i18n="footer.copy">© 2026 Colorado — All rights reserved</span>
-        · <a href="privacy.html">Privacy</a>
+        · <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
+        · <a href="termini.html" data-i18n="footer.terms">Termini</a>
       </p>
     </div>
   </footer>

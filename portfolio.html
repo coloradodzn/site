@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="img/Coloradologo.svg" type="image/svg+xml">
   <title data-i18n="title.portfolio">Portfolio</title>
-  <meta name="description" content="Raccolta dei progetti realizzati da [Nome Cognome], studente di Media Design." data-i18n-content="desc.portfolio">
+  <meta name="description" content="Portfolio Colorado Design: brand identity, visual communication, editorial, fotografia e progetti personali." data-i18n-content="desc.portfolio">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/seo.js"></script>
 </head>
 <body>
 
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
       <a href="/" class="navbar__logo" aria-label="Torna alla homepage" data-i18n-aria-label="a11y.home">
-        <img src="img/mylogo.png" alt="Logo — homepage" class="navbar__logo-img" data-i18n-alt="logo.alt">
+        <img src="img/Coloradologo.svg" alt="Logo — homepage" class="navbar__logo-img" width="40" height="40" data-i18n-alt="logo.alt">
       </a>
       <ul class="navbar__menu" id="navbar-menu">
           <li><a href="about.html" class="navbar__link">About</a></li>
@@ -24,8 +26,8 @@
           <li class="navbar__item navbar__item--dropdown">
             <a href="portfolio.html" class="navbar__link navbar__dropdown-trigger is-active" aria-haspopup="true" aria-expanded="false" id="navbar-portfolio-trigger"><span class="navbar__dropdown-label">Portfolio</span><span class="navbar__dropdown-chevron" aria-hidden="true"></span></a>
             <ul class="navbar__dropdown" id="navbar-portfolio-menu" role="menu" aria-label="Portfolio">
-              <li role="none"><a href="portfolio.html#success-projects" class="navbar__dropdown-link" role="menuitem">Success Projects</a></li>
-              <li role="none"><a href="portfolio.html#independent-projects" class="navbar__dropdown-link" role="menuitem">Independent Projects</a></li>
+              <li role="none"><a href="success-projects.html" class="navbar__dropdown-link" role="menuitem">Success Projects</a></li>
+              <li role="none"><a href="independent-projects.html" class="navbar__dropdown-link" role="menuitem">Independent Projects</a></li>
             </ul>
           </li>
           <li><a href="contatti.html" class="navbar__link" data-i18n="nav.contatti">Contatti</a></li>
@@ -61,9 +63,8 @@
     </nav>
   </header>
 
-  <main class="portfolio-page is-view-all">
+  <main class="portfolio-page">
 
-    <!-- ONLINE: contenuto portfolio — rimuovi questo commento per publicare
     <header class="portfolio-page__intro">
       <h1 class="portfolio-page__title">Portfolio</h1>
       <p class="portfolio-page__lead">Progetti selezionati — commesse e lavori autonomi.</p>
@@ -72,6 +73,7 @@
     <section id="success-projects" class="portfolio-section" data-portfolio-section="success" aria-labelledby="success-projects-heading">
       <div class="portfolio-section__head">
         <h2 id="success-projects-heading" class="portfolio-section__title">Success Projects</h2>
+        <a href="success-projects.html" class="portfolio-section__link" data-i18n="portfolio.viewAll">Vedi tutti</a>
       </div>
 
       <div class="portfolio-carousel" data-carousel>
@@ -82,19 +84,30 @@
           <ul class="portfolio-carousel__list">
             <li class="portfolio-carousel__item">
               <a href="lavoro-1.html" class="portfolio-card">
-                <img src="img/axit-jersey1.jpg" alt="Anteprima progetto Axit — jersey design" class="portfolio-card__img" width="360" height="450">
+                <div class="portfolio-card__media">
+                  <img src="img/LogoDesign/Logo folio.png" alt="Logo Design — anteprima" class="portfolio-card__img" width="640" height="360">
+                </div>
                 <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name">Axit</span>
+                  <span class="portfolio-card__name">Logo Design</span>
                   <span class="portfolio-card__type">Brand identity</span>
                 </span>
               </a>
             </li>
             <li class="portfolio-carousel__item">
               <a href="lavoro-2.html" class="portfolio-card">
-                <img src="img/calyy-banner.jpg" alt="Anteprima progetto Calyy — visual campaign" class="portfolio-card__img" width="360" height="450">
+                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-2" aria-hidden="true"></div>
                 <span class="portfolio-card__meta">
                   <span class="portfolio-card__name">Calyy</span>
                   <span class="portfolio-card__type">Visual campaign</span>
+                </span>
+              </a>
+            </li>
+            <li class="portfolio-carousel__item">
+              <a href="lavoro-5.html" class="portfolio-card">
+                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-5" aria-hidden="true"></div>
+                <span class="portfolio-card__meta">
+                  <span class="portfolio-card__name">Axit Collection</span>
+                  <span class="portfolio-card__type">Brand identity</span>
                 </span>
               </a>
             </li>
@@ -109,6 +122,7 @@
     <section id="independent-projects" class="portfolio-section" data-portfolio-section="independent" aria-labelledby="independent-projects-heading">
       <div class="portfolio-section__head">
         <h2 id="independent-projects-heading" class="portfolio-section__title">Independent Projects</h2>
+        <a href="independent-projects.html" class="portfolio-section__link" data-i18n="portfolio.viewAll">Vedi tutti</a>
       </div>
 
       <div class="portfolio-carousel" data-carousel>
@@ -119,16 +133,16 @@
           <ul class="portfolio-carousel__list">
             <li class="portfolio-carousel__item">
               <a href="lavoro-3.html" class="portfolio-card">
-                <img src="img/herosection2.png" alt="Anteprima progetto personale — editorial layout" class="portfolio-card__img" width="360" height="450">
+                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-3" aria-hidden="true"></div>
                 <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name">Editorial Study</span>
-                  <span class="portfolio-card__type">Personal work</span>
+                  <span class="portfolio-card__name" data-i18n="work3.name">Analisi del Cinema</span>
+                  <span class="portfolio-card__type" data-i18n="work3.type">Film study</span>
                 </span>
               </a>
             </li>
             <li class="portfolio-carousel__item">
-              <a href="lavoro-3.html" class="portfolio-card">
-                <img src="img/colocanyon.jpeg" alt="Anteprima progetto personale — landscape series" class="portfolio-card__img" width="360" height="450">
+              <a href="lavoro-4.html" class="portfolio-card">
+                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-4" aria-hidden="true"></div>
                 <span class="portfolio-card__meta">
                   <span class="portfolio-card__name">Colorado Series</span>
                   <span class="portfolio-card__type">Photography</span>
@@ -142,7 +156,7 @@
         </button>
       </div>
     </section>
-    ONLINE: contenuto portfolio -->
+    <!--ONLINE: contenuto portfolio -->
 
   </main>
 
@@ -150,14 +164,14 @@
     <div class="site-footer__inner">
       <div class="site-footer__identity">
           <div class="site-footer__brand">
-            <img src="img/Coloradologo.svg" alt="" class="site-footer__logo-img" width="48" height="48">
+            <img src="img/Coloradologo.svg" alt="Logo Colorado Creative Studio" data-i18n-alt="footer.logo.alt" class="site-footer__logo-img" width="48" height="48">
             <p class="site-footer__name">COLORADO</p>
           </div>
           <p class="site-footer__location">Rome, Italy · 41°50′01″N 12°28′15″E</p>
         </div>
 
       <div class="site-footer__cta">
-        <p class="site-footer__cta-lead" data-i18n="footer.cta">Hai un progetto in mente?</p>
+        <p class="site-footer__cta-lead" data-i18n="footer.cta">Diamo forma alla prossima idea.</p>
         <div class="site-footer__cta-row">
           <a class="site-footer__email" href="mailto:info.coloradodesign@gmail.com">
             info.coloradodesign@gmail.com
@@ -188,13 +202,14 @@
 
       <p class="site-footer__legal">
         <span data-i18n="footer.copy">© 2026 Colorado — All rights reserved</span>
-        · <a href="privacy.html">Privacy</a>
+        · <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
+        · <a href="termini.html" data-i18n="footer.terms">Termini</a>
       </p>
     </div>
   </footer>
 
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
-  <!-- ONLINE: attiva con contenuto portfolio — <script src="js/portfolio.js"></script> -->
+  <script src="js/portfolio.js"></script>
 </body>
 </html>

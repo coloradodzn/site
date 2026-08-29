@@ -1,3 +1,60 @@
+// ── FRECCIA INDIETRO (case study + pagine categoria portfolio) ──
+function isWorkDetailPage() {
+  return /^lavoro-\d+\.html$/i.test(
+    window.location.pathname.split('/').pop() || ''
+  );
+}
+
+function isPortfolioCategoryPage() {
+  const page = window.location.pathname.split('/').pop() || '';
+  return page === 'success-projects.html' || page === 'independent-projects.html';
+}
+
+function initBackButton() {
+  const isWork = isWorkDetailPage();
+  const isCategory = isPortfolioCategoryPage();
+  if (!isWork && !isCategory) return;
+  if (document.querySelector('.work-back')) return;
+
+  if (isWork) {
+    document.body.classList.add('is-work-detail');
+  }
+  if (isCategory) {
+    document.body.classList.add('is-portfolio-category');
+  }
+
+  const back = document.createElement('button');
+  back.type = 'button';
+  back.className = 'work-back';
+  back.setAttribute('aria-label', 'Torna indietro');
+  back.setAttribute('data-i18n-aria-label', 'a11y.back');
+  back.innerHTML = `<svg class="work-back__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M19 12H5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+    <path d="M12 19l-7-7 7-7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+
+  back.addEventListener('click', () => {
+    if (isCategory) {
+      window.location.assign('portfolio.html');
+      return;
+    }
+
+    const sameOriginReferrer = document.referrer
+      && new URL(document.referrer, window.location.href).origin === window.location.origin;
+
+    if (window.history.length > 1 || sameOriginReferrer) {
+      window.history.back();
+      return;
+    }
+
+    window.location.assign('portfolio.html');
+  });
+
+  document.body.insertBefore(back, document.body.firstChild);
+}
+
+initBackButton();
+
 const nav = document.querySelector('.navbar');
 const toggle = document.querySelector('.navbar__toggle');
 const menu = document.querySelector('.navbar__menu');
@@ -95,6 +152,10 @@ const header = document.querySelector('.site-header');
 
 if (header) {
   const updateScrolled = () => {
+    if (document.body.classList.contains('home')) {
+      header.classList.remove('scrolled');
+      return;
+    }
     header.classList.toggle('scrolled', window.scrollY > 50);
   };
   updateScrolled();
@@ -146,6 +207,7 @@ if (contactForm) {
     try {
       const data = new FormData(contactForm);
       const picked = contactForm.querySelector('input[name="subject"]:checked');
+
       if (picked) {
         const label = picked.closest('.contact-feather')?.querySelector('.contact-feather__name')?.textContent?.trim();
         if (label) data.set('subject', label);

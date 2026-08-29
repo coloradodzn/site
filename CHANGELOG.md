@@ -2,18 +2,9 @@
 
 Tutte le modifiche rilevanti al progetto sono documentate in questo file.
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
+Le voci più recenti sono in fondo al file.
 
 ---
-
-## [Unreleased]
-
-### [3.8] — Footer spacing + Privacy Policy
-- Colonne laterali del footer avvicinate di 50px al blocco centrale (desktop)
-- Nuova pagina `privacy.html` (informativa GDPR: titolare, dati, finalità, Formspree, diritti, cookie/localStorage)
-
-### [3.7] — FAQ Contatti + footer bianco
-- Aggiunta sezione FAQ accordion sotto il form (layout due colonne da tablet, testi provvisori)
-- Footer Contatti con sfondo bianco e testo brand (colore definitivo da definire)
 
 ### [0.1] — Struttura base e design system
 - Creata struttura completa di file e cartelle: `index.html`, `bio.html`, `portfolio.html`, `lavoro-1/2/3.html`, `contatti.html`, `/css`, `/img`, `/js`, `README.md`, `CHANGELOG.md`, `.cursorrules`
@@ -127,17 +118,17 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
 - Su mobile la hero usa `aspect-ratio: 16 / 9` invece di coprire tutta la viewport
 - Da 768px in su rimane fullscreen (`100dvh - 72px`)
 
-### [2.2] — Shadow on scroll
-- Aggiunto event listener su `window scroll` in `main.js`: quando `scrollY > 50` aggiunge classe `.scrolled` all'header
-- CSS: `.site-header.scrolled` con `box-shadow` evidente e padding navbar ridotto (`0.5rem`)
-- Transizione smooth su `box-shadow` e `padding` (`0.3s ease`)
-
 ### [2.1] — Hover icone social allineato ai link navbar
 - Hover sulle icone social unificato con quello di Bio/Portfolio/Contatti: `scale(1.1) translateY(-2px)`
 - Light mode: le icone diventano nere al hover (`filter: brightness(0)`)
 - Dark mode: le icone diventano bianche al hover (`filter: brightness(0) invert(1)`)
 - Aggiornamento automatico su tutte le pagine tramite `style.css`
 - Hero aggiornata a `100dvh` per compatibilità con i browser mobile che hanno barre dell'interfaccia dinamiche
+
+### [2.2] — Shadow on scroll
+- Aggiunto event listener su `window scroll` in `main.js`: quando `scrollY > 50` aggiunge classe `.scrolled` all'header
+- CSS: `.site-header.scrolled` con `box-shadow` evidente e padding navbar ridotto (`0.5rem`)
+- Transizione smooth su `box-shadow` e `padding` (`0.3s ease`)
 
 ### [2.3] — Immagine hero aggiornata
 - Sostituita l'immagine di copertina della hero con `img/mainback.jpg`
@@ -199,7 +190,7 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
 
 ### [3.2] — Pagina Contact
 - [contatti.html](contatti.html): sfondo `mainback.jpg` a tutta viewport con overlay, navbar e footer **senza barra piena** (solo testi/icone, come la navbar overlay)
-- Layout: tavola `formcontact.png` al centro. Overlay: nome, email, 5 piume con etichetta visibile (soggetto, spiegazione accanto al titolo), messaggio con scrollbar, privacy tra messaggio e Send (25px più in basso, testo visibile ma contenuto). Timeline sulla colonna destra. Campi senza bordo. La piuma scelta arriva in mail come campo `subject` (es. Identità) e nell’oggetto Formspree. Nascosti i marker arancioni della lista timeline (niente più elenco numerato) e i pallini nativi dei radio sulle piume.
+- Layout: tavola `formcontact.png` al centro. Overlay: nome, email, 5 piume con etichetta visibile (soggetto, spiegazione accanto al titolo), messaggio con scrollbar, privacy tra messaggio e Send (25px più in basso, testo visibile ma contenuto). Timeline sulla colonna destra. Campi senza bordo. La piuma scelta arriva in mail come campo `subject` (es. Identità) e nell'oggetto Formspree. Nascosti i marker arancioni della lista timeline (niente più elenco numerato) e i pallini nativi dei radio sulle piume.
 - Form POST a Formspree `https://formspree.io/f/xnpaeboj`; conferma/errore in pagina via `main.js` (niente numero di telefono né nel form né tra i recapiti)
 - Footer a 3 colonne (My Info, Navigation, Social) + copyright e link Privacy
 - Navbar su tutte le pagine: About, Bio, Portfolio, Contact. About è la pagina professionale (`about.html`, contenuti ancora da inserire).
@@ -219,3 +210,46 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.0.0/).
 - Campi nativi (nome, email, select spedizione, messaggio), privacy, Formspree invariato
 - Mobile: card sopra, rail in riga sotto; da 768px form + colonna verticale a destra
 - Nuove chiavi i18n IT/EN/FR/ES per copy expedition
+
+### [3.7] — FAQ Contatti + footer bianco
+- Aggiunta sezione FAQ accordion sotto il form (layout due colonne da tablet, testi provvisori)
+- Footer Contatti con sfondo bianco e testo brand (colore definitivo da definire)
+
+### [3.8] — Footer spacing + Privacy Policy
+- Colonne laterali del footer avvicinate di 50px al blocco centrale (desktop)
+- Nuova pagina `privacy.html` (informativa GDPR: titolare, dati, finalità, Formspree, diritti, cookie/localStorage)
+
+### [3.9] — Freccia indietro globale
+- Pulsante freccia in alto a sinistra (navbar) su tutte le pagine tranne `index.html`
+- `history.back()` con fallback a `index.html` se non c'è cronologia; aria-label i18n (`a11y.back`)
+
+### [4.0] — Home Z, portfolio categorie, SEO e footer
+- `index.html` rifatta: hero fullscreen con scroll-asse-Z (5 card lavori in tunnel 3D), sfondo `mainback.jpg` con zoom, nav reveal al centro a fine scroll, footer overlay nella sticky
+- `js/home.js`: tunnel 3D (profondità, opacità, scale), fallback `prefers-reduced-motion`, indicatore scroll con percentuale, fade footer legato alla fase scroll
+- Card lavori (Logo Design, Calyy, Editorial Study, Colorado Series, Axit Collection) → `lavoro-1` … `lavoro-5`; solo la card attiva è cliccabile
+- Nav reveal: link About, Bio, Portfolio, Contatti animati al centro viewport; navbar nascosta in fase reveal; testi bianchi, hover arancione
+- Footer home (`.site-footer--home-overlay`): trasparente su hero, testi bianchi fissi (indipendenti da tema), layout compatto brand + CTA email
+- `portfolio.html`: hub con due caroselli — Success Projects (3 card) e Independent Projects (2 card) — e link "Vedi tutti" alle pagine categoria
+- `success-projects.html` / `independent-projects.html`: catalogo con griglia raggruppata per servizio e filtri toolbar (Servizio + Settore, multi-select stile Paper Crowns)
+- `js/portfolio.js`: caroselli prev/next; `js/portfolio-category.js`: filtri AND/OR, conteggio dinamico, chiusura Escape/click fuori, re-apply su cambio lingua
+- Navbar Portfolio dropdown (desktop): Success / Independent con stato attivo; freccia indietro su categorie → sempre `portfolio.html`
+- Fix UX portfolio: trigger filtro senza glow browser, scrollbar sottile, allineamento carosello desktop, sfondo pagine trasparente
+- Aggiunti `lavoro-4.html` (Colorado Series) e `lavoro-5.html` (Axit Collection) — shell pronta, contenuto da completare
+- Nuova `about.html` (cover professionale; contenuto da inserire)
+- `js/seo.js`: canonical, Open Graph, Twitter Card, JSON-LD Organization; `robots.txt` e `sitemap.xml` (13 URL)
+- Footer global: sfondo solido (tranne overlay home), heading Navigation/Socials in primary, link in nero, CTA "Diamo forma alla prossima idea"
+- Estensioni i18n: portfolio, lavori 4/5, footer CTA; navbar con voce About, icone globo SVG e tema ☾/☀
+- Creato `PLANNING.md` con checklist prioritizzata vs brief d'esame
+
+## [Unreleased]
+
+### Footer (pagine a sfondo solido)
+- Verificato e allineato il footer su tutte le pagine a sfondo piano (`portfolio.html`, `success-projects.html`, `independent-projects.html`, `lavoro-1`–`lavoro-5`, `privacy.html`): struttura unificata (identity, CTA, nav/social, legal), copy CTA `footer.cta` (“Diamo forma alla prossima idea.”), i18n su `footer.nav` e `footer.copy`
+- Colori gestiti da `body:not(.page-cover):not(.home) .site-footer` (heading primary, link/CTA lead/legal accent, nome ed email primary)
+- Non modificati i footer overlay: home (`site-footer--home-overlay`), `about.html`, `bio.html`, `contatti.html`
+
+### Decisioni di progetto
+- Navbar: nessuna voce Home; logo → `index.html` (confermato)
+- Homepage: hero scroll Z al posto del carousel del brief (Z accettata)
+- Homepage bio/CV (29 ago 2026): link a `bio.html` già presente (nav reveal post-scroll Z) — fatto; CV non in homepage né sul sito pubblico (privato, rischio identificazione) — cancellato; estratto bio in homepage — pianificato, da implementare
+- Privacy contatti: nessun indirizzo fisico (via), Maps, telefono o recapiti personali sul sito pubblico; form senza cognome/telefono; identità reale riservata ai collaboratori; email professionale studio (`info.coloradodesign@gmail.com`), città (“Roma” / “Rome, Italy”) e coordinate GPS nel footer (`41°50′01″N 12°28′15″E`) OK in footer/privacy/i18n/SEO/JSON-LD

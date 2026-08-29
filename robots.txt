@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Aggiorna il dominio in sitemap.xml prima della pubblicazione
+Sitemap: https://www.coloradodesign.it/sitemap.xml

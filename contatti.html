@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="title.contatti">Contact — Colorado</title>
-  <meta name="description" content="Get in touch with Colorado Creative Studio for collaborations and projects." data-i18n-content="desc.contatti">
+  <link rel="icon" href="img/Coloradologo.svg" type="image/svg+xml">
+  <title data-i18n="title.contatti">Contatti — Colorado Design</title>
+  <meta name="description" content="Contatta Colorado Design a Roma per collaborazioni e progetti di media design, brand identity e comunicazione visiva. Richiedi un preventivo." data-i18n-content="desc.contatti">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/seo.js"></script>
 </head>
 <body class="page-cover page-contact">
 
@@ -21,7 +23,7 @@
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
       <a href="/" class="navbar__logo" aria-label="Torna alla homepage" data-i18n-aria-label="a11y.home">
-        <img src="img/mylogo.png" alt="Logo — homepage" class="navbar__logo-img" data-i18n-alt="logo.alt">
+        <img src="img/Coloradologo.svg" alt="Logo — homepage" class="navbar__logo-img" width="40" height="40" data-i18n-alt="logo.alt">
       </a>
       <ul class="navbar__menu" id="navbar-menu">
           <li><a href="about.html" class="navbar__link">About</a></li>
@@ -29,8 +31,8 @@
           <li class="navbar__item navbar__item--dropdown">
             <a href="portfolio.html" class="navbar__link navbar__dropdown-trigger" aria-haspopup="true" aria-expanded="false" id="navbar-portfolio-trigger"><span class="navbar__dropdown-label">Portfolio</span><span class="navbar__dropdown-chevron" aria-hidden="true"></span></a>
             <ul class="navbar__dropdown" id="navbar-portfolio-menu" role="menu" aria-label="Portfolio">
-              <li role="none"><a href="portfolio.html#success-projects" class="navbar__dropdown-link" role="menuitem">Success Projects</a></li>
-              <li role="none"><a href="portfolio.html#independent-projects" class="navbar__dropdown-link" role="menuitem">Independent Projects</a></li>
+              <li role="none"><a href="success-projects.html" class="navbar__dropdown-link" role="menuitem">Success Projects</a></li>
+              <li role="none"><a href="independent-projects.html" class="navbar__dropdown-link" role="menuitem">Independent Projects</a></li>
             </ul>
           </li>
           <li><a href="contatti.html" class="navbar__link is-active" data-i18n="nav.contatti">Contatti</a></li>
@@ -69,7 +71,7 @@
   <main class="contact">
     <div class="contact__stage">
     <header class="contact__banner">
-      <p class="contact__kicker" data-i18n="contact.lead">Hai un progetto in mente?</p>
+      <p class="contact__kicker" data-i18n="contact.lead">Diamo forma alla prossima idea.</p>
       <h1 id="contact-title" class="contact__cta-line" data-i18n="contact.cta">Contattami</h1>
     </header>
 
@@ -266,14 +268,14 @@
     <div class="site-footer__inner">
       <div class="site-footer__identity">
           <div class="site-footer__brand">
-            <img src="img/Coloradologo.svg" alt="" class="site-footer__logo-img" width="48" height="48">
+            <img src="img/Coloradologo.svg" alt="Logo Colorado Creative Studio" data-i18n-alt="footer.logo.alt" class="site-footer__logo-img" width="48" height="48">
             <p class="site-footer__name">COLORADO</p>
           </div>
           <p class="site-footer__location">Rome, Italy · 41°50′01″N 12°28′15″E</p>
         </div>
 
       <div class="site-footer__cta">
-        <p class="site-footer__cta-lead" data-i18n="footer.cta">Hai un progetto in mente?</p>
+        <p class="site-footer__cta-lead" data-i18n="footer.cta">Diamo forma alla prossima idea.</p>
         <div class="site-footer__cta-row">
           <a class="site-footer__email" href="mailto:info.coloradodesign@gmail.com">
             info.coloradodesign@gmail.com
@@ -304,7 +306,8 @@
 
       <p class="site-footer__legal">
         <span data-i18n="footer.copy">© 2026 Colorado — All rights reserved</span>
-        · <a href="privacy.html">Privacy</a>
+        · <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
+        · <a href="termini.html" data-i18n="footer.terms">Termini</a>
       </p>
     </div>
   </footer> 
