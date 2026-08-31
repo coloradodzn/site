@@ -1,3 +1,78 @@
+// ── SESSIONE SITO (navigazione interna → niente intro in home) ──
+(function markSiteSession() {
+  try {
+    const onHome = document.body.classList.contains('home');
+    const introPending = document.body.classList.contains('home-intro-active');
+    if (!onHome || !introPending) {
+      sessionStorage.setItem('colorado_session', '1');
+    }
+  } catch (err) {
+    /* storage blocked */
+  }
+})();
+
+// ── ICONE UI (SVG custom in img/icons/) ──
+const UI_ICON_FILES = {
+  moon: 'img/icons/moon.svg',
+  sun: 'img/icons/sun.svg',
+  extlink: 'img/icons/extlink.svg',
+  download: 'img/icons/download.svg',
+  'arrow-left': 'img/icons/arrow.svg',
+  dropdown: 'img/icons/dropdown.svg',
+};
+
+const UI_ICON_TARGETS = [
+  { selector: '.site-footer__email-arrow', icon: 'extlink' },
+  { selector: '.contact-card__submit-arrow', icon: 'extlink' },
+  { selector: '.work-download__arrow', icon: 'download' },
+  { selector: '.navbar__dropdown-chevron', icon: 'dropdown' },
+  { selector: '.portfolio-filter__chevron', icon: 'dropdown' },
+];
+
+function mountUiIcon(el, iconName) {
+  if (!el || el.dataset.uiIconMounted === '1') return;
+  const src = UI_ICON_FILES[iconName];
+  if (!src) return;
+
+  el.textContent = '';
+  el.classList.add('ui-icon', `ui-icon--${iconName}`);
+
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = '';
+  img.decoding = 'async';
+  img.width = 24;
+  img.height = 24;
+  if (iconName === 'arrow-left') {
+    el.classList.add('ui-icon--flip');
+  }
+  el.appendChild(img);
+  el.dataset.uiIconMounted = '1';
+}
+
+function initUiIcons() {
+  UI_ICON_TARGETS.forEach(({ selector, icon }) => {
+    document.querySelectorAll(selector).forEach((el) => mountUiIcon(el, icon));
+  });
+}
+
+function setThemeToggleIcon(theme) {
+  if (!themeToggle) return;
+  themeToggle.textContent = '';
+  const wrap = document.createElement('span');
+  wrap.className = `ui-icon ui-icon--${theme === 'dark' ? 'sun' : 'moon'}`;
+  wrap.setAttribute('aria-hidden', 'true');
+
+  const img = document.createElement('img');
+  img.src = UI_ICON_FILES[theme === 'dark' ? 'sun' : 'moon'];
+  img.alt = '';
+  img.decoding = 'async';
+  img.width = 28;
+  img.height = 28;
+  wrap.appendChild(img);
+  themeToggle.appendChild(wrap);
+}
+
 // ── FRECCIA INDIETRO (case study + pagine categoria portfolio) ──
 function isWorkDetailPage() {
   return /^lavoro-\d+\.html$/i.test(
@@ -28,10 +103,7 @@ function initBackButton() {
   back.className = 'work-back';
   back.setAttribute('aria-label', 'Torna indietro');
   back.setAttribute('data-i18n-aria-label', 'a11y.back');
-  back.innerHTML = `<svg class="work-back__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path d="M19 12H5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-    <path d="M12 19l-7-7 7-7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>`;
+  back.innerHTML = '<span class="ui-icon ui-icon--arrow-left ui-icon--flip work-back__icon" aria-hidden="true"><img src="img/icons/arrow.svg" alt="" width="40" height="40" decoding="async"></span>';
 
   back.addEventListener('click', () => {
     if (isCategory) {
@@ -107,6 +179,10 @@ document.querySelectorAll('.navbar__lang-btn').forEach((btn) => {
 });
 
 document.addEventListener('click', (event) => {
+  const portfolioItem = document.querySelector('.navbar__item--dropdown');
+  if (portfolioItem && !portfolioItem.contains(event.target)) {
+    closePortfolioDropdown();
+  }
   if (!nav || nav.contains(event.target)) return;
   setMenuOpen(false);
   setLangOpen(false);
@@ -114,6 +190,7 @@ document.addEventListener('click', (event) => {
 
 document.addEventListener('keydown', (event) => {
   if (event.key !== 'Escape') return;
+  closePortfolioDropdown();
   setMenuOpen(false);
   setLangOpen(false);
 });
@@ -122,6 +199,7 @@ window.addEventListener('resize', () => {
   if (!isDesktopNav()) return;
   setMenuOpen(false);
   setLangOpen(false);
+  closePortfolioDropdown();
   alignPortfolioDropdown();
 });
 
@@ -147,6 +225,41 @@ function alignPortfolioDropdown() {
 }
 
 alignPortfolioDropdown();
+
+function closePortfolioDropdown() {
+  const item = document.querySelector('.navbar__item--dropdown');
+  const trigger = document.getElementById('navbar-portfolio-trigger');
+  if (!item || !trigger) return;
+  item.classList.remove('is-open', 'is-collapsed');
+  trigger.setAttribute('aria-expanded', 'false');
+}
+
+function initPortfolioDropdown() {
+  const trigger = document.getElementById('navbar-portfolio-trigger');
+  const item = document.querySelector('.navbar__item--dropdown');
+  const chevron = trigger?.querySelector('.navbar__dropdown-chevron');
+  if (!trigger || !item || !chevron) return;
+
+  trigger.addEventListener('click', (event) => {
+    if (!isDesktopNav()) return;
+    if (!chevron.contains(event.target)) return;
+    event.preventDefault();
+    event.stopPropagation();
+
+    const open = !item.classList.contains('is-open');
+    item.classList.toggle('is-open', open);
+    item.classList.toggle('is-collapsed', !open);
+    trigger.setAttribute('aria-expanded', String(open));
+  });
+
+  item.addEventListener('mouseleave', () => {
+    if (!isDesktopNav()) return;
+    item.classList.remove('is-collapsed', 'is-open');
+    trigger.setAttribute('aria-expanded', 'false');
+  });
+}
+
+initPortfolioDropdown();
 
 const header = document.querySelector('.site-header');
 
@@ -176,13 +289,14 @@ function applyTheme(theme, persist) {
   document.documentElement.setAttribute('data-theme', theme);
   if (persist) localStorage.setItem(THEME_KEY, theme);
   if (themeToggle) {
-    // icona provvisoria: sole se sei in dark (per passare a light), luna se sei in light
-    themeToggle.textContent = theme === 'dark' ? '☀' : '☾';
+    setThemeToggleIcon(theme);
     themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
   }
 }
 
 applyTheme(currentTheme(), false);
+initUiIcons();
+window.initUiIcons = initUiIcons;
 
 if (themeToggle) {
   themeToggle.addEventListener('click', () => {
@@ -239,3 +353,31 @@ if (contactForm) {
     }
   });
 }
+
+(function loadAmbientAudio() {
+  if (document.querySelector('script[data-colorado-audio]')) return;
+  const script = document.createElement('script');
+  script.src = 'js/audio.js';
+  script.setAttribute('data-colorado-audio', '');
+  document.body.appendChild(script);
+})();
+
+(function initWorkGalleryPage() {
+  if (!document.querySelector('.work-gallery')) return;
+  document.body.classList.add('work-gallery-page');
+  if (document.querySelector('script[data-colorado-work-gallery]')) return;
+  const script = document.createElement('script');
+  script.src = 'js/work-gallery.js';
+  script.setAttribute('data-colorado-work-gallery', '');
+  document.body.appendChild(script);
+})();
+
+(function initWorkPdfViewer() {
+  if (!document.querySelector('.work-pdf')) return;
+  if (document.querySelector('script[data-colorado-work-pdf]')) return;
+  const script = document.createElement('script');
+  script.type = 'module';
+  script.src = 'js/work-pdf.js';
+  script.setAttribute('data-colorado-work-pdf', '');
+  document.body.appendChild(script);
+})();

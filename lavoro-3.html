@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,8 +42,8 @@
             </svg>
           </button>
           <div class="navbar__lang-list" id="navbar-langs">
-            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
             <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
+            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
             <button type="button" class="navbar__lang-btn" data-lang="fr">FR</button>
             <button type="button" class="navbar__lang-btn" data-lang="es">ES</button>
           </div>
@@ -83,8 +83,29 @@
 
       <section class="work-section work-section--pdf" aria-labelledby="work3-pdf">
         <h2 id="work3-pdf" class="work-section__title" data-i18n="work3.pdf.title">Presentazione</h2>
-        <p data-i18n="work3.pdf.lead">La versione completa del progetto è disponibile in PDF. Puoi aprirla nel browser o scaricarla per consultarla offline.</p>
-        <a class="work-download" href="img/esame-analisi-cinema.pdf" target="_blank" rel="noopener noreferrer" data-i18n="work3.pdf.cta">
+        <p data-i18n="work3.pdf.lead">Sfoglia la presentazione pagina per pagina oppure scarica il PDF completo.</p>
+
+        <div
+          class="work-pdf"
+          data-pdf="img/Esame Analisi del Cinema.pdf"
+          tabindex="0"
+          aria-label="PDF presentation viewer"
+          data-i18n-aria-label="a11y.work3.pdf.viewer"
+        >
+          <div class="work-pdf__viewport">
+            <p class="work-pdf__loading" data-i18n="work3.pdf.loading">Caricamento…</p>
+            <canvas class="work-pdf__canvas" role="img" hidden></canvas>
+          </div>
+          <div class="work-pdf__controls">
+            <button type="button" class="work-pdf__btn work-pdf__btn--prev" aria-label="Pagina precedente" data-i18n-aria-label="a11y.work3.pdf.prev">←</button>
+            <span class="work-pdf__status" aria-live="polite">
+              <span class="work-pdf__current">1</span> / <span class="work-pdf__total">—</span>
+            </span>
+            <button type="button" class="work-pdf__btn work-pdf__btn--next" aria-label="Pagina successiva" data-i18n-aria-label="a11y.work3.pdf.next">→</button>
+          </div>
+        </div>
+
+        <a class="work-download work-pdf__download" href="img/Esame%20Analisi%20del%20Cinema.pdf" target="_blank" rel="noopener noreferrer" data-i18n="work3.pdf.cta">
           Apri la presentazione PDF
           <span class="work-download__arrow" aria-hidden="true">↗</span>
         </a>

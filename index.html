@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="img/Coloradologo.svg" type="image/svg+xml">
   <title data-i18n="title.home">Colorado — Creative Direction | Colorado Design</title>
-  <meta name="description" content="Colorado Design: studio di media design a Roma. Brand identity, motion, print e digital. Portfolio creativo e progetti su misura." data-i18n-content="desc.home">
+  <meta name="description" content="Colorado Design — creative director bridging art and design. Multidisciplinary projects with an eco-sustainable vision: nature first, concrete social impact. Rome." data-i18n-content="desc.home">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Colorado Design">
   <meta property="og:title" content="Colorado — Creative Direction | Colorado Design">
-  <meta property="og:description" content="Colorado Design: studio di media design a Roma. Brand identity, motion, print e digital. Portfolio creativo e progetti su misura.">
+  <meta property="og:description" content="Colorado Design — creative director bridging art and design. Multidisciplinary projects with an eco-sustainable vision: nature first, concrete social impact. Rome.">
   <meta property="og:url" content="https://www.coloradodesign.it/">
   <meta property="og:image" content="https://www.coloradodesign.it/img/mainback.jpg">
-  <meta property="og:locale" content="it_IT">
+  <meta property="og:locale" content="en_US">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
@@ -21,6 +21,31 @@
   <script src="js/seo.js"></script>
 </head>
 <body class="home">
+<script>
+(function () {
+  var SESSION_KEY = 'colorado_session';
+  var INTRO_KEY = 'colorado_intro_seen';
+
+  function isInternalHomeVisit() {
+    try {
+      if (sessionStorage.getItem(SESSION_KEY) === '1') return true;
+      var ref = document.referrer;
+      if (!ref) return false;
+      return new URL(ref).origin === window.location.origin;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  var show = true;
+  try {
+    if (localStorage.getItem(INTRO_KEY) === '1') show = false;
+  } catch (e) {}
+  if (isInternalHomeVisit()) show = false;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) show = false;
+  if (show) document.body.classList.add('home-intro-active');
+})();
+</script>
 
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
@@ -49,8 +74,8 @@
             </svg>
           </button>
           <div class="navbar__lang-list" id="navbar-langs">
-            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
             <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
+            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
             <button type="button" class="navbar__lang-btn" data-lang="fr">FR</button>
             <button type="button" class="navbar__lang-btn" data-lang="es">ES</button>
           </div>
@@ -71,7 +96,7 @@
   </header>
 
   <main class="home-main">
-    <section class="home-hero" id="home-hero" data-card-count="5" aria-labelledby="home-hero-title">
+    <section class="home-hero" id="home-hero" data-card-count="4" aria-labelledby="home-hero-title">
       <h1 id="home-hero-title" class="visually-hidden" data-i18n="home.hero.title">Colorado — Creative Direction</h1>
 
       <div class="home-hero__sticky">
@@ -86,10 +111,11 @@
               <a href="lavoro-1.html" class="home-work-card__link home-overlay-ui">
                 <div class="home-work-card__inner">
                   <span class="home-work-card__meta">
-                    <span class="home-work-card__name">Logo Design</span>
+                    <span class="home-work-card__name" data-i18n="work1.name">Logo Collection</span>
+                    <span class="home-work-card__type" data-i18n="work1.type">Logo Design</span>
                   </span>
                   <span class="home-work-card__media">
-                    <img src="img/LogoDesign/Logo folio.png" alt="Logo Design — anteprima" class="home-work-card__img" width="640" height="360">
+                    <img src="img/LogoDesign/Logo folio.png" alt="Logo Collection — anteprima" class="home-work-card__img" width="640" height="360">
                   </span>
                 </div>
               </a>
@@ -116,23 +142,12 @@
                 </div>
               </a>
             </li>
-            <li class="home-work-card" data-offset-x="32" data-offset-y="-10" data-rotate-y="-11">
-              <a href="lavoro-4.html" class="home-work-card__link home-overlay-ui">
-                <div class="home-work-card__inner">
-                  <span class="home-work-card__meta">
-                    <span class="home-work-card__name">Colorado Series</span>
-                    <span class="home-work-card__type">Photography</span>
-                  </span>
-                  <span class="home-work-card__media home-work-card__media--placeholder home-work-card__media--tone-4" aria-hidden="true"></span>
-                </div>
-              </a>
-            </li>
             <li class="home-work-card" data-offset-x="-14" data-offset-y="5" data-rotate-y="6">
               <a href="lavoro-5.html" class="home-work-card__link home-overlay-ui">
                 <div class="home-work-card__inner">
                   <span class="home-work-card__meta">
                     <span class="home-work-card__name">Axit Collection</span>
-                    <span class="home-work-card__type">Brand identity</span>
+                    <span class="home-work-card__type" data-i18n="work5.type">Visual Communication</span>
                   </span>
                   <span class="home-work-card__media home-work-card__media--placeholder home-work-card__media--tone-5" aria-hidden="true"></span>
                 </div>
@@ -141,10 +156,20 @@
           </ul>
         </div>
 
-        <p class="home-hero__scroll home-overlay-ui" aria-hidden="true">
+        <p class="home-hero__scroll home-overlay-ui">
           <span data-i18n="home.scroll">Scroll</span>
           <span class="home-hero__progress" id="home-hero-progress">0%</span>
         </p>
+
+        <div class="home-hero-claim" id="home-hero-claim" aria-hidden="true">
+          <button type="button" class="home-hero-claim__trigger" id="home-hero-claim-trigger" data-i18n-aria-label="home.claim.aria" aria-label="I get the Chaos and I transform it into a vision clear and impactful">
+            <span class="home-hero-claim__line home-hero-claim__line--lead" data-i18n="home.claim.lead">I get the Chaos</span>
+            <span class="home-hero-claim__line home-hero-claim__line--mid" data-i18n="home.claim.mid">and I transform it into a vision</span>
+            <span class="home-hero-claim__line home-hero-claim__line--accent">
+              <span class="home-hero-claim__clarity" data-i18n="home.claim.clarity">clear</span><span class="home-hero-claim__and" data-i18n="home.claim.and"> and </span><span class="home-hero-claim__vision" data-i18n="home.claim.vision">impactful</span>
+            </span>
+          </button>
+        </div>
 
         <div class="home-nav-reveal" id="home-nav-reveal" aria-hidden="true">
           <nav class="home-nav-reveal__hub" aria-label="Sezioni principali">
@@ -162,7 +187,6 @@
                 <div class="site-footer__brand">
                   <img src="img/Coloradologo.svg" alt="Logo Colorado Creative Studio" data-i18n-alt="footer.logo.alt" class="site-footer__logo-img" width="48" height="48">
                   <p class="site-footer__name">COLORADO</p>
-                  <p class="site-footer__role" data-i18n="home.hero.role">Creative Direction</p>
                 </div>
                 <p class="site-footer__location">Rome, Italy · 41°50′01″N 12°28′15″E</p>
               </div>
@@ -185,8 +209,29 @@
     </section>
   </main>
 
+  <div class="home-intro" id="home-intro" role="dialog" aria-modal="true" aria-labelledby="home-intro-start" aria-hidden="true">
+    <div class="home-intro__scrim" aria-hidden="true"></div>
+
+    <div class="home-intro__video-wrap" id="home-intro-video-wrap">
+      <video class="home-intro__video" id="home-intro-video" playsinline preload="metadata" aria-label="Sigla Colorado Design">
+        <source src="img/sigla.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="home-intro__gate" id="home-intro-gate">
+      <div class="home-intro__inner">
+        <button type="button" class="home-intro__start" id="home-intro-start" data-i18n="home.intro.start">
+          Welcome to Colorful Colorado
+        </button>
+      </div>
+    </div>
+
+    <button type="button" class="home-intro__skip" id="home-intro-skip" data-i18n="home.intro.skip">Skip</button>
+  </div>
+
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
+  <script src="js/intro.js"></script>
   <script src="js/home.js"></script>
 </body>
 </html>

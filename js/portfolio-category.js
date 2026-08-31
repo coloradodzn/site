@@ -1,6 +1,7 @@
 const PORTFOLIO_SERVICES = [
   { value: 'creative-direction', i18n: 'portfolio.service.creativeDirection' },
   { value: 'brand', i18n: 'portfolio.service.brand' },
+  { value: 'logo', i18n: 'portfolio.service.logo' },
   { value: 'visual', i18n: 'portfolio.service.visual' },
   { value: 'web', i18n: 'portfolio.service.web' },
   { value: 'motion', i18n: 'portfolio.service.motion' },
@@ -199,6 +200,7 @@ function initCatalogFilters() {
 
   mountCatalogFilters(catalog);
   applyCatalogFilters(catalog);
+  if (typeof window.initUiIcons === 'function') window.initUiIcons();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

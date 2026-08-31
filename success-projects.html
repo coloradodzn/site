@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,8 +42,8 @@
             </svg>
           </button>
           <div class="navbar__lang-list" id="navbar-langs">
-            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
             <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
+            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
             <button type="button" class="navbar__lang-btn" data-lang="fr">FR</button>
             <button type="button" class="navbar__lang-btn" data-lang="es">ES</button>
           </div>
@@ -76,26 +76,17 @@
       </div>
 
       <div class="portfolio-catalog__body">
-        <section class="portfolio-grid-group" data-group="brand">
-          <h2 class="portfolio-grid-group__title" data-i18n="contact.subject.brand">Brand Identity</h2>
+        <section class="portfolio-grid-group" data-group="logo">
+          <h2 class="portfolio-grid-group__title" data-i18n="portfolio.service.logo">Logo Design</h2>
           <ul class="portfolio-grid">
-            <li class="portfolio-grid__item" data-service="brand" data-sector="fashion">
+            <li class="portfolio-grid__item" data-service="logo" data-sector="fashion">
               <a href="lavoro-1.html" class="portfolio-card">
                 <div class="portfolio-card__media">
-                  <img src="img/LogoDesign/Logo folio.png" alt="Logo Design — anteprima" class="portfolio-card__img" width="640" height="360" loading="lazy">
+                  <img src="img/LogoDesign/Logo folio.png" alt="Logo Collection — anteprima" class="portfolio-card__img" width="640" height="360" loading="lazy">
                 </div>
                 <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name">Logo Design</span>
-                  <span class="portfolio-card__type">Brand identity</span>
-                </span>
-              </a>
-            </li>
-            <li class="portfolio-grid__item" data-service="brand" data-sector="fashion sport">
-              <a href="lavoro-5.html" class="portfolio-card">
-                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-5" aria-hidden="true"></div>
-                <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name">Axit Collection</span>
-                  <span class="portfolio-card__type">Brand identity</span>
+                  <span class="portfolio-card__name" data-i18n="work1.name">Logo Collection</span>
+                  <span class="portfolio-card__type" data-i18n="work1.type">Logo Design</span>
                 </span>
               </a>
             </li>
@@ -111,6 +102,15 @@
                 <span class="portfolio-card__meta">
                   <span class="portfolio-card__name">Calyy</span>
                   <span class="portfolio-card__type">Visual campaign</span>
+                </span>
+              </a>
+            </li>
+            <li class="portfolio-grid__item" data-service="visual" data-sector="fashion sport esports">
+              <a href="lavoro-5.html" class="portfolio-card">
+                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-5" aria-hidden="true"></div>
+                <span class="portfolio-card__meta">
+                  <span class="portfolio-card__name">Axit Collection</span>
+                  <span class="portfolio-card__type" data-i18n="work5.type">Visual Communication</span>
                 </span>
               </a>
             </li>

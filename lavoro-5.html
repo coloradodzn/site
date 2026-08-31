@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="img/Coloradologo.svg" type="image/svg+xml">
   <title data-i18n="title.lavoro5">Axit Collection — Colorado Design</title>
-  <meta name="description" content="Axit Collection — case study di brand identity e collezione moda." data-i18n-content="desc.lavoro5">
+  <meta name="description" content="Axit Collection — case study di comunicazione visiva e social content." data-i18n-content="desc.lavoro5">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="js/seo.js"></script>
 </head>
-<body>
+<body class="work-gallery-page">
 
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
@@ -42,8 +42,8 @@
             </svg>
           </button>
           <div class="navbar__lang-list" id="navbar-langs">
-            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
             <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
+            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
             <button type="button" class="navbar__lang-btn" data-lang="fr">FR</button>
             <button type="button" class="navbar__lang-btn" data-lang="es">ES</button>
           </div>
@@ -63,8 +63,51 @@
     </nav>
   </header>
 
-  <main>
-    <h1 class="visually-hidden" data-i18n="title.lavoro5">Axit Collection — Colorado Design</h1>
+  <main class="work-gallery" id="work-gallery">
+    <header class="work-gallery__meta">
+      <p class="work-gallery__category" data-i18n="gallery.work5.category">Visual Communication</p>
+      <h1 class="work-gallery__title" data-i18n="gallery.work5.title">Axit Collection</h1>
+    </header>
+
+    <figure class="work-gallery__stage">
+      <img
+        class="work-gallery__image"
+        src="img/Axit Social Communication/axit-jersey2.jpg"
+        alt="Axit Collection — jersey design"
+        width="1600"
+        height="1067"
+        decoding="async"
+      >
+    </figure>
+
+    <nav class="work-gallery__filmstrip-wrap" aria-label="Project gallery" data-i18n-aria-label="a11y.gallery">
+      <div class="work-gallery__filmstrip" role="tablist">
+        <button type="button" class="work-gallery__thumb is-active" role="tab" aria-selected="true" data-src="img/Axit Social Communication/axit-jersey2.jpg" data-alt="Axit Collection — jersey design">
+          <img src="img/Axit Social Communication/axit-jersey2.jpg" alt="" width="160" height="120" decoding="async">
+        </button>
+        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/axit-jersey3.jpg" data-alt="Axit Collection — jersey variation">
+          <img src="img/Axit Social Communication/axit-jersey3.jpg" alt="" width="160" height="120" decoding="async">
+        </button>
+        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/axit-jersey4.jpg" data-alt="Axit Collection — jersey detail">
+          <img src="img/Axit Social Communication/axit-jersey4.jpg" alt="" width="160" height="120" decoding="async">
+        </button>
+        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/axit-jersey5.jpg" data-alt="Axit Collection — jersey layout">
+          <img src="img/Axit Social Communication/axit-jersey5.jpg" alt="" width="160" height="120" decoding="async">
+        </button>
+        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/axit-academy.jpg" data-alt="Axit Collection — academy visual">
+          <img src="img/Axit Social Communication/axit-academy.jpg" alt="" width="160" height="120" decoding="async">
+        </button>
+        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/sfondo-storie-axit.jpg" data-alt="Axit Collection — stories background">
+          <img src="img/Axit Social Communication/sfondo-storie-axit.jpg" alt="" width="160" height="120" decoding="async">
+        </button>
+        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/elmo-axit.jpg" data-alt="Axit Collection — helmet graphic">
+          <img src="img/Axit Social Communication/elmo-axit.jpg" alt="" width="160" height="120" decoding="async">
+        </button>
+        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/icon-axit.jpg" data-alt="Axit Collection — icon system">
+          <img src="img/Axit Social Communication/icon-axit.jpg" alt="" width="160" height="120" decoding="async">
+        </button>
+      </div>
+    </nav>
   </main>
 
   <footer class="site-footer">

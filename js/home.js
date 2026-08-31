@@ -5,14 +5,35 @@ const homeHeroScrim = document.getElementById('home-hero-scrim');
 const homeHeroProgress = document.getElementById('home-hero-progress');
 const homeNavReveal = document.getElementById('home-nav-reveal');
 const homeFooter = document.getElementById('home-footer');
+const homeClaim = document.getElementById('home-hero-claim');
+const homeClaimTrigger = document.getElementById('home-hero-claim-trigger');
 const workCards = homeHero ? [...homeHero.querySelectorAll('.home-work-card')] : [];
+
+let claimShattered = false;
+let claimShatterAnimating = false;
+let claimEnterPlayed = false;
+let lastProgressPercent = 0;
+let lastHeroProgress = 0;
+let navAutoDrive = false;
+let navAutoStart = 0;
 
 const Z_STEP = 1950;
 const TARGET_Z = -200;
 const BG_ZOOM_START = 1;
 const BG_ZOOM_END = 2.35;
 const HOME_SCRIM_MAX = 0.24;
-const EXTRA_SCROLL_SEGMENTS = 3;
+const EXTRA_SCROLL_SEGMENTS = 4;
+const CARD_CLICK_OPACITY = 0.4;
+const CARD_CLICK_DEPTH = 0.36;
+const CARD_HIDE_PERCENT = 62;
+const CLAIM_SHOW_PERCENT = 62;
+const CLAIM_SHATTER_START_PERCENT = 63;
+const CLAIM_SHATTER_END_PERCENT = 68;
+const NAV_START_PERCENT = 68;
+const NAV_CENTER_PERCENT = 80;
+const FOOTER_START_PERCENT = 80;
+const FOOTER_END_PERCENT = 95;
+const CLAIM_ANIM_MS = 850;
 
 const DEFAULT_OFFSETS = [
   { x: -34, y: -12, rotateY: 12 },
@@ -82,6 +103,7 @@ function getScrollPhases(progress) {
 
   let cardPhase = clamp(pos / cardCount, 0, 1);
   let exitPhase = 0;
+  let claimPhase = 0;
   let navPhase = 0;
   let footerPhase = 0;
 
@@ -90,19 +112,41 @@ function getScrollPhases(progress) {
     exitPhase = clamp(pos - cardCount, 0, 1);
   }
 
-  if (pos > cardCount + 1) {
-    exitPhase = 1;
-    navPhase = clamp(pos - cardCount - 1, 0, 1);
+  const progressPercent = Math.round(progress * 100);
+
+  if (progressPercent >= CLAIM_SHATTER_START_PERCENT) {
+    claimPhase = clamp(
+      (progressPercent - CLAIM_SHATTER_START_PERCENT)
+        / (CLAIM_SHATTER_END_PERCENT - CLAIM_SHATTER_START_PERCENT),
+      0,
+      1
+    );
   }
 
-  if (pos > cardCount + 2) {
+  if (pos > cardCount + 1) {
+    exitPhase = 1;
+  }
+
+  if (progressPercent >= NAV_START_PERCENT) {
+    navPhase = clamp(
+      (progressPercent - NAV_START_PERCENT) / (NAV_CENTER_PERCENT - NAV_START_PERCENT),
+      0,
+      1
+    );
+  }
+
+  if (progressPercent >= NAV_CENTER_PERCENT) {
     navPhase = 1;
-    footerPhase = clamp(pos - cardCount - 2, 0, 1);
+    footerPhase = clamp(
+      (progressPercent - FOOTER_START_PERCENT) / (FOOTER_END_PERCENT - FOOTER_START_PERCENT),
+      0,
+      1
+    );
   }
 
   const tunnelPhase = clamp((cardPhase - 0.06) / 0.94, 0, 1);
 
-  return { cardPhase, tunnelPhase, exitPhase, navPhase, footerPhase, pos };
+  return { cardPhase, tunnelPhase, exitPhase, claimPhase, navPhase, footerPhase, pos };
 }
 
 function getSettlePhase(pos, cardCount) {
@@ -199,15 +243,379 @@ function updateHomeFooter(footerPhase) {
   homeFooter.setAttribute('aria-hidden', String(footerPhase < 0.2));
 }
 
+function canClickCard({ visibleOpacity, exitPhase, claimPhase, navPhase, z = null, depth = null }) {
+  if (exitPhase >= 0.15 || claimPhase > 0 || navPhase > 0) return false;
+  if (z !== null && z > TARGET_Z) return false;
+
+  const meetsOpacity = visibleOpacity >= CARD_CLICK_OPACITY;
+  const meetsDepth = depth !== null && depth >= CARD_CLICK_DEPTH;
+
+  return meetsOpacity || meetsDepth;
+}
+
+function storeCardInteraction(card, state) {
+  card.__interaction = state;
+}
+
+function getCardAtPoint(clientX, clientY) {
+  let bestCard = null;
+  let bestDepth = -1;
+
+  workCards.forEach((card) => {
+    const state = card.__interaction;
+    if (!state?.isClickable) return;
+
+    const rect = card.getBoundingClientRect();
+    if (
+      clientX < rect.left
+      || clientX > rect.right
+      || clientY < rect.top
+      || clientY > rect.bottom
+    ) return;
+
+    if (state.depth > bestDepth) {
+      bestDepth = state.depth;
+      bestCard = card;
+    }
+  });
+
+  return bestCard;
+}
+
+function setCardInteractive(card, isClickable, zIndex = 0, delegateToScene = false) {
+  const link = card.querySelector('.home-work-card__link');
+  card.classList.toggle('is-clickable', isClickable);
+
+  if (delegateToScene) {
+    card.style.pointerEvents = 'none';
+    if (link) link.style.pointerEvents = 'none';
+  } else {
+    card.style.pointerEvents = isClickable ? 'auto' : 'none';
+    if (link) link.style.pointerEvents = isClickable ? 'auto' : 'none';
+  }
+
+  card.style.zIndex = isClickable ? String(zIndex) : '';
+}
+
+function resetClaimFragments() {
+  if (!homeClaimTrigger) return;
+  delete homeClaimTrigger.dataset.fragmentsReady;
+  delete homeClaimTrigger.dataset.fragmentCount;
+}
+
+function rebuildClaimLines() {
+  if (!homeClaimTrigger) return;
+
+  homeClaimTrigger.innerHTML = `
+    <span class="home-hero-claim__line home-hero-claim__line--lead" data-i18n="home.claim.lead"></span>
+    <span class="home-hero-claim__line home-hero-claim__line--mid" data-i18n="home.claim.mid"></span>
+    <span class="home-hero-claim__line home-hero-claim__line--accent">
+      <span class="home-hero-claim__clarity" data-i18n="home.claim.clarity"></span><span class="home-hero-claim__and" data-i18n="home.claim.and"></span><span class="home-hero-claim__vision" data-i18n="home.claim.vision"></span>
+    </span>
+  `;
+  resetClaimFragments();
+}
+
+function prepareClaimFragments() {
+  if (!homeClaimTrigger) return;
+  if (homeClaimTrigger.dataset.fragmentsReady === '1') return;
+
+  let delayIndex = 0;
+
+  homeClaimTrigger.querySelectorAll('.home-hero-claim__line').forEach((line) => {
+    const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+
+    while (walker.nextNode()) {
+      textNodes.push(walker.currentNode);
+    }
+
+    textNodes.forEach((node) => {
+      const text = node.textContent;
+      if (!text) return;
+
+      const replacement = document.createDocumentFragment();
+
+      [...text].forEach((char) => {
+        const span = document.createElement('span');
+        span.className = 'home-hero-claim__fragment';
+        span.textContent = char === ' ' ? '\u00a0' : char;
+        span.dataset.delayIndex = String(delayIndex);
+        span.style.setProperty('--delay', `${delayIndex * 0.01}s`);
+        if (char.trim()) delayIndex += 1;
+        replacement.appendChild(span);
+      });
+
+      node.parentNode.replaceChild(replacement, node);
+    });
+  });
+
+  homeClaimTrigger.dataset.fragmentsReady = '1';
+  homeClaimTrigger.dataset.fragmentCount = String(Math.max(delayIndex, 1));
+}
+
+function assignFragmentScatter(fragment) {
+  if (!fragment.dataset.tx) {
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 48 + Math.random() * 200;
+    fragment.dataset.tx = String(Math.cos(angle) * distance);
+    fragment.dataset.ty = String(Math.sin(angle) * distance);
+    fragment.dataset.rot = String((Math.random() - 0.5) * 720);
+  }
+
+  fragment.style.setProperty('--tx', `${fragment.dataset.tx}px`);
+  fragment.style.setProperty('--ty', `${fragment.dataset.ty}px`);
+  fragment.style.setProperty('--rot', `${fragment.dataset.rot}deg`);
+}
+
+function clearFragmentMotionStyles() {
+  homeClaim?.querySelectorAll('.home-hero-claim__fragment').forEach((fragment) => {
+    fragment.style.animation = '';
+    fragment.style.removeProperty('transform');
+    fragment.style.removeProperty('opacity');
+  });
+}
+
+function restoreClaimContent() {
+  if (!homeClaimTrigger || !homeClaim) return;
+
+  resetClaimFragments();
+  homeClaim.classList.remove('is-shattered', 'is-shattering', 'is-reassembling');
+  homeClaim.style.opacity = '';
+
+  const lang = document.documentElement.lang || 'en';
+  if (typeof i18nApply === 'function') {
+    i18nApply(lang);
+  }
+}
+
+function triggerClaimShatter(fromClick = false) {
+  if (claimShattered || claimShatterAnimating || !homeClaim) return;
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reducedMotion) {
+    claimShattered = true;
+    homeClaim.classList.remove('is-visible', 'is-shattering', 'is-reassembling');
+    homeClaim.classList.add('is-shattered');
+    homeClaim.style.opacity = '0';
+    homeClaim.setAttribute('aria-hidden', 'true');
+    if (fromClick) {
+      navAutoDrive = true;
+      navAutoStart = performance.now();
+    }
+    updateHomeExperience();
+    return;
+  }
+
+  prepareClaimFragments();
+  claimShatterAnimating = true;
+
+  homeClaim.classList.remove('is-reassembling', 'is-shattered');
+  homeClaim.classList.add('is-visible', 'is-shattering');
+  homeClaim.style.opacity = '1';
+  homeClaim.setAttribute('aria-hidden', 'false');
+
+  const fragments = homeClaim.querySelectorAll('.home-hero-claim__fragment');
+  fragments.forEach((fragment) => {
+    const delayIndex = Number.parseInt(fragment.dataset.delayIndex || '0', 10);
+    fragment.style.animation = '';
+    fragment.style.setProperty('--delay', `${delayIndex * 0.01}s`);
+    assignFragmentScatter(fragment);
+  });
+
+  void homeClaim.offsetWidth;
+
+  window.setTimeout(() => {
+    claimShatterAnimating = false;
+    claimShattered = true;
+    homeClaim.classList.remove('is-visible', 'is-shattering');
+    homeClaim.classList.add('is-shattered');
+    homeClaim.style.opacity = '0';
+    homeClaim.setAttribute('aria-hidden', 'true');
+    if (fromClick) {
+      navAutoDrive = true;
+      navAutoStart = performance.now();
+    }
+    updateHomeExperience();
+  }, CLAIM_ANIM_MS);
+}
+
+function triggerClaimReassemble() {
+  if (!homeClaim || claimShatterAnimating || !claimShattered) return;
+
+  const fragments = homeClaim.querySelectorAll('.home-hero-claim__fragment');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reducedMotion || !fragments.length) {
+    claimShattered = false;
+    navAutoDrive = false;
+    lastProgressPercent = 0;
+    restoreClaimContent();
+    updateHomeExperience();
+    return;
+  }
+
+  claimShatterAnimating = true;
+  claimShattered = false;
+  navAutoDrive = false;
+
+  homeClaim.classList.remove('is-shattered', 'is-shattering');
+  homeClaim.classList.add('is-visible', 'is-reassembling');
+  homeClaim.style.opacity = '1';
+  homeClaim.setAttribute('aria-hidden', 'false');
+
+  const total = fragments.length;
+  fragments.forEach((fragment) => {
+    const delayIndex = Number.parseInt(fragment.dataset.delayIndex || '0', 10);
+    assignFragmentScatter(fragment);
+    fragment.style.animation = 'none';
+    fragment.style.setProperty('--delay', `${(total - 1 - delayIndex) * 0.008}s`);
+  });
+
+  void homeClaim.offsetWidth;
+  fragments.forEach((fragment) => {
+    fragment.style.animation = '';
+  });
+
+  window.setTimeout(() => {
+    claimShatterAnimating = false;
+    homeClaim.classList.remove('is-reassembling');
+    clearFragmentMotionStyles();
+    updateHomeExperience();
+  }, CLAIM_ANIM_MS);
+}
+
+function updateHomeClaim(progress, scrollingBack) {
+  if (!homeClaim || claimShatterAnimating) return;
+
+  const progressPercent = Math.round(progress * 100);
+
+  if (claimShattered) {
+    homeClaim.classList.remove('is-visible', 'is-shattering', 'is-reassembling');
+    homeClaim.classList.add('is-shattered');
+    homeClaim.style.opacity = '0';
+    homeClaim.setAttribute('aria-hidden', 'true');
+    lastProgressPercent = progressPercent;
+    return;
+  }
+
+  if (progressPercent < CLAIM_SHOW_PERCENT) {
+    if (!homeClaimTrigger?.dataset.fragmentsReady) {
+      claimEnterPlayed = false;
+    }
+    homeClaim.classList.remove('is-visible', 'is-shattering', 'is-reassembling', 'is-shattered');
+    homeClaim.style.opacity = '0';
+    homeClaim.setAttribute('aria-hidden', 'true');
+    lastProgressPercent = progressPercent;
+    return;
+  }
+
+  const opacity = easeOutCubic(clamp((progressPercent - (CLAIM_SHOW_PERCENT - 1)) / 2, 0, 1));
+
+  if (!claimEnterPlayed) {
+    claimEnterPlayed = true;
+    homeClaimTrigger?.classList.add('is-entering');
+  }
+
+  homeClaim.classList.remove('is-shattered', 'is-shattering', 'is-reassembling');
+  homeClaim.classList.add('is-visible');
+  homeClaim.style.opacity = String(opacity);
+  homeClaim.setAttribute('aria-hidden', String(opacity < 0.08));
+
+  const crossedShatterStart = progressPercent >= CLAIM_SHATTER_START_PERCENT
+    && lastProgressPercent < CLAIM_SHATTER_START_PERCENT;
+
+  if (
+    !scrollingBack
+    && progressPercent >= CLAIM_SHATTER_START_PERCENT
+    && (crossedShatterStart || !homeClaimTrigger?.dataset.fragmentsReady)
+  ) {
+    triggerClaimShatter(false);
+  }
+
+  lastProgressPercent = progressPercent;
+}
+
+function getDrivenNavPhase(navPhase) {
+  if (!navAutoDrive) return navPhase;
+
+  const autoPhase = easeOutCubic(clamp((performance.now() - navAutoStart) / 1200, 0, 1));
+  if (autoPhase >= 1) navAutoDrive = false;
+  return Math.max(navPhase, autoPhase);
+}
+
+function getDrivenFooterPhase(navPhase, footerPhase) {
+  if (!navAutoDrive && footerPhase > 0) return footerPhase;
+  const drivenNav = getDrivenNavPhase(navPhase);
+  if (drivenNav < 1) return footerPhase;
+  if (navAutoDrive) {
+    return easeOutCubic(clamp((performance.now() - navAutoStart - 900) / 900, 0, 1));
+  }
+  return footerPhase;
+}
+
+function initClaimInteraction() {
+  if (!homeClaimTrigger) return;
+
+  homeClaimTrigger.addEventListener('animationend', (event) => {
+    if (event.animationName === 'home-claim-enter') {
+      homeClaimTrigger.classList.remove('is-entering');
+    }
+  });
+
+  homeClaimTrigger.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (!homeClaim?.classList.contains('is-visible')) return;
+    triggerClaimShatter(true);
+  });
+
+  window.addEventListener('colorado:langchange', () => {
+    if (!homeClaimTrigger?.querySelector('.home-hero-claim__fragment')) return;
+    claimShattered = false;
+    claimShatterAnimating = false;
+    restoreClaimContent();
+    const lang = document.documentElement.lang || 'en';
+    if (typeof i18nApply === 'function') {
+      i18nApply(lang);
+    }
+    updateHomeExperience();
+  });
+}
+
 function updateHomeExperience() {
   if (!homeHero || !workCards.length) return;
 
   const cardCount = getCardCount();
   const progress = getHeroProgress();
-  const { tunnelPhase, exitPhase, navPhase, footerPhase, pos } = getScrollPhases(progress);
+  const scrollingBack = progress < lastHeroProgress - 0.0001;
+  lastHeroProgress = progress;
+  const progressPercent = Math.round(progress * 100);
+  let phases = getScrollPhases(progress);
+
+  if (
+    claimShattered
+    && !claimShatterAnimating
+    && scrollingBack
+    && progressPercent < CLAIM_SHATTER_END_PERCENT
+  ) {
+    triggerClaimReassemble();
+    phases = getScrollPhases(progress);
+  }
+
+  const { tunnelPhase, exitPhase, claimPhase, navPhase, footerPhase, pos } = phases;
+
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scrollOffset = tunnelPhase * Z_STEP * cardCount + exitPhase * Z_STEP * 1.35;
-  const cardVisibility = exitPhase >= 1 || navPhase > 0 ? 0 : 1 - easeOutCubic(exitPhase);
+  let cardVisibility = 1;
+
+  if (navPhase > 0 || progressPercent >= CARD_HIDE_PERCENT) {
+    cardVisibility = 0;
+  } else if (exitPhase > 0) {
+    cardVisibility = 1 - easeOutCubic(
+      clamp((progressPercent - (CARD_HIDE_PERCENT - 2)) / 2, 0, 1)
+    );
+  }
   const settleEased = getSettlePhase(pos, cardCount);
   const tunnelBgProgress = clamp((progress * getTotalSegments()) / (cardCount + 1), 0, 1);
 
@@ -219,21 +627,39 @@ function updateHomeExperience() {
 
     workCards.forEach((card, index) => {
       const layout = getCardLayout(card, index);
-      const isActive = index === activeIndex && exitPhase < 0.15 && navPhase === 0;
+      const isActive = index === activeIndex && exitPhase < 0.15 && claimPhase === 0 && navPhase === 0;
       const spread = isActive ? 0 : spreadFactor;
       const x = (layout.x / 100) * window.innerWidth * spread;
       const y = (layout.y / 100) * window.innerHeight * spread;
 
       card.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0) scale(${isActive ? 1 : 0.88})`;
-      card.style.opacity = isActive ? String(cardVisibility) : String(0.2 * cardVisibility);
+      const visibleOpacity = isActive ? cardVisibility : 0.2 * cardVisibility;
+      const isClickable = canClickCard({
+        visibleOpacity,
+        exitPhase,
+        claimPhase,
+        navPhase,
+        depth: isActive ? 1 : 0.2,
+      });
+
+      card.style.opacity = String(visibleOpacity);
       card.classList.toggle('is-active', isActive);
+      storeCardInteraction(card, {
+        depth: isActive ? 1 : 0.2,
+        isClickable,
+      });
+      setCardInteractive(card, isClickable, isActive ? 20 : 10, false);
     });
 
-    updateNavReveal(navPhase);
-    updateHomeFooter(footerPhase);
+    updateHomeClaim(progress, scrollingBack);
+    const drivenNavPhase = getDrivenNavPhase(navPhase);
+    const drivenFooterPhase = getDrivenFooterPhase(navPhase, footerPhase);
+    updateNavReveal(drivenNavPhase);
+    updateHomeFooter(drivenFooterPhase);
 
     if (homeHeroProgress) homeHeroProgress.textContent = `${Math.round(progress * 100)}%`;
-    document.body.classList.toggle('home-flow-complete', footerPhase > 0.2 || navPhase > 0.5);
+    document.body.classList.toggle('home-flow-complete', drivenFooterPhase > 0.2 || drivenNavPhase > 0.5);
+    if (navAutoDrive) window.requestAnimationFrame(updateHomeExperience);
     return;
   }
 
@@ -255,18 +681,40 @@ function updateHomeExperience() {
 
     card.style.transform = getCardTransform(z, layout, depth);
     const cardOpacity = tunnelPhase > 0 ? clamp(depth * 0.9 + 0.08, 0, 1) : 0;
-    card.style.opacity = String(cardOpacity * cardVisibility);
-    card.classList.toggle('is-active', index === closestIndex && exitPhase < 0.15 && navPhase === 0);
+    const visibleOpacity = cardOpacity * cardVisibility;
+    card.style.opacity = String(visibleOpacity);
+    const isFront = index === closestIndex && exitPhase < 0.15 && claimPhase === 0 && navPhase === 0;
+    const isClickable = canClickCard({
+      visibleOpacity,
+      exitPhase,
+      claimPhase,
+      navPhase,
+      z,
+      depth,
+    });
+
+    card.classList.toggle('is-active', isFront);
+    storeCardInteraction(card, { depth, isClickable });
+    setCardInteractive(
+      card,
+      isClickable,
+      isClickable ? Math.max(1, Math.round(depth * 100)) : 0,
+      true
+    );
   });
 
-  updateNavReveal(navPhase);
-  updateHomeFooter(footerPhase);
+  updateHomeClaim(progress, scrollingBack);
+  const drivenNavPhase = getDrivenNavPhase(navPhase);
+  const drivenFooterPhase = getDrivenFooterPhase(navPhase, footerPhase);
+  updateNavReveal(drivenNavPhase);
+  updateHomeFooter(drivenFooterPhase);
 
   if (homeHeroProgress) {
     homeHeroProgress.textContent = `${Math.round(progress * 100)}%`;
   }
 
-  document.body.classList.toggle('home-flow-complete', footerPhase > 0.15 || navPhase > 0.12);
+  document.body.classList.toggle('home-flow-complete', drivenFooterPhase > 0.15 || drivenNavPhase > 0.12);
+  if (navAutoDrive) window.requestAnimationFrame(updateHomeExperience);
 }
 
 function setHeroHeight() {
@@ -276,8 +724,35 @@ function setHeroHeight() {
   homeHero.style.height = `${totalSegments * 100}dvh`;
 }
 
+function initWorkCardNavigation() {
+  const scene = document.getElementById('home-hero-scene');
+  if (!scene) return;
+
+  scene.addEventListener('click', (event) => {
+    if (document.body.classList.contains('home-intro-active')) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const card = getCardAtPoint(event.clientX, event.clientY);
+    if (!card) return;
+
+    const href = card.querySelector('.home-work-card__link')?.getAttribute('href');
+    if (!href) return;
+
+    event.preventDefault();
+    window.location.assign(href);
+  });
+
+  scene.addEventListener('mousemove', (event) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const card = getCardAtPoint(event.clientX, event.clientY);
+    scene.style.cursor = card ? 'pointer' : '';
+  });
+}
+
 if (homeHero) {
   setHeroHeight();
+  initWorkCardNavigation();
+  initClaimInteraction();
   updateHomeExperience();
   window.addEventListener('scroll', updateHomeExperience, { passive: true });
   window.addEventListener('resize', () => {

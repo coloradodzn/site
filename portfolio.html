@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,8 +42,8 @@
             </svg>
           </button>
           <div class="navbar__lang-list" id="navbar-langs">
-            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
             <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
+            <button type="button" class="navbar__lang-btn" data-lang="it">IT</button>
             <button type="button" class="navbar__lang-btn" data-lang="fr">FR</button>
             <button type="button" class="navbar__lang-btn" data-lang="es">ES</button>
           </div>
@@ -85,11 +85,11 @@
             <li class="portfolio-carousel__item">
               <a href="lavoro-1.html" class="portfolio-card">
                 <div class="portfolio-card__media">
-                  <img src="img/LogoDesign/Logo folio.png" alt="Logo Design — anteprima" class="portfolio-card__img" width="640" height="360">
+                  <img src="img/LogoDesign/Logo folio.png" alt="Logo Collection — anteprima" class="portfolio-card__img" width="640" height="360">
                 </div>
                 <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name">Logo Design</span>
-                  <span class="portfolio-card__type">Brand identity</span>
+                  <span class="portfolio-card__name" data-i18n="work1.name">Logo Collection</span>
+                  <span class="portfolio-card__type" data-i18n="work1.type">Logo Design</span>
                 </span>
               </a>
             </li>
@@ -107,7 +107,7 @@
                 <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-5" aria-hidden="true"></div>
                 <span class="portfolio-card__meta">
                   <span class="portfolio-card__name">Axit Collection</span>
-                  <span class="portfolio-card__type">Brand identity</span>
+                  <span class="portfolio-card__type" data-i18n="work5.type">Visual Communication</span>
                 </span>
               </a>
             </li>
@@ -140,21 +140,41 @@
                 </span>
               </a>
             </li>
-            <li class="portfolio-carousel__item">
-              <a href="lavoro-4.html" class="portfolio-card">
-                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-4" aria-hidden="true"></div>
-                <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name">Colorado Series</span>
-                  <span class="portfolio-card__type">Photography</span>
-                </span>
-              </a>
-            </li>
           </ul>
         </div>
         <button type="button" class="portfolio-carousel__btn portfolio-carousel__btn--next" aria-label="Scorri avanti">
           <span aria-hidden="true">→</span>
         </button>
       </div>
+    </section>
+
+    <section class="clients-marquee" aria-labelledby="clients-marquee-heading">
+      <div class="clients-marquee__copy">
+        <h2 id="clients-marquee-heading" class="clients-marquee__title" data-i18n="clients.title">YOU'RE NOT ALONE</h2>
+        <p class="clients-marquee__lead" data-i18n="clients.lead">Brands &amp; partners that have chosen to build with us.</p>
+      </div>
+
+      <div class="clients-marquee__viewport" aria-hidden="true">
+        <div class="clients-marquee__track">
+          <ul class="clients-marquee__list">
+            <li class="clients-marquee__item"><img src="img/loghi/Axit.svg" alt="" width="140" height="56" decoding="async"></li>
+            <li class="clients-marquee__item"><img src="img/loghi/Hark.svg" alt="" width="140" height="56" decoding="async"></li>
+            <li class="clients-marquee__item"><img src="img/loghi/Moondream.svg" alt="" width="140" height="56" decoding="async"></li>
+            <li class="clients-marquee__item"><img src="img/loghi/bebon.svg" alt="" width="140" height="56" decoding="async"></li>
+            <li class="clients-marquee__item"><img src="img/loghi/Locked.svg" alt="" width="140" height="56" decoding="async"></li>
+            <li class="clients-marquee__item"><img src="img/loghi/Risorsa 1.svg" alt="" width="140" height="56" decoding="async"></li>
+          </ul>
+          <ul class="clients-marquee__list" aria-hidden="true">
+            <li class="clients-marquee__item"><img src="img/loghi/Axit.svg" alt="" width="140" height="56" decoding="async"></li>
+            <li class="clients-marquee__item"><img src="img/loghi/Hark.svg" alt="" width="140" height="56" decoding="async"></li>
+            <li class="clients-marquee__item"><img src="img/loghi/Moondream.svg" alt="" width="140" height="56" decoding="async"></li>
+            <li class="clients-marquee__item"><img src="img/loghi/bebon.svg" alt="" width="140" height="56" decoding="async"></li>
+            <li class="clients-marquee__item"><img src="img/loghi/Locked.svg" alt="" width="140" height="56" decoding="async"></li>
+            <li class="clients-marquee__item"><img src="img/loghi/Risorsa 1.svg" alt="" width="140" height="56" decoding="async"></li>
+          </ul>
+        </div>
+      </div>
+      <p class="visually-hidden" data-i18n="clients.a11y">Client logos: Axit, Hark, Moondream, Bebon, Locked.</p>
     </section>
     <!--ONLINE: contenuto portfolio -->
 
