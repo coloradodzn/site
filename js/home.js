@@ -1,13 +1,13 @@
-const homeHero = document.getElementById('home-hero');
-const homeHeroBg = document.getElementById('home-hero-bg');
-const homeHeroBgImg = homeHeroBg?.querySelector('.home-hero__bg-img');
-const homeHeroScrim = document.getElementById('home-hero-scrim');
-const homeHeroProgress = document.getElementById('home-hero-progress');
-const homeNavReveal = document.getElementById('home-nav-reveal');
-const homeFooter = document.getElementById('home-footer');
-const homeClaim = document.getElementById('home-hero-claim');
-const homeClaimTrigger = document.getElementById('home-hero-claim-trigger');
-const workCards = homeHero ? [...homeHero.querySelectorAll('.home-work-card')] : [];
+let homeHero = document.getElementById('home-hero');
+let homeHeroBg = document.getElementById('home-hero-bg');
+let homeHeroBgImg = homeHeroBg?.querySelector('.home-hero__bg-img');
+let homeHeroScrim = document.getElementById('home-hero-scrim');
+let homeHeroProgress = document.getElementById('home-hero-progress');
+let homeNavReveal = document.getElementById('home-nav-reveal');
+let homeFooter = document.getElementById('home-footer');
+let homeClaim = document.getElementById('home-hero-claim');
+let homeClaimTrigger = document.getElementById('home-hero-claim-trigger');
+let workCards = homeHero ? [...homeHero.querySelectorAll('.home-work-card')] : [];
 
 let claimShattered = false;
 let claimShatterAnimating = false;
@@ -31,8 +31,8 @@ const CLAIM_SHATTER_START_PERCENT = 63;
 const CLAIM_SHATTER_END_PERCENT = 68;
 const NAV_START_PERCENT = 68;
 const NAV_CENTER_PERCENT = 80;
-const FOOTER_START_PERCENT = 80;
-const FOOTER_END_PERCENT = 95;
+const FOOTER_START_PERCENT = 88;
+const FOOTER_END_PERCENT = 97;
 const CLAIM_ANIM_MS = 850;
 
 const DEFAULT_OFFSETS = [
@@ -43,16 +43,33 @@ const DEFAULT_OFFSETS = [
   { x: -14, y: 5, rotateY: 6 },
 ];
 
-const navRevealLinks = homeNavReveal
-  ? [...homeNavReveal.querySelectorAll('.home-nav-reveal__link')]
-  : [];
+let navRevealLinks = [];
+let navSourceLinks = [];
+let homeAbort = new AbortController();
 
-const navSourceLinks = [
-  document.querySelector('#navbar-menu > li:nth-child(1) .navbar__link'),
-  document.querySelector('#navbar-menu > li:nth-child(2) .navbar__link'),
-  document.getElementById('navbar-portfolio-trigger'),
-  document.querySelector('#navbar-menu > li:nth-child(4) .navbar__link'),
-];
+function refreshHomeRefs() {
+  homeHero = document.getElementById('home-hero');
+  homeHeroBg = document.getElementById('home-hero-bg');
+  homeHeroBgImg = homeHeroBg?.querySelector('.home-hero__bg-img');
+  homeHeroScrim = document.getElementById('home-hero-scrim');
+  homeHeroProgress = document.getElementById('home-hero-progress');
+  homeNavReveal = document.getElementById('home-nav-reveal');
+  homeFooter = document.getElementById('home-footer');
+  homeClaim = document.getElementById('home-hero-claim');
+  homeClaimTrigger = document.getElementById('home-hero-claim-trigger');
+  workCards = homeHero ? [...homeHero.querySelectorAll('.home-work-card')] : [];
+  navRevealLinks = homeNavReveal
+    ? [...homeNavReveal.querySelectorAll('.home-nav-reveal__link')]
+    : [];
+  navSourceLinks = [
+    document.querySelector('#navbar-menu > li:nth-child(1) .navbar__link'),
+    document.querySelector('#navbar-menu > li:nth-child(2) .navbar__link'),
+    document.getElementById('navbar-portfolio-trigger'),
+    document.querySelector('#navbar-menu > li:nth-child(4) .navbar__link'),
+  ];
+}
+
+refreshHomeRefs();
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -178,13 +195,33 @@ function getCardTransform(z, layout, depth) {
 }
 
 function getNavRowTargets(count) {
-  const centerX = window.innerWidth * 0.5;
+  const isMobile = window.innerWidth < 768;
   const centerY = window.innerHeight * 0.5;
+
+  if (isMobile) {
+    const edgeInset = 20;
+    const widths = Array.from({ length: count }, (_, index) => {
+      const link = navRevealLinks[index];
+      if (!link) return 56;
+      const rect = link.getBoundingClientRect();
+      return rect.width > 0 ? rect.width : 56;
+    });
+    const totalWidth = widths.reduce((sum, width) => sum + width, 0);
+    const available = window.innerWidth - edgeInset * 2;
+    const gap = count > 1 ? Math.max(10, (available - totalWidth) / (count - 1)) : 0;
+    let cursor = edgeInset;
+
+    return widths.map((width) => {
+      const x = cursor + width / 2;
+      cursor += width + gap;
+      return { x, y: centerY };
+    });
+  }
+
+  const centerX = window.innerWidth * 0.5;
   const gap = window.innerWidth < 480
     ? Math.max(76, window.innerWidth * 0.26)
-    : window.innerWidth < 768
-      ? 120
-      : Math.min(200, window.innerWidth * 0.11);
+    : Math.min(200, window.innerWidth * 0.11);
   const span = (count - 1) * gap;
 
   return Array.from({ length: count }, (_, index) => ({
@@ -216,7 +253,7 @@ function updateNavReveal(navPhase) {
       startX = rect.left + rect.width / 2;
       startY = rect.top + rect.height / 2;
     } else if (!isDesktop) {
-      startY = target.y + 48;
+      startY = target.y + 32;
     }
 
     const x = startX + (target.x - startX) * eased;
@@ -368,6 +405,18 @@ function assignFragmentScatter(fragment) {
   fragment.style.setProperty('--rot', `${fragment.dataset.rot}deg`);
 }
 
+function setFragmentScatteredState(fragment) {
+  assignFragmentScatter(fragment);
+  fragment.style.opacity = '0';
+  fragment.style.transform = `translate3d(${fragment.dataset.tx}px, ${fragment.dataset.ty}px, 0) rotate(${fragment.dataset.rot}deg) scale(0.4)`;
+}
+
+function releaseFragmentReassemble(fragment) {
+  fragment.style.removeProperty('opacity');
+  fragment.style.removeProperty('transform');
+  fragment.style.animation = '';
+}
+
 function clearFragmentMotionStyles() {
   homeClaim?.querySelectorAll('.home-hero-claim__fragment').forEach((fragment) => {
     fragment.style.animation = '';
@@ -460,22 +509,26 @@ function triggerClaimReassemble() {
   claimShattered = false;
   navAutoDrive = false;
 
-  homeClaim.classList.remove('is-shattered', 'is-shattering');
-  homeClaim.classList.add('is-visible', 'is-reassembling');
-  homeClaim.style.opacity = '1';
-  homeClaim.setAttribute('aria-hidden', 'false');
+  homeClaim.classList.remove('is-shattered', 'is-shattering', 'is-visible', 'is-reassembling');
+  homeClaim.style.opacity = '0';
+  homeClaim.setAttribute('aria-hidden', 'true');
 
   const total = fragments.length;
   fragments.forEach((fragment) => {
     const delayIndex = Number.parseInt(fragment.dataset.delayIndex || '0', 10);
-    assignFragmentScatter(fragment);
     fragment.style.animation = 'none';
+    setFragmentScatteredState(fragment);
     fragment.style.setProperty('--delay', `${(total - 1 - delayIndex) * 0.008}s`);
   });
 
   void homeClaim.offsetWidth;
+
+  homeClaim.classList.add('is-visible', 'is-reassembling');
+  homeClaim.style.opacity = '1';
+  homeClaim.setAttribute('aria-hidden', 'false');
+
   fragments.forEach((fragment) => {
-    fragment.style.animation = '';
+    releaseFragmentReassemble(fragment);
   });
 
   window.setTimeout(() => {
@@ -515,7 +568,9 @@ function updateHomeClaim(progress, scrollingBack) {
 
   if (!claimEnterPlayed) {
     claimEnterPlayed = true;
-    homeClaimTrigger?.classList.add('is-entering');
+    if (!homeClaimTrigger?.dataset.fragmentsReady) {
+      homeClaimTrigger?.classList.add('is-entering');
+    }
   }
 
   homeClaim.classList.remove('is-shattered', 'is-shattering', 'is-reassembling');
@@ -545,30 +600,24 @@ function getDrivenNavPhase(navPhase) {
   return Math.max(navPhase, autoPhase);
 }
 
-function getDrivenFooterPhase(navPhase, footerPhase) {
-  if (!navAutoDrive && footerPhase > 0) return footerPhase;
-  const drivenNav = getDrivenNavPhase(navPhase);
-  if (drivenNav < 1) return footerPhase;
-  if (navAutoDrive) {
-    return easeOutCubic(clamp((performance.now() - navAutoStart - 900) / 900, 0, 1));
-  }
+function getDrivenFooterPhase(_navPhase, footerPhase) {
   return footerPhase;
 }
 
-function initClaimInteraction() {
+function initClaimInteraction(signal) {
   if (!homeClaimTrigger) return;
 
   homeClaimTrigger.addEventListener('animationend', (event) => {
     if (event.animationName === 'home-claim-enter') {
       homeClaimTrigger.classList.remove('is-entering');
     }
-  });
+  }, { signal });
 
   homeClaimTrigger.addEventListener('click', (event) => {
     event.preventDefault();
     if (!homeClaim?.classList.contains('is-visible')) return;
     triggerClaimShatter(true);
-  });
+  }, { signal });
 
   window.addEventListener('colorado:langchange', () => {
     if (!homeClaimTrigger?.querySelector('.home-hero-claim__fragment')) return;
@@ -580,7 +629,7 @@ function initClaimInteraction() {
       i18nApply(lang);
     }
     updateHomeExperience();
-  });
+  }, { signal });
 }
 
 function updateHomeExperience() {
@@ -724,7 +773,7 @@ function setHeroHeight() {
   homeHero.style.height = `${totalSegments * 100}dvh`;
 }
 
-function initWorkCardNavigation() {
+function initWorkCardNavigation(signal) {
   const scene = document.getElementById('home-hero-scene');
   if (!scene) return;
 
@@ -739,24 +788,46 @@ function initWorkCardNavigation() {
     if (!href) return;
 
     event.preventDefault();
-    window.location.assign(href);
-  });
+    if (typeof window.coloradoNavigate === 'function') {
+      window.coloradoNavigate(href);
+    } else {
+      window.location.assign(href);
+    }
+  }, { signal });
 
   scene.addEventListener('mousemove', (event) => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const card = getCardAtPoint(event.clientX, event.clientY);
     scene.style.cursor = card ? 'pointer' : '';
-  });
+  }, { signal });
 }
 
-if (homeHero) {
+function initHomePage() {
+  homeAbort.abort();
+  homeAbort = new AbortController();
+  const { signal } = homeAbort;
+
+  refreshHomeRefs();
+  claimShattered = false;
+  claimShatterAnimating = false;
+  claimEnterPlayed = false;
+  lastProgressPercent = 0;
+  lastHeroProgress = 0;
+  navAutoDrive = false;
+  navAutoStart = 0;
+
+  if (!homeHero) return;
+
   setHeroHeight();
-  initWorkCardNavigation();
-  initClaimInteraction();
+  initWorkCardNavigation(signal);
+  initClaimInteraction(signal);
   updateHomeExperience();
-  window.addEventListener('scroll', updateHomeExperience, { passive: true });
+  window.addEventListener('scroll', updateHomeExperience, { passive: true, signal });
   window.addEventListener('resize', () => {
     setHeroHeight();
     updateHomeExperience();
-  });
+  }, { signal });
 }
+
+initHomePage();
+document.addEventListener('colorado:pagechange', initHomePage);

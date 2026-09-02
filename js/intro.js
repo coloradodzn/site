@@ -1,79 +1,97 @@
 (function () {
   const INTRO_KEY = 'colorado_intro_seen';
   const SESSION_KEY = 'colorado_session';
-  const intro = document.getElementById('home-intro');
-  const gate = document.getElementById('home-intro-gate');
-  const videoWrap = document.getElementById('home-intro-video-wrap');
-  const video = document.getElementById('home-intro-video');
-  const startBtn = document.getElementById('home-intro-start');
-  const skipBtn = document.getElementById('home-intro-skip');
+  let introAbort = null;
 
-  if (!intro || !document.body.classList.contains('home-intro-active')) return;
+  function initHomeIntro() {
+    introAbort?.abort();
+    introAbort = new AbortController();
+    const { signal } = introAbort;
 
-  intro.setAttribute('aria-hidden', 'false');
+    const intro = document.getElementById('home-intro');
+    const gate = document.getElementById('home-intro-gate');
+    const video = document.getElementById('home-intro-video');
+    const startBtn = document.getElementById('home-intro-start');
+    const skipBtn = document.getElementById('home-intro-skip');
 
-  function dismissIntro() {
-    try {
-      localStorage.setItem(INTRO_KEY, '1');
-      sessionStorage.setItem(SESSION_KEY, '1');
-    } catch (err) {
-      /* storage blocked */
-    }
-
-    intro.classList.add('is-hidden');
-    intro.classList.remove('is-playing', 'is-gate');
-    document.body.classList.remove('home-intro-active', 'home-intro-sigla');
-
-    window.setTimeout(() => {
-      intro.setAttribute('aria-hidden', 'true');
-    }, 700);
-
-    if (video) {
-      video.pause();
-      video.currentTime = 0;
-    }
-
-    document.dispatchEvent(new CustomEvent('colorado:intro-dismissed'));
-  }
-
-  function showGate() {
-    intro.classList.remove('is-playing');
-    intro.classList.add('is-gate');
-    document.body.classList.remove('home-intro-sigla');
-
-    if (video) {
-      video.pause();
-    }
-  }
-
-  function playSigla() {
-    if (!video) {
-      showGate();
+    if (!intro || !document.body.classList.contains('home-intro-active')) {
+      if (intro) {
+        intro.classList.add('is-hidden');
+        intro.classList.remove('is-playing', 'is-gate');
+        intro.setAttribute('aria-hidden', 'true');
+      }
       return;
     }
 
-    intro.classList.add('is-playing');
-    intro.classList.remove('is-gate');
-    document.body.classList.add('home-intro-sigla');
+    intro.classList.remove('is-hidden');
+    intro.setAttribute('aria-hidden', 'false');
 
-    const playPromise = video.play();
-    if (playPromise && typeof playPromise.catch === 'function') {
-      playPromise.catch(() => showGate());
+    function dismissIntro() {
+      try {
+        localStorage.setItem(INTRO_KEY, '1');
+        sessionStorage.setItem(SESSION_KEY, '1');
+      } catch (err) {
+        /* storage blocked */
+      }
+
+      intro.classList.add('is-hidden');
+      intro.classList.remove('is-playing', 'is-gate');
+      document.body.classList.remove('home-intro-active', 'home-intro-sigla');
+
+      window.setTimeout(() => {
+        intro.setAttribute('aria-hidden', 'true');
+      }, 700);
+
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+      }
+
+      document.dispatchEvent(new CustomEvent('colorado:intro-dismissed'));
     }
+
+    function showGate() {
+      intro.classList.remove('is-playing');
+      intro.classList.add('is-gate');
+      document.body.classList.remove('home-intro-sigla');
+
+      if (video) {
+        video.pause();
+      }
+    }
+
+    function playSigla() {
+      if (!video) {
+        showGate();
+        return;
+      }
+
+      intro.classList.add('is-playing');
+      intro.classList.remove('is-gate');
+      document.body.classList.add('home-intro-sigla');
+
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => showGate());
+      }
+    }
+
+    if (startBtn) startBtn.addEventListener('click', dismissIntro, { signal });
+    if (skipBtn) skipBtn.addEventListener('click', showGate, { signal });
+    if (video) video.addEventListener('ended', showGate, { signal });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      if (intro.classList.contains('is-gate')) {
+        dismissIntro();
+      } else if (intro.classList.contains('is-playing')) {
+        showGate();
+      }
+    }, { signal });
+
+    playSigla();
   }
 
-  if (startBtn) startBtn.addEventListener('click', dismissIntro);
-  if (skipBtn) skipBtn.addEventListener('click', showGate);
-  if (video) video.addEventListener('ended', showGate);
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape') return;
-    if (intro.classList.contains('is-gate')) {
-      dismissIntro();
-    } else if (intro.classList.contains('is-playing')) {
-      showGate();
-    }
-  });
-
-  playSigla();
+  initHomeIntro();
+  document.addEventListener('colorado:pagechange', initHomeIntro);
 })();

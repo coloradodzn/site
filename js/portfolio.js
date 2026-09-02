@@ -1,5 +1,7 @@
 function initPortfolioCarousels() {
   document.querySelectorAll('[data-carousel]').forEach((carousel) => {
+    if (carousel.dataset.carouselInit === '1') return;
+
     const track = carousel.querySelector('.portfolio-carousel__track');
     const prev = carousel.querySelector('.portfolio-carousel__btn--prev');
     const next = carousel.querySelector('.portfolio-carousel__btn--next');
@@ -14,7 +16,10 @@ function initPortfolioCarousels() {
     next?.addEventListener('click', () => {
       track.scrollBy({ left: scrollStep(), behavior: 'smooth' });
     });
+
+    carousel.dataset.carouselInit = '1';
   });
 }
 
 initPortfolioCarousels();
+document.addEventListener('colorado:pagechange', initPortfolioCarousels);

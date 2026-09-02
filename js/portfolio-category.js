@@ -147,6 +147,27 @@ function buildFilterGroup(groupName, labelKey, options) {
   return filter;
 }
 
+let portfolioFilterGlobalBound = false;
+
+function bindPortfolioFilterGlobalListeners() {
+  if (portfolioFilterGlobalBound) return;
+  portfolioFilterGlobalBound = true;
+
+  document.addEventListener('click', (event) => {
+    const catalog = document.querySelector('[data-portfolio-catalog]');
+    if (!catalog) return;
+    if (!event.target.closest('.portfolio-filter')) {
+      closeFilterPanels(catalog);
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    const catalog = document.querySelector('[data-portfolio-catalog]');
+    if (catalog) closeFilterPanels(catalog);
+  });
+}
+
 function mountCatalogFilters(catalog) {
   const mount = catalog.querySelector('[data-filter-mount]');
   if (!mount || mount.dataset.filtersMounted === 'true') return;
@@ -174,24 +195,7 @@ function mountCatalogFilters(catalog) {
     });
   });
 
-  document.addEventListener('click', (event) => {
-    if (!event.target.closest('.portfolio-filter')) {
-      closeFilterPanels(catalog);
-    }
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeFilterPanels(catalog);
-  });
-
-  document.querySelectorAll('.navbar__lang-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      window.setTimeout(() => {
-        if (typeof i18nApply === 'function') i18nApply(btn.getAttribute('data-lang'));
-        applyCatalogFilters(catalog);
-      }, 0);
-    });
-  });
+  bindPortfolioFilterGlobalListeners();
 }
 
 function initCatalogFilters() {
@@ -203,11 +207,9 @@ function initCatalogFilters() {
   if (typeof window.initUiIcons === 'function') window.initUiIcons();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  initCatalogFilters();
-  if (typeof i18nApply === 'function' && typeof i18nDetectLang === 'function') {
-    i18nApply(i18nDetectLang());
-    const catalog = document.querySelector('[data-portfolio-catalog]');
-    if (catalog) applyCatalogFilters(catalog);
-  }
+document.addEventListener('DOMContentLoaded', initCatalogFilters);
+document.addEventListener('colorado:pagechange', initCatalogFilters);
+document.addEventListener('colorado:langchange', () => {
+  const catalog = document.querySelector('[data-portfolio-catalog]');
+  if (catalog) applyCatalogFilters(catalog);
 });

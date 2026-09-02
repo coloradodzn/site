@@ -1,5 +1,13 @@
 // ── SESSIONE SITO (navigazione interna → niente intro in home) ──
-(function markSiteSession() {
+(function loadColoradoNav() {
+  if (document.querySelector('script[data-colorado-nav]')) return;
+  const script = document.createElement('script');
+  script.src = 'js/nav.js';
+  script.setAttribute('data-colorado-nav', '');
+  document.head.appendChild(script);
+})();
+
+function markSiteSession() {
   try {
     const onHome = document.body.classList.contains('home');
     const introPending = document.body.classList.contains('home-intro-active');
@@ -9,7 +17,7 @@
   } catch (err) {
     /* storage blocked */
   }
-})();
+}
 
 // ── ICONE UI (SVG custom in img/icons/) ──
 const UI_ICON_FILES = {
@@ -56,7 +64,7 @@ function initUiIcons() {
   });
 }
 
-function setThemeToggleIcon(theme) {
+function setThemeToggleIcon(theme, themeToggle) {
   if (!themeToggle) return;
   themeToggle.textContent = '';
   const wrap = document.createElement('span');
@@ -85,11 +93,12 @@ function isPortfolioCategoryPage() {
   return page === 'success-projects.html' || page === 'independent-projects.html';
 }
 
-function initBackButton() {
+function initBackButton(signal) {
+  document.querySelector('.work-back')?.remove();
+
   const isWork = isWorkDetailPage();
   const isCategory = isPortfolioCategoryPage();
   if (!isWork && !isCategory) return;
-  if (document.querySelector('.work-back')) return;
 
   if (isWork) {
     document.body.classList.add('is-work-detail');
@@ -107,7 +116,11 @@ function initBackButton() {
 
   back.addEventListener('click', () => {
     if (isCategory) {
-      window.location.assign('portfolio.html');
+      if (typeof window.coloradoNavigate === 'function') {
+        window.coloradoNavigate('portfolio.html');
+      } else {
+        window.location.assign('portfolio.html');
+      }
       return;
     }
 
@@ -119,26 +132,26 @@ function initBackButton() {
       return;
     }
 
-    window.location.assign('portfolio.html');
-  });
+    if (typeof window.coloradoNavigate === 'function') {
+      window.coloradoNavigate('portfolio.html');
+    } else {
+      window.location.assign('portfolio.html');
+    }
+  }, { signal });
 
   document.body.insertBefore(back, document.body.firstChild);
 }
 
-initBackButton();
-
-const nav = document.querySelector('.navbar');
-const toggle = document.querySelector('.navbar__toggle');
-const menu = document.querySelector('.navbar__menu');
-const langRoot = document.querySelector('.navbar__lang');
-const langToggle = document.querySelector('.navbar__lang-toggle');
 const DESKTOP_NAV = 768;
+const THEME_KEY = 'theme';
+
+let pageAbort = new AbortController();
 
 function isDesktopNav() {
   return window.innerWidth >= DESKTOP_NAV;
 }
 
-function setMenuOpen(open) {
+function setMenuOpen(open, toggle, menu) {
   if (!toggle || !menu) return;
   const next = open && !isDesktopNav();
   menu.classList.toggle('is-open', next);
@@ -147,61 +160,12 @@ function setMenuOpen(open) {
   document.body.classList.toggle('nav-open', next);
 }
 
-function setLangOpen(open) {
+function setLangOpen(open, langRoot, langToggle) {
   if (!langRoot || !langToggle) return;
   const next = open && !isDesktopNav();
   langRoot.classList.toggle('is-open', next);
   langToggle.setAttribute('aria-expanded', String(next));
 }
-
-if (toggle && menu) {
-  setMenuOpen(false);
-
-  toggle.addEventListener('click', (event) => {
-    event.stopPropagation();
-    const open = !menu.classList.contains('is-open');
-    setLangOpen(false);
-    setMenuOpen(open);
-  });
-}
-
-if (langToggle && langRoot) {
-  langToggle.addEventListener('click', (event) => {
-    event.stopPropagation();
-    const open = !langRoot.classList.contains('is-open');
-    setMenuOpen(false);
-    setLangOpen(open);
-  });
-}
-
-document.querySelectorAll('.navbar__lang-btn').forEach((btn) => {
-  btn.addEventListener('click', () => setLangOpen(false));
-});
-
-document.addEventListener('click', (event) => {
-  const portfolioItem = document.querySelector('.navbar__item--dropdown');
-  if (portfolioItem && !portfolioItem.contains(event.target)) {
-    closePortfolioDropdown();
-  }
-  if (!nav || nav.contains(event.target)) return;
-  setMenuOpen(false);
-  setLangOpen(false);
-});
-
-document.addEventListener('keydown', (event) => {
-  if (event.key !== 'Escape') return;
-  closePortfolioDropdown();
-  setMenuOpen(false);
-  setLangOpen(false);
-});
-
-window.addEventListener('resize', () => {
-  if (!isDesktopNav()) return;
-  setMenuOpen(false);
-  setLangOpen(false);
-  closePortfolioDropdown();
-  alignPortfolioDropdown();
-});
 
 function alignPortfolioDropdown() {
   const label = document.querySelector('.navbar__dropdown-label');
@@ -224,8 +188,6 @@ function alignPortfolioDropdown() {
   dropdown.style.left = `${labelRect.left - itemRect.left}px`;
 }
 
-alignPortfolioDropdown();
-
 function closePortfolioDropdown() {
   const item = document.querySelector('.navbar__item--dropdown');
   const trigger = document.getElementById('navbar-portfolio-trigger');
@@ -234,7 +196,7 @@ function closePortfolioDropdown() {
   trigger.setAttribute('aria-expanded', 'false');
 }
 
-function initPortfolioDropdown() {
+function initPortfolioDropdown(signal) {
   const trigger = document.getElementById('navbar-portfolio-trigger');
   const item = document.querySelector('.navbar__item--dropdown');
   const chevron = trigger?.querySelector('.navbar__dropdown-chevron');
@@ -250,34 +212,14 @@ function initPortfolioDropdown() {
     item.classList.toggle('is-open', open);
     item.classList.toggle('is-collapsed', !open);
     trigger.setAttribute('aria-expanded', String(open));
-  });
+  }, { signal });
 
   item.addEventListener('mouseleave', () => {
     if (!isDesktopNav()) return;
     item.classList.remove('is-collapsed', 'is-open');
     trigger.setAttribute('aria-expanded', 'false');
-  });
+  }, { signal });
 }
-
-initPortfolioDropdown();
-
-const header = document.querySelector('.site-header');
-
-if (header) {
-  const updateScrolled = () => {
-    if (document.body.classList.contains('home')) {
-      header.classList.remove('scrolled');
-      return;
-    }
-    header.classList.toggle('scrolled', window.scrollY > 50);
-  };
-  updateScrolled();
-  window.addEventListener('scroll', updateScrolled, { passive: true });
-}
-
-// ── TEMA CHIARO / SCURO ──
-const THEME_KEY = 'theme';
-const themeToggle = document.querySelector('.navbar__theme-toggle');
 
 function currentTheme() {
   const saved = localStorage.getItem(THEME_KEY);
@@ -285,29 +227,19 @@ function currentTheme() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-function applyTheme(theme, persist) {
+function applyTheme(theme, persist, themeToggle) {
   document.documentElement.setAttribute('data-theme', theme);
   if (persist) localStorage.setItem(THEME_KEY, theme);
   if (themeToggle) {
-    setThemeToggleIcon(theme);
+    setThemeToggleIcon(theme, themeToggle);
     themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
   }
 }
 
-applyTheme(currentTheme(), false);
-initUiIcons();
-window.initUiIcons = initUiIcons;
+function initContactForm(signal) {
+  const contactForm = document.querySelector('.contact-form');
+  if (!contactForm) return;
 
-if (themeToggle) {
-  themeToggle.addEventListener('click', () => {
-    const next = (document.documentElement.getAttribute('data-theme') || currentTheme()) === 'dark' ? 'light' : 'dark';
-    applyTheme(next, true);
-  });
-}
-
-const contactForm = document.querySelector('.contact-form');
-
-if (contactForm) {
   const statusEl = contactForm.querySelector('.contact-form__status');
 
   contactForm.addEventListener('submit', async (event) => {
@@ -351,18 +283,18 @@ if (contactForm) {
       statusEl.classList.add('is-err');
       statusEl.textContent = dict['contact.err'] || 'Error.';
     }
-  });
+  }, { signal });
 }
 
-(function loadAmbientAudio() {
-  if (document.querySelector('script[data-colorado-audio]')) return;
+function loadAmbientAudio() {
+  if (document.querySelector('script[data-colorado-audio]') || document.getElementById('ambient-audio')) return;
   const script = document.createElement('script');
   script.src = 'js/audio.js';
   script.setAttribute('data-colorado-audio', '');
   document.body.appendChild(script);
-})();
+}
 
-(function initWorkGalleryPage() {
+function initWorkGalleryPage() {
   if (!document.querySelector('.work-gallery')) return;
   document.body.classList.add('work-gallery-page');
   if (document.querySelector('script[data-colorado-work-gallery]')) return;
@@ -370,9 +302,9 @@ if (contactForm) {
   script.src = 'js/work-gallery.js';
   script.setAttribute('data-colorado-work-gallery', '');
   document.body.appendChild(script);
-})();
+}
 
-(function initWorkPdfViewer() {
+function initWorkPdfViewer() {
   if (!document.querySelector('.work-pdf')) return;
   if (document.querySelector('script[data-colorado-work-pdf]')) return;
   const script = document.createElement('script');
@@ -380,4 +312,112 @@ if (contactForm) {
   script.src = 'js/work-pdf.js';
   script.setAttribute('data-colorado-work-pdf', '');
   document.body.appendChild(script);
-})();
+}
+
+function initWorkProjectsNav() {
+  if (!document.querySelector('main') || !/^lavoro-\d+\.html$/i.test(window.location.pathname.split('/').pop() || '')) return;
+  if (document.querySelector('script[data-colorado-work-projects-nav]')) return;
+  const script = document.createElement('script');
+  script.src = 'js/work-projects-nav.js';
+  script.setAttribute('data-colorado-work-projects-nav', '');
+  document.body.appendChild(script);
+}
+
+function coloradoInitPage() {
+  pageAbort.abort();
+  pageAbort = new AbortController();
+  const { signal } = pageAbort;
+
+  markSiteSession();
+
+  const nav = document.querySelector('.navbar');
+  const toggle = document.querySelector('.navbar__toggle');
+  const menu = document.querySelector('.navbar__menu');
+  const langRoot = document.querySelector('.navbar__lang');
+  const langToggle = document.querySelector('.navbar__lang-toggle');
+  const themeToggle = document.querySelector('.navbar__theme-toggle');
+  const header = document.querySelector('.site-header');
+
+  if (toggle && menu) {
+    setMenuOpen(false, toggle, menu);
+    toggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const open = !menu.classList.contains('is-open');
+      setLangOpen(false, langRoot, langToggle);
+      setMenuOpen(open, toggle, menu);
+    }, { signal });
+  }
+
+  if (langToggle && langRoot) {
+    langToggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const open = !langRoot.classList.contains('is-open');
+      setMenuOpen(false, toggle, menu);
+      setLangOpen(open, langRoot, langToggle);
+    }, { signal });
+  }
+
+  document.querySelectorAll('.navbar__lang-btn').forEach((btn) => {
+    btn.addEventListener('click', () => setLangOpen(false, langRoot, langToggle), { signal });
+  });
+
+  document.addEventListener('click', (event) => {
+    const portfolioItem = document.querySelector('.navbar__item--dropdown');
+    if (portfolioItem && !portfolioItem.contains(event.target)) {
+      closePortfolioDropdown();
+    }
+    if (!nav || nav.contains(event.target)) return;
+    setMenuOpen(false, toggle, menu);
+    setLangOpen(false, langRoot, langToggle);
+  }, { signal });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    closePortfolioDropdown();
+    setMenuOpen(false, toggle, menu);
+    setLangOpen(false, langRoot, langToggle);
+  }, { signal });
+
+  window.addEventListener('resize', () => {
+    if (!isDesktopNav()) return;
+    setMenuOpen(false, toggle, menu);
+    setLangOpen(false, langRoot, langToggle);
+    closePortfolioDropdown();
+    alignPortfolioDropdown();
+  }, { signal });
+
+  alignPortfolioDropdown();
+  initPortfolioDropdown(signal);
+  initBackButton(signal);
+  initContactForm(signal);
+  loadAmbientAudio();
+  initWorkGalleryPage();
+  initWorkPdfViewer();
+  initWorkProjectsNav();
+
+  applyTheme(currentTheme(), false, themeToggle);
+  initUiIcons();
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const next = (document.documentElement.getAttribute('data-theme') || currentTheme()) === 'dark' ? 'light' : 'dark';
+      applyTheme(next, true, themeToggle);
+    }, { signal });
+  }
+
+  if (header) {
+    const updateScrolled = () => {
+      if (document.body.classList.contains('home')) {
+        header.classList.remove('scrolled');
+        return;
+      }
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    };
+    updateScrolled();
+    window.addEventListener('scroll', updateScrolled, { passive: true, signal });
+  }
+}
+
+window.coloradoInitPage = coloradoInitPage;
+window.initUiIcons = initUiIcons;
+coloradoInitPage();

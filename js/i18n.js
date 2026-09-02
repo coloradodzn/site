@@ -155,6 +155,9 @@ const I18N = {
     "a11y.work3.pdf.viewer": "Visualizzatore presentazione PDF",
     "a11y.work3.pdf.prev": "Pagina precedente",
     "a11y.work3.pdf.next": "Pagina successiva",
+    "a11y.work3.pdf.pages": "Anteprime pagine PDF",
+    "work.nav.label": "Altri progetti",
+    "a11y.work.nav": "Navigazione tra i progetti del portfolio",
     "desc.lavoro5": "Axit Collection — case study di comunicazione visiva e social content.",
     "gallery.work1.category": "Logo Design",
     "gallery.work1.title": "Logo Collection",
@@ -177,7 +180,7 @@ const I18N = {
     "nav.contatti": "Contact",
     "contact.title": "Get in touch",
     "contact.lead": "Got a project in mind?",
-    "contact.cta": "Contact us.",
+    "contact.cta": "Contact me",
     "contact.body": "Tell me what you want to build. I work with brands and people who need visual clarity — from identity to motion. Fill in the form and I will get back to you.",
     "contact.label.name": "Your name",
     "contact.label.email": "Your email",
@@ -327,6 +330,9 @@ const I18N = {
     "a11y.work3.pdf.viewer": "PDF presentation viewer",
     "a11y.work3.pdf.prev": "Previous page",
     "a11y.work3.pdf.next": "Next page",
+    "a11y.work3.pdf.pages": "PDF page previews",
+    "work.nav.label": "More projects",
+    "a11y.work.nav": "Portfolio project navigation",
     "desc.lavoro5": "Axit Collection — visual communication and social content case study.",
     "gallery.work1.category": "Logo Design",
     "gallery.work1.title": "Logo Collection",
@@ -499,6 +505,9 @@ const I18N = {
     "a11y.work3.pdf.viewer": "Visionneuse de présentation PDF",
     "a11y.work3.pdf.prev": "Page précédente",
     "a11y.work3.pdf.next": "Page suivante",
+    "a11y.work3.pdf.pages": "Aperçus des pages PDF",
+    "work.nav.label": "Autres projets",
+    "a11y.work.nav": "Navigation entre les projets du portfolio",
     "desc.lavoro5": "Axit Collection — étude de cas de communication visuelle et contenus sociaux.",
     "gallery.work1.category": "Logo Design",
     "gallery.work1.title": "Logo Collection",
@@ -671,6 +680,9 @@ const I18N = {
     "a11y.work3.pdf.viewer": "Visor de presentación PDF",
     "a11y.work3.pdf.prev": "Página anterior",
     "a11y.work3.pdf.next": "Página siguiente",
+    "a11y.work3.pdf.pages": "Vistas previas de páginas PDF",
+    "work.nav.label": "Otros proyectos",
+    "a11y.work.nav": "Navegación entre proyectos del portfolio",
     "desc.lavoro5": "Axit Collection — caso de estudio de comunicación visual y contenidos sociales.",
     "gallery.work1.category": "Logo Design",
     "gallery.work1.title": "Logo Collection",
@@ -733,6 +745,12 @@ function i18nApply(lang) {
   resetClaimFragments();
   window.dispatchEvent(new CustomEvent("colorado:langchange", { detail: { lang } }));
 }
+
+function coloradoRefreshI18n() {
+  i18nApply(i18nDetectLang());
+}
+
+window.coloradoRefreshI18n = coloradoRefreshI18n;
 
 function resetClaimFragments() {
   const trigger = document.getElementById("home-hero-claim-trigger");

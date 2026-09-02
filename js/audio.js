@@ -2,22 +2,27 @@
   const STORAGE_VOLUME = 'colorado_audio_volume';
   const STORAGE_MUTED = 'colorado_audio_muted';
   const STORAGE_SESSION = 'colorado_audio_session';
+  const STORAGE_UNLOCKED = 'colorado_audio_unlocked';
   const DEFAULT_VOLUME = 0.3;
   const DUCK_RATIO = 0.15;
   const FADE_MS = 1200;
 
+  // Ordine curato: apertura accessibile → tema Colorado → deep mood (sessioni lunghe).
   const PLAYLIST = [
-    'Music/KOTA The Friend - COLORADO {Official Music Video}.mp3',
-    'Music/Milky Chance - Colorado (Lyric Video).mp3',
-    'Music/Reneé Rapp - Colorado (Official Audio).mp3',
-    'Music/_Colorado Bluebird Sky_- The String Cheese Incident (Song In My Head).mp3'
+    'Music/blossom.mp3',
+    'Music/KOTA The Friend - COLORADO .mp3',
+    'Music/Milky Chance - Colorado.mp3',
+    'Music/a bar song.mp3',
+    'Music/Reneé Rapp - Colorado.mp3',
+    'Music/Colorado Bluebird Sky - The String Cheese Incident.mp3',
+    'Music/orangecounty.mp3'
   ];
 
   if (document.body.dataset.noAmbient !== undefined) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const audio = new Audio();
-  audio.preload = 'metadata';
+  audio.preload = 'auto';
 
   let trackIndex = 0;
   let userVolume = readVolume();
@@ -27,6 +32,7 @@
   let fadeFrame = null;
   let unlocked = false;
   let contentPlaying = 0;
+  let resumePlayback = false;
 
   function readVolume() {
     const saved = parseFloat(localStorage.getItem(STORAGE_VOLUME));
@@ -46,16 +52,32 @@
     }
   }
 
+  function readUnlocked() {
+    try {
+      return sessionStorage.getItem(STORAGE_UNLOCKED) === '1';
+    } catch (err) {
+      return false;
+    }
+  }
+
   function saveSession() {
     try {
       sessionStorage.setItem(STORAGE_SESSION, JSON.stringify({
         playing: isPlaying && !isMuted,
         trackIndex,
-        time: audio.currentTime || 0
+        time: audio.currentTime || 0,
+        savedAt: Date.now()
       }));
+      if (unlocked) sessionStorage.setItem(STORAGE_UNLOCKED, '1');
     } catch (err) {
       /* storage blocked */
     }
+  }
+
+  function sessionPlaybackTime(session) {
+    if (!session || !Number.isFinite(session.time)) return 0;
+    const elapsed = session.savedAt ? (Date.now() - session.savedAt) / 1000 : 0;
+    return session.time + Math.max(0, elapsed);
   }
 
   function loadSession() {
@@ -68,8 +90,14 @@
     }
   }
 
-  function shuffleStartIndex() {
-    return Math.floor(Math.random() * PLAYLIST.length);
+  function advanceTrack(step) {
+    if (!PLAYLIST.length) return;
+    loadTrack(trackIndex + step);
+  }
+
+  function skipToNextTrack() {
+    advanceTrack(1);
+    if (isPlaying && !isMuted) playAmbient();
   }
 
   function effectiveVolume() {
@@ -150,20 +178,45 @@
     );
   }
 
-  function playAmbient() {
+  function playAmbient(options = {}) {
     if (!unlocked || isMuted) return;
-    applyVolume();
-    const promise = audio.play();
-    if (promise && typeof promise.catch === 'function') {
-      promise.catch(() => {
-        isPlaying = false;
-        updateUi();
-      });
+
+    const instant = options.resume === true || resumePlayback;
+    resumePlayback = false;
+
+    const startPlayback = () => {
+      if (instant) {
+        applyVolume();
+      } else {
+        applyVolume();
+      }
+
+      const promise = audio.play();
+      if (promise && typeof promise.catch === 'function') {
+        promise.catch(() => {
+          isPlaying = false;
+          updateUi();
+        });
+      }
+      isPlaying = true;
+
+      if (instant) {
+        cancelFade();
+        audio.volume = effectiveVolume();
+      } else {
+        fadeTo(effectiveVolume());
+      }
+
+      updateUi();
+      saveSession();
+    };
+
+    if (audio.readyState >= 1) {
+      startPlayback();
+      return;
     }
-    isPlaying = true;
-    fadeTo(effectiveVolume());
-    updateUi();
-    saveSession();
+
+    audio.addEventListener('loadedmetadata', startPlayback, { once: true });
   }
 
   function pauseAmbient() {
@@ -259,10 +312,46 @@
     });
   }
 
-  function unlockAndMaybePlay() {
-    if (unlocked || introBlocksAmbient()) return;
+  function onUserGesture() {
+    if (unlocked) {
+      removeGestureListeners();
+      return;
+    }
+    if (introBlocksAmbient()) return;
+
     unlocked = true;
+    try {
+      sessionStorage.setItem(STORAGE_UNLOCKED, '1');
+    } catch (err) {
+      /* storage blocked */
+    }
+    removeGestureListeners();
     if (!isMuted) playAmbient();
+  }
+
+  function removeGestureListeners() {
+    document.removeEventListener('pointerdown', onUserGesture);
+    document.removeEventListener('keydown', onUserGesture);
+  }
+
+  function tryResumeAfterIntro() {
+    if (!document.body.classList.contains('home')) return;
+    if (introBlocksAmbient()) return;
+
+    let introSeen = false;
+    try {
+      introSeen = localStorage.getItem('colorado_intro_seen') === '1';
+    } catch (err) {
+      /* storage blocked */
+    }
+
+    if (!introSeen) return;
+
+    const session = loadSession();
+    if (session && session.playing && !isMuted) {
+      unlocked = true;
+      playAmbient({ resume: true });
+    }
   }
 
   function introBlocksAmbient() {
@@ -271,20 +360,23 @@
 
   function initPlaybackState() {
     const session = loadSession();
+    unlocked = unlocked || readUnlocked();
+
     trackIndex = session && Number.isFinite(session.trackIndex)
       ? session.trackIndex
-      : shuffleStartIndex();
+      : 0;
     loadTrack(trackIndex);
 
     if (session && session.time > 0) {
-      audio.currentTime = session.time;
+      audio.currentTime = sessionPlaybackTime(session);
+      resumePlayback = !!(session.playing && !isMuted);
     }
 
     if (introBlocksAmbient()) return;
 
     if (session && session.playing && !isMuted) {
       unlocked = true;
-      playAmbient();
+      playAmbient({ resume: true });
     }
   }
 
@@ -372,7 +464,8 @@
       setVolumePanelOpen(true);
     });
 
-    volumeZone.addEventListener('mouseleave', () => {
+    volumeZone.addEventListener('mouseleave', (event) => {
+      if (volumeZone.contains(event.relatedTarget)) return;
       if (!slider.matches(':active')) setVolumePanelOpen(false);
     });
   }
@@ -387,9 +480,22 @@
     if (!root.contains(event.target)) setVolumePanelOpen(false);
   });
 
+  let skipAttempts = 0;
+
   audio.addEventListener('ended', () => {
-    loadTrack(trackIndex + 1);
+    skipAttempts = 0;
+    advanceTrack(1);
     if (isPlaying && !isMuted) playAmbient();
+  });
+
+  audio.addEventListener('error', () => {
+    skipAttempts += 1;
+    if (skipAttempts > PLAYLIST.length) return;
+    skipToNextTrack();
+  });
+
+  audio.addEventListener('playing', () => {
+    skipAttempts = 0;
   });
 
   audio.addEventListener('timeupdate', () => {
@@ -397,20 +503,28 @@
   });
 
   window.addEventListener('beforeunload', saveSession);
+  window.addEventListener('pagehide', saveSession);
 
   document.addEventListener('colorado:intro-dismissed', () => {
     unlocked = true;
+    try {
+      sessionStorage.setItem(STORAGE_UNLOCKED, '1');
+    } catch (err) {
+      /* storage blocked */
+    }
+    removeGestureListeners();
     if (!isMuted) playAmbient();
   });
 
-  document.addEventListener('pointerdown', unlockAndMaybePlay, { once: true });
-  document.addEventListener('keydown', unlockAndMaybePlay, { once: true });
+  document.addEventListener('pointerdown', onUserGesture);
+  document.addEventListener('keydown', onUserGesture);
 
   bindContentMedia();
   const mediaObserver = new MutationObserver(bindContentMedia);
   mediaObserver.observe(document.body, { childList: true, subtree: true });
 
   initPlaybackState();
+  tryResumeAfterIntro();
   updateUi();
 
   if (typeof i18nApply === 'function') {
