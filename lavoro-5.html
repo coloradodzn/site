@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,11 +35,7 @@
       <div class="navbar__actions">
         <div class="navbar__lang" role="group" aria-label="Selettore lingua" data-i18n-aria-label="a11y.lang">
           <button type="button" class="navbar__lang-toggle" aria-label="Selettore lingua" data-i18n-aria-label="a11y.lang" aria-expanded="false" aria-controls="navbar-langs">
-            <svg class="navbar__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.75"/>
-              <ellipse cx="12" cy="12" rx="4" ry="9" fill="none" stroke="currentColor" stroke-width="1.75"/>
-              <path d="M3.5 12h17" fill="none" stroke="currentColor" stroke-width="1.75"/>
-            </svg>
+            <img class="navbar__icon" src="img/icons/language.svg" alt="" width="23" height="28" decoding="async">
           </button>
           <div class="navbar__lang-list" id="navbar-langs">
             <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
@@ -48,11 +44,16 @@
             <button type="button" class="navbar__lang-btn" data-lang="es">ES</button>
           </div>
         </div>
-        <button type="button" class="navbar__theme-toggle" aria-label="Cambia tema" data-i18n-aria-label="a11y.theme">☾</button>
+        <button type="button" class="navbar__theme-toggle" aria-label="Cambia tema" data-i18n-aria-label="a11y.theme">
+          <img class="navbar__icon" src="img/icons/moon.svg" alt="" width="28" height="28" decoding="async">
+        </button>
         <button type="button" class="navbar__toggle" aria-label="Menu" data-i18n-aria-label="a11y.menu" aria-expanded="false" aria-controls="navbar-menu">
-          <span class="navbar__toggle-bar" aria-hidden="true"></span>
-          <span class="navbar__toggle-bar" aria-hidden="true"></span>
-          <span class="navbar__toggle-bar" aria-hidden="true"></span>
+          <span class="navbar__toggle-bars" aria-hidden="true">
+            <span class="navbar__toggle-bar"></span>
+            <span class="navbar__toggle-bar"></span>
+            <span class="navbar__toggle-bar"></span>
+          </span>
+          <img class="navbar__toggle-close" src="img/icons/xmenu.svg" alt="" width="28" height="28" decoding="async" aria-hidden="true">
         </button>
         <ul class="navbar__social" id="navbar-social">
           <li><a href="https://www.instagram.com/colorado.design/" class="navbar__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="img/icon-instagram.svg" alt="Instagram"><span class="navbar__social-name">Instagram</span></a></li>
@@ -69,45 +70,9 @@
       <h1 class="work-gallery__title" data-i18n="gallery.work5.title">Axit Collection</h1>
     </header>
 
-    <figure class="work-gallery__stage">
-      <img
-        class="work-gallery__image"
-        src="img/Axit Social Communication/axit-jersey2.jpg"
-        alt="Axit Collection — jersey design"
-        width="1600"
-        height="1067"
-        decoding="async"
-      >
+    <figure class="work-gallery__stage" aria-hidden="true">
+      <div class="work-gallery__placeholder"></div>
     </figure>
-
-    <nav class="work-gallery__filmstrip-wrap" aria-label="Project gallery" data-i18n-aria-label="a11y.gallery">
-      <div class="work-gallery__filmstrip" role="tablist">
-        <button type="button" class="work-gallery__thumb is-active" role="tab" aria-selected="true" data-src="img/Axit Social Communication/axit-jersey2.jpg" data-alt="Axit Collection — jersey design">
-          <img src="img/Axit Social Communication/axit-jersey2.jpg" alt="" width="160" height="120" decoding="async">
-        </button>
-        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/axit-jersey3.jpg" data-alt="Axit Collection — jersey variation">
-          <img src="img/Axit Social Communication/axit-jersey3.jpg" alt="" width="160" height="120" decoding="async">
-        </button>
-        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/axit-jersey4.jpg" data-alt="Axit Collection — jersey detail">
-          <img src="img/Axit Social Communication/axit-jersey4.jpg" alt="" width="160" height="120" decoding="async">
-        </button>
-        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/axit-jersey5.jpg" data-alt="Axit Collection — jersey layout">
-          <img src="img/Axit Social Communication/axit-jersey5.jpg" alt="" width="160" height="120" decoding="async">
-        </button>
-        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/axit-academy.jpg" data-alt="Axit Collection — academy visual">
-          <img src="img/Axit Social Communication/axit-academy.jpg" alt="" width="160" height="120" decoding="async">
-        </button>
-        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/sfondo-storie-axit.jpg" data-alt="Axit Collection — stories background">
-          <img src="img/Axit Social Communication/sfondo-storie-axit.jpg" alt="" width="160" height="120" decoding="async">
-        </button>
-        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/elmo-axit.jpg" data-alt="Axit Collection — helmet graphic">
-          <img src="img/Axit Social Communication/elmo-axit.jpg" alt="" width="160" height="120" decoding="async">
-        </button>
-        <button type="button" class="work-gallery__thumb" role="tab" aria-selected="false" tabindex="-1" data-src="img/Axit Social Communication/icon-axit.jpg" data-alt="Axit Collection — icon system">
-          <img src="img/Axit Social Communication/icon-axit.jpg" alt="" width="160" height="120" decoding="async">
-        </button>
-      </div>
-    </nav>
   </main>
 
   <footer class="site-footer">

@@ -35,6 +35,7 @@ const UI_ICON_TARGETS = [
   { selector: '.work-download__arrow', icon: 'download' },
   { selector: '.navbar__dropdown-chevron', icon: 'dropdown' },
   { selector: '.portfolio-filter__chevron', icon: 'dropdown' },
+  { selector: '.portfolio-carousel__icon', icon: 'dropdown' },
 ];
 
 function mountUiIcon(el, iconName) {

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="img/Coloradologo.svg" type="image/svg+xml">
-  <title data-i18n="title.bio">Bio — Portfolio</title>
-  <meta name="description" content="Biografia e percorso di Colorado Design, studio creativo di media design a Roma." data-i18n-content="desc.bio">
+  <title data-i18n="title.bio">Bio — Colorado Design</title>
+  <meta name="description" content="Biografia e percorso di Colorado Design, studio creativo di media design." data-i18n-content="desc.bio">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
@@ -40,11 +40,7 @@
       <div class="navbar__actions">
         <div class="navbar__lang" role="group" aria-label="Selettore lingua" data-i18n-aria-label="a11y.lang">
           <button type="button" class="navbar__lang-toggle" aria-label="Selettore lingua" data-i18n-aria-label="a11y.lang" aria-expanded="false" aria-controls="navbar-langs">
-            <svg class="navbar__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.75"/>
-              <ellipse cx="12" cy="12" rx="4" ry="9" fill="none" stroke="currentColor" stroke-width="1.75"/>
-              <path d="M3.5 12h17" fill="none" stroke="currentColor" stroke-width="1.75"/>
-            </svg>
+            <img class="navbar__icon" src="img/icons/language.svg" alt="" width="23" height="28" decoding="async">
           </button>
           <div class="navbar__lang-list" id="navbar-langs">
             <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
@@ -53,11 +49,16 @@
             <button type="button" class="navbar__lang-btn" data-lang="es">ES</button>
           </div>
         </div>
-        <button type="button" class="navbar__theme-toggle" aria-label="Cambia tema" data-i18n-aria-label="a11y.theme">☾</button>
+        <button type="button" class="navbar__theme-toggle" aria-label="Cambia tema" data-i18n-aria-label="a11y.theme">
+          <img class="navbar__icon" src="img/icons/moon.svg" alt="" width="28" height="28" decoding="async">
+        </button>
         <button type="button" class="navbar__toggle" aria-label="Menu" data-i18n-aria-label="a11y.menu" aria-expanded="false" aria-controls="navbar-menu">
-          <span class="navbar__toggle-bar" aria-hidden="true"></span>
-          <span class="navbar__toggle-bar" aria-hidden="true"></span>
-          <span class="navbar__toggle-bar" aria-hidden="true"></span>
+          <span class="navbar__toggle-bars" aria-hidden="true">
+            <span class="navbar__toggle-bar"></span>
+            <span class="navbar__toggle-bar"></span>
+            <span class="navbar__toggle-bar"></span>
+          </span>
+          <img class="navbar__toggle-close" src="img/icons/xmenu.svg" alt="" width="28" height="28" decoding="async" aria-hidden="true">
         </button>
         <ul class="navbar__social" id="navbar-social">
           <li><a href="https://www.instagram.com/colorado.design/" class="navbar__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="img/icon-instagram.svg" alt="Instagram"><span class="navbar__social-name">Instagram</span></a></li>

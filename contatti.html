@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="img/Coloradologo.svg" type="image/svg+xml">
   <title data-i18n="title.contatti">Contatti — Colorado Design</title>
-  <meta name="description" content="Contatta Colorado Design a Roma per collaborazioni e progetti di media design, brand identity e comunicazione visiva. Richiedi un preventivo." data-i18n-content="desc.contatti">
+  <meta name="description" content="Contatta Colorado Design per collaborazioni, commissioni e nuovi progetti creativi." data-i18n-content="desc.contatti">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
@@ -40,11 +40,7 @@
       <div class="navbar__actions">
         <div class="navbar__lang" role="group" aria-label="Selettore lingua" data-i18n-aria-label="a11y.lang">
           <button type="button" class="navbar__lang-toggle" aria-label="Selettore lingua" data-i18n-aria-label="a11y.lang" aria-expanded="false" aria-controls="navbar-langs">
-            <svg class="navbar__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.75"/>
-              <ellipse cx="12" cy="12" rx="4" ry="9" fill="none" stroke="currentColor" stroke-width="1.75"/>
-              <path d="M3.5 12h17" fill="none" stroke="currentColor" stroke-width="1.75"/>
-            </svg>
+            <img class="navbar__icon" src="img/icons/language.svg" alt="" width="23" height="28" decoding="async">
           </button>
           <div class="navbar__lang-list" id="navbar-langs">
             <button type="button" class="navbar__lang-btn" data-lang="en">EN</button>
@@ -55,9 +51,12 @@
         </div>
         <button type="button" class="navbar__theme-toggle" aria-label="Cambia tema" data-i18n-aria-label="a11y.theme">☾</button>
         <button type="button" class="navbar__toggle" aria-label="Menu" data-i18n-aria-label="a11y.menu" aria-expanded="false" aria-controls="navbar-menu">
-          <span class="navbar__toggle-bar" aria-hidden="true"></span>
-          <span class="navbar__toggle-bar" aria-hidden="true"></span>
-          <span class="navbar__toggle-bar" aria-hidden="true"></span>
+          <span class="navbar__toggle-bars" aria-hidden="true">
+            <span class="navbar__toggle-bar"></span>
+            <span class="navbar__toggle-bar"></span>
+            <span class="navbar__toggle-bar"></span>
+          </span>
+          <img class="navbar__toggle-close" src="img/icons/xmenu.svg" alt="" width="28" height="28" decoding="async" aria-hidden="true">
         </button>
         <ul class="navbar__social" id="navbar-social">
           <li><a href="https://www.instagram.com/colorado.design/" class="navbar__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="img/icon-instagram.svg" alt="Instagram"><span class="navbar__social-name">Instagram</span></a></li>
@@ -152,7 +151,9 @@
         <aside class="contact-rail" aria-label="Next Milestone" data-i18n-aria-label="contact.flow.kicker">
           <p class="contact-rail__depart" data-i18n="contact.flow.depart">Next Milestone</p>
           <div class="contact-rail__step">
-            <span class="contact-rail__icon" aria-hidden="true"></span>
+            <span class="contact-rail__icon" aria-hidden="true">
+              <span class="contact-rail__glyph contact-rail__glyph--posta" aria-hidden="true"></span>
+            </span>
             <span class="contact-rail__label" data-i18n="contact.flow.1">Contattaci</span>
           </div>
           <div class="contact-rail__connector">
@@ -160,7 +161,9 @@
             <span class="contact-rail__eta" data-i18n="contact.flow.1eta">24 ore</span>
           </div>
           <div class="contact-rail__step">
-            <span class="contact-rail__icon" aria-hidden="true"></span>
+            <span class="contact-rail__icon" aria-hidden="true">
+              <span class="contact-rail__glyph contact-rail__glyph--pergamena" aria-hidden="true"></span>
+            </span>
             <span class="contact-rail__label" data-i18n="contact.flow.2">Briefing</span>
           </div>
           <div class="contact-rail__connector">
@@ -175,12 +178,7 @@
             <span class="contact-rail__arrow"></span>
           </div>
           <div class="contact-rail__step">
-            <span class="contact-rail__icon" aria-hidden="true">
-              <svg class="contact-rail__glyph" viewBox="0 0 24 24" focusable="false">
-                <path d="M7 3.5h8.2c1.4 0 2.5 1.1 2.5 2.5v12.8c0 .9-1 1.4-1.7.9l-1.8-1.3-1.8 1.3c-.4.3-1 .3-1.4 0L9.2 18.4l-1.8 1.3c-.7.5-1.7 0-1.7-.9V5.2C5.7 4.3 6.3 3.5 7 3.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                <path d="M9 8h6.5M9 11.2h6.5M9 14.4h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </span>
+            <span class="contact-rail__icon" aria-hidden="true"></span>
             <span class="contact-rail__label" data-i18n="contact.flow.4">Progetto completo</span>
           </div>
           <div class="contact-rail__connector" aria-hidden="true">

@@ -145,7 +145,7 @@
   }
 
   function getDict() {
-    const lang = document.documentElement.lang || 'en';
+    const lang = document.documentElement.lang || 'it';
     return (typeof I18N !== 'undefined' && I18N[lang]) ? I18N[lang] : {};
   }
 

@@ -432,7 +432,7 @@ function restoreClaimContent() {
   homeClaim.classList.remove('is-shattered', 'is-shattering', 'is-reassembling');
   homeClaim.style.opacity = '';
 
-  const lang = document.documentElement.lang || 'en';
+  const lang = document.documentElement.lang || 'it';
   if (typeof i18nApply === 'function') {
     i18nApply(lang);
   }
@@ -624,7 +624,7 @@ function initClaimInteraction(signal) {
     claimShattered = false;
     claimShatterAnimating = false;
     restoreClaimContent();
-    const lang = document.documentElement.lang || 'en';
+    const lang = document.documentElement.lang || 'it';
     if (typeof i18nApply === 'function') {
       i18nApply(lang);
     }
