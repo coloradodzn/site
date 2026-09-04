@@ -5,7 +5,7 @@ const PORTFOLIO_WORKS = [
     typeKey: 'work1.type',
     name: 'Logo Collection',
     type: 'Logo Design',
-    image: 'img/LogoDesign/Logo folio.png',
+    image: 'img/LogoDesign/Logo-folio.png',
     tone: null,
   },
   {

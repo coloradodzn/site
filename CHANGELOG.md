@@ -266,3 +266,10 @@ Le voci più recenti sono in fondo al file.
 - **Pagine lavoro** (`lavoro-1`, `lavoro-2`, `lavoro-5`): rimosse gallerie/immagini interne non confermate; stage con `.work-gallery__placeholder`; miniature home/portfolio/nav lavori lasciate
 - **Navbar**: allineamento verticale voci (About/Bio/Portfolio/Contatti), chevron Portfolio ridotto; icone custom (globo `language.svg`, tema, chiusura menu) e timeline contatti (`posta` / `pergamena`)
 - **Dropdown lingue**: click sul globo apre EN/IT/FR/ES anche su desktop (prima bloccato); bordo sinistro del pannello allineato al globo; `z-index` header alzato così il menu resta cliccabile anche in cima alla home (non solo dopo lo scroll); testi leggibili a header trasparente
+
+### [4.2] — Contatti, marquee clienti, SEO cache, cursore
+- **Flusso contatti**: icone custom su tutti gli step (`contact`, `pergamena`, `start`, `completed`, `feedback`); label “Progetto completo” su due righe; testi step abbassati di 4px rispetto ai riquadri; distanza label “Soggetto” → box piume allineata a Nome/Email (rimosso `min-height` forzato)
+- **Ordine lingue** nel selettore: **IT → EN → FR → ES** su tutte le pagine + `I18N_SUPPORTED`
+- **Marquee clienti** (`portfolio.html`): aggiunti `clover.svg` e `harjit.svg`; rimosso slot rotto `Risorsa 1.svg`; loop seamless (padding = metà gap); loghi nello stesso box con `object-fit: contain`
+- **Icone UI**: `backarrow`, `send`, timeline contatti; cursore custom `navigation.svg` introdotto poi **rimosso** — ripristinati i cursori di sistema Windows (freccia / manina) per evitare glitch al passaggio sulle zone cliccabili
+- **SEO**: `sitemap.xml` homepage `lastmod` aggiornato a `2026-09-04` (la description live è già corretta; Google SERP può restare in cache fino a reindicizzazione via Search Console)
