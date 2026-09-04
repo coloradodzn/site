@@ -22,6 +22,9 @@
   --color-faq-rule:       rgba(255, 77, 10, 0.18); /* divisorio FAQ */
   --font-title:           "Outfit", sans-serif;   /* titoli */
   --font-body:            "Inter", sans-serif;    /* testi */
+  /* Punta in alto al centro del viewBox 66×82.5 (render ~79×99, +20%) */
+  --cursor-nav:           url("../img/icons/navigation.svg") 40 14, auto;
+  --cursor-click:         pointer;
 
   /* Breakpoint (riferimento 2026)
      Mobile S  < 480px   | Mobile L  480–767px
@@ -91,10 +94,40 @@
 
 /* ───────────── BASE ───────────── */
 
+html {
+  cursor: var(--cursor-nav);
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
+  cursor: var(--cursor-nav);
+}
+
+a,
+button,
+summary,
+label[for],
+[role="button"],
+[role="link"],
+[role="menuitem"],
+[role="option"],
+[role="tab"],
+[role="switch"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+.contact-feather {
+  cursor: var(--cursor-click);
+}
+
+input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]),
+textarea {
+  cursor: text;
 }
 
 body:has(> .site-footer) {
@@ -121,7 +154,7 @@ h1, h2, h3, h4, h5, h6 {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 360;
   background-color: var(--color-bg);
 }
 
@@ -232,9 +265,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar__theme-toggle .ui-icon,
-.navbar__lang-toggle .ui-icon,
-.navbar__dropdown-chevron {
+.navbar__lang-toggle .ui-icon {
   --ui-icon-size: 28px;
+}
+
+.navbar__dropdown-chevron {
+  --ui-icon-size: 18px;
 }
 
 .portfolio-filter__chevron {
@@ -1040,13 +1076,8 @@ body.work-gallery-page .site-footer {
   }
 
   .clients-marquee__item {
-    min-width: clamp(4.25rem, 20vw, 6.5rem);
+    width: clamp(4.25rem, 20vw, 6.5rem);
     height: clamp(2rem, 7.5vw, 2.75rem);
-  }
-
-  .clients-marquee__item img {
-    max-width: clamp(4.25rem, 20vw, 6.5rem);
-    max-height: clamp(1.6rem, 6.5vw, 2.35rem);
   }
 
   .work-pdf__viewport {
@@ -1100,7 +1131,7 @@ body.work-gallery-page .site-footer {
   }
 
   .clients-marquee__list {
-    gap: clamp(1.5rem, 5.5vw, 2rem);
+    --clients-marquee-gap: clamp(1.5rem, 5.5vw, 2rem);
   }
 
   .site-footer__email-arrow,
@@ -1210,7 +1241,7 @@ body.work-gallery-page .site-footer {
   border: none;
   color: var(--color-primary);
   cursor: pointer;
-  padding: 0.15rem 0.25rem;
+  padding: 0.15rem 0;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
@@ -1225,7 +1256,8 @@ body.work-gallery-page .site-footer {
   gap: 0.1rem;
   position: absolute;
   top: calc(100% + 0.55rem);
-  right: 0;
+  left: 0;
+  right: auto;
   min-width: 3.5rem;
   padding: 0.45rem 0.35rem;
   background-color: var(--color-bg);
@@ -1235,6 +1267,24 @@ body.work-gallery-page .site-footer {
 
 .navbar__lang.is-open .navbar__lang-list {
   display: flex;
+}
+
+/* Su home / cover trasparente: dropdown sempre leggibile e cliccabile */
+.home .site-header .navbar__lang.is-open .navbar__lang-btn,
+.page-cover .site-header:not(.scrolled) .navbar__lang.is-open .navbar__lang-btn {
+  color: var(--color-primary);
+}
+
+.home .site-header .navbar__lang.is-open .navbar__lang-toggle,
+.page-cover .site-header:not(.scrolled) .navbar__lang.is-open .navbar__lang-toggle {
+  color: var(--color-primary);
+}
+
+.home .site-header .navbar__lang.is-open .navbar__lang-toggle .navbar__icon,
+.home .site-header .navbar__lang.is-open .navbar__lang-toggle .ui-icon img,
+.page-cover .site-header:not(.scrolled) .navbar__lang.is-open .navbar__lang-toggle .navbar__icon,
+.page-cover .site-header:not(.scrolled) .navbar__lang.is-open .navbar__lang-toggle .ui-icon img {
+  filter: none;
 }
 
 .navbar__lang-btn {
@@ -1284,6 +1334,7 @@ body.work-gallery-page .site-footer {
 .navbar__menu {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 2rem;
   list-style: none;
   padding: 0;
@@ -1292,13 +1343,21 @@ body.work-gallery-page .site-footer {
   justify-self: center;
 }
 
+.navbar__menu > li {
+  display: flex;
+  align-items: center;
+}
+
 .navbar__link {
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 1rem;
+  line-height: 1.2;
   color: var(--color-primary);
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
@@ -1319,28 +1378,33 @@ body.work-gallery-page .site-footer {
 /* Portfolio dropdown — desktop: pannello editorial; mobile: sotto-voci semplici */
 .navbar__item--dropdown {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .navbar__dropdown-label {
   display: inline-block;
+  line-height: inherit;
 }
 
 .navbar__dropdown-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
   transform-origin: left center;
 }
 
 .navbar__dropdown-chevron {
-  display: inline-block;
-  margin-top: -0.06em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
   transform: none;
   transition: transform 0.2s ease;
   flex-shrink: 0;
   cursor: pointer;
-  padding: 0.15rem;
-  margin-right: -0.15rem;
+  line-height: 0;
 }
 
 .navbar__dropdown {
@@ -1751,7 +1815,7 @@ body.work-gallery-page .site-footer {
   inset: 0;
   z-index: 2;
   transform-style: preserve-3d;
-  cursor: default;
+  cursor: var(--cursor-nav);
 }
 
 .home-works {
@@ -3146,7 +3210,6 @@ body.home-flow-complete .home-hero__scroll {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.4rem;
-  min-height: 2.4em;
 }
 
 .contact-field__hint {
@@ -3338,6 +3401,10 @@ body.home-flow-complete .home-hero__scroll {
   display: inline-flex;
 }
 
+.contact-card__submit-arrow img {
+  filter: brightness(0) invert(1);
+}
+
 .contact-form__status {
   margin: 0;
   font-size: 0.9rem;
@@ -3381,8 +3448,8 @@ body.home-flow-complete .home-hero__scroll {
 }
 
 .contact-rail__icon {
-  width: 4.1rem;
-  height: 4.1rem;
+  width: 3.75rem;
+  height: 3.75rem;
   border-radius: 0.75rem;
   background: var(--color-contact-chip);
   border: 2px solid var(--color-contact-frame);
@@ -3394,13 +3461,16 @@ body.home-flow-complete .home-hero__scroll {
 }
 
 .contact-rail__glyph {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   display: block;
 }
 
-.contact-rail__glyph--posta,
-.contact-rail__glyph--pergamena {
+.contact-rail__glyph--contact,
+.contact-rail__glyph--pergamena,
+.contact-rail__glyph--completed,
+.contact-rail__glyph--start,
+.contact-rail__glyph--feedback {
   background-color: currentColor;
   mask-repeat: no-repeat;
   mask-position: center;
@@ -3410,14 +3480,29 @@ body.home-flow-complete .home-hero__scroll {
   -webkit-mask-size: contain;
 }
 
-.contact-rail__glyph--posta {
-  mask-image: url('../img/icons/posta.svg');
-  -webkit-mask-image: url('../img/icons/posta.svg');
+.contact-rail__glyph--contact {
+  mask-image: url('../img/icons/contact.svg');
+  -webkit-mask-image: url('../img/icons/contact.svg');
 }
 
 .contact-rail__glyph--pergamena {
   mask-image: url('../img/icons/pergamena.svg');
   -webkit-mask-image: url('../img/icons/pergamena.svg');
+}
+
+.contact-rail__glyph--completed {
+  mask-image: url('../img/icons/completed.svg');
+  -webkit-mask-image: url('../img/icons/completed.svg');
+}
+
+.contact-rail__glyph--start {
+  mask-image: url('../img/icons/start.svg');
+  -webkit-mask-image: url('../img/icons/start.svg');
+}
+
+.contact-rail__glyph--feedback {
+  mask-image: url('../img/icons/feedback.svg?v=2');
+  -webkit-mask-image: url('../img/icons/feedback.svg?v=2');
 }
 
 .contact-rail__label {
@@ -3429,10 +3514,9 @@ body.home-flow-complete .home-hero__scroll {
   letter-spacing: 0.04em;
   line-height: 1.2;
   min-height: 2.4em;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  display: block;
   text-align: center;
+  white-space: pre-line;
 }
 
 .contact-rail__eta {
@@ -3710,8 +3794,8 @@ body.home-flow-complete .home-hero__scroll {
     --contact-rail-width: clamp(7.75rem, 13vw, 9rem);
     --contact-rail-gutter: calc((var(--contact-rail-width) - 3.85rem) / 4);
     grid-column: 2;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--contact-rail-width);
     align-items: stretch;
     align-self: center;
     column-gap: clamp(0.75rem, 1.8vw, 1.15rem);
@@ -3728,12 +3812,14 @@ body.home-flow-complete .home-hero__scroll {
   }
 
   .contact-card__form {
-    flex: 1 1 0;
+    grid-column: 1;
     min-width: 0;
     width: 100%;
     max-width: none;
-    height: auto;
-    align-self: stretch;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
 
   .contact-card__mark {
@@ -3741,8 +3827,12 @@ body.home-flow-complete .home-hero__scroll {
   }
 
   .contact-card__fields {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     gap: clamp(0.85rem, 1.6vw, 1.15rem);
-    height: 100%;
+    min-height: 0;
   }
 
   .contact-field__control {
@@ -3772,11 +3862,22 @@ body.home-flow-complete .home-hero__scroll {
     line-height: 1.15;
   }
 
+  /* Il messaggio assorbe l’altezza extra → colonna form = flusso */
+  .contact-card__fields > .contact-field:has(.contact-field__textarea) {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
   .contact-field__textarea {
+    flex: 1 1 auto;
+    width: 100%;
     min-height: 5.25rem;
-    height: 5.25rem;
-    max-height: 5.25rem;
-    resize: none;
+    height: auto;
+    max-height: none;
+    resize: vertical;
+    box-sizing: border-box;
   }
 
   .contact-card__submit {
@@ -3784,16 +3885,17 @@ body.home-flow-complete .home-hero__scroll {
     font-size: 0.8rem;
   }
 
-  /* Flusso parallelo al form: stessa altezza, steps distribuiti */
+  /* Flusso parallelo al form: stessa altezza di riga della card */
   .contact-rail {
+    grid-column: 2;
     display: flex;
-    flex: 0 0 var(--contact-rail-width, clamp(7.75rem, 13vw, 9rem));
-    width: var(--contact-rail-width, clamp(7.75rem, 13vw, 9rem));
+    width: 100%;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     align-self: stretch;
+    height: 100%;
     min-height: 100%;
     padding: 0;
     gap: 0;
@@ -3819,39 +3921,36 @@ body.home-flow-complete .home-hero__scroll {
 
   .contact-rail__step {
     flex: 0 0 auto;
-    gap: 0.28rem;
+    gap: calc(0.28rem + 4px);
   }
 
-  /* Freccia + orario sopra; spazio tra riquadri come prima, −20px ciascuno */
+  /*
+    Connector a quota uguale: slot orario + freccia tra due 1fr,
+    padding fisso → freccia mai a contatto con label/box.
+  */
   .contact-rail__connector {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 0.2rem;
+    display: grid;
+    grid-template-rows: 1fr auto auto 1fr;
+    justify-items: center;
+    align-content: stretch;
+    row-gap: 0.2rem;
     width: 100%;
-    flex: 1 1 auto;
-    min-height: 1.25rem;
-    margin-block: 0.15rem;
-  }
-
-  .contact-rail__arrow {
-    display: block;
-    width: 0.85rem;
-    height: 0.55rem;
-    flex-shrink: 0;
-    background: var(--color-contact-line, var(--color-primary));
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    flex: 1 1 0;
+    min-height: 2.75rem;
+    margin: 0;
+    padding-block: 0.4rem;
+    box-sizing: border-box;
   }
 
   .contact-rail__eta {
+    grid-row: 2;
     position: static;
     transform: none;
     left: auto;
     top: auto;
     margin: 0;
-    order: -1;
+    min-height: 1.15em;
     font-size: calc(0.68rem + 1pt);
     font-weight: 700;
     line-height: 1.15;
@@ -3860,19 +3959,74 @@ body.home-flow-complete .home-hero__scroll {
     text-align: center;
   }
 
+  .contact-rail__arrow {
+    grid-row: 3;
+    display: block;
+    width: 0.85rem;
+    height: 0.55rem;
+    flex-shrink: 0;
+    background: var(--color-contact-line, var(--color-primary));
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+
+  /* Senza orario: freccia esattamente a metà tra i due riquadri */
+  .contact-rail__connector:has(.contact-rail__eta:empty) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 0;
+  }
+
+  .contact-rail__connector:has(.contact-rail__eta:empty) .contact-rail__eta {
+    display: none;
+  }
+
+  .contact-rail__connector:has(.contact-rail__eta:empty) .contact-rail__arrow {
+    grid-row: unset;
+  }
+
   .contact-rail__icon {
-    width: 4.2rem;
-    height: 4.2rem;
+    width: 3.85rem;
+    height: 3.85rem;
   }
 
   .contact-rail__glyph {
-    width: 2.6rem;
-    height: 2.6rem;
+    width: 2.35rem;
+    height: 2.35rem;
   }
 
   .contact-rail__label {
     font-size: calc(0.58rem + 1pt);
     font-weight: 700;
+    min-height: 2.4em;
+  }
+
+  /*
+    Fondo ultimo riquadro = fondo button Invia:
+    la label Feedback esce dal flusso e resta sotto il box.
+  */
+  .contact-rail__step:last-child {
+    position: relative;
+  }
+
+  .contact-rail__step:last-child .contact-rail__label {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 0.28rem + 4px);
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 9rem;
+    min-height: 0;
+  }
+
+  .contact-card {
+    padding-bottom: calc(clamp(1rem, 2vw, 1.45rem) + 15px + 2.6em);
+  }
+
+  .contact-card__actions {
+    padding-top: 0;
+    margin-top: auto;
   }
 }
 
@@ -4044,6 +4198,7 @@ body.home-flow-complete .home-hero__scroll {
   max-width: 72rem;
   margin: 0 auto;
   padding: clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2.5rem);
+  text-align: center;
 }
 
 .portfolio-page__title {
@@ -4056,7 +4211,7 @@ body.home-flow-complete .home-hero__scroll {
 }
 
 .portfolio-page__lead {
-  margin: 0;
+  margin: 0 auto;
   max-width: 32rem;
   font-family: var(--font-body);
   font-size: clamp(0.95rem, 2.2vw, 1.05rem);
@@ -4640,7 +4795,8 @@ body.home-flow-complete .home-hero__scroll {
   }
 
   .portfolio-page__intro {
-    padding-left: calc(clamp(1.25rem, 5vw, 3rem) + var(--portfolio-carousel-content-inset));
+    padding-left: clamp(1.25rem, 5vw, 3rem);
+    padding-right: clamp(1.25rem, 5vw, 3rem);
   }
 
   .portfolio-carousel__item {
@@ -4708,10 +4864,12 @@ body.home-flow-complete .home-hero__scroll {
 }
 
 .clients-marquee__list {
+  --clients-marquee-gap: clamp(2.5rem, 7vw, 5rem);
   display: flex;
   align-items: center;
-  gap: clamp(2.5rem, 7vw, 5rem);
-  padding: 0 clamp(1.25rem, 3vw, 2rem);
+  gap: var(--clients-marquee-gap);
+  /* metà gap ai bordi: tra fine lista 1 e inizio lista 2 lo spazio resta uguale al gap */
+  padding: 0 calc(var(--clients-marquee-gap) / 2);
   list-style: none;
   margin: 0;
 }
@@ -4721,16 +4879,16 @@ body.home-flow-complete .home-hero__scroll {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: clamp(5.5rem, 14vw, 9rem);
+  width: clamp(5.5rem, 14vw, 9rem);
   height: clamp(2.5rem, 6vw, 3.5rem);
 }
 
 .clients-marquee__item img {
   display: block;
-  max-width: clamp(5.5rem, 14vw, 9rem);
-  max-height: clamp(2rem, 5vw, 3rem);
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
   object-fit: contain;
   filter: brightness(0) invert(1);
   opacity: 0.92;

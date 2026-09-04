@@ -32,7 +32,7 @@ const I18N = {
     "contact.flow.2": "Briefing",
     "contact.flow.2eta": "48 ore",
     "contact.flow.3": "Kick off",
-    "contact.flow.4": "Progetto completo",
+    "contact.flow.4": "Progetto\ncompleto",
     "contact.flow.5": "Feedback",
     "footer.cta": "Diamo forma alla prossima idea.",
     "footer.info": "My Info",
@@ -166,7 +166,7 @@ const I18N = {
     "work5.type": "Comunicazione visiva",
     "clients.title": "NON SEI SOLO",
     "clients.lead": "Brand e partner che hanno scelto di costruire con noi.",
-    "clients.a11y": "Loghi clienti: Axit, Hark, Moondream, Bebon, Locked.",
+    "clients.a11y": "Loghi clienti: Axit, Hark, Moondream, Bebon, Locked, Clover, Harjit.",
     "desc.privacy": "Informativa sulla privacy e cookie di Colorado Creative Studio.",
     "desc.termini": "Termini e condizioni d'uso del sito web di Colorado Creative Studio."
   },
@@ -203,7 +203,7 @@ const I18N = {
     "contact.flow.2": "Briefing",
     "contact.flow.2eta": "48h",
     "contact.flow.3": "Kick off",
-    "contact.flow.4": "Project complete",
+    "contact.flow.4": "Project\ncomplete",
     "contact.flow.5": "Feedback",
     "footer.cta": "Let's shape your next idea.",
     "footer.info": "My Info",
@@ -337,7 +337,7 @@ const I18N = {
     "work5.type": "Visual Communication",
     "clients.title": "YOU'RE NOT ALONE",
     "clients.lead": "Brands & partners that have chosen to build with us.",
-    "clients.a11y": "Client logos: Axit, Hark, Moondream, Bebon, Locked.",
+    "clients.a11y": "Client logos: Axit, Hark, Moondream, Bebon, Locked, Clover, Harjit.",
     "desc.privacy": "Colorado Creative Studio privacy notice and cookie information.",
     "desc.termini": "Terms and conditions of use for the Colorado Creative Studio website."
   },
@@ -374,7 +374,7 @@ const I18N = {
     "contact.flow.2": "Briefing",
     "contact.flow.2eta": "48h",
     "contact.flow.3": "Kick off",
-    "contact.flow.4": "Project complete",
+    "contact.flow.4": "Project\ncomplete",
     "contact.flow.5": "Feedback",
     "footer.cta": "Donnons forme à votre prochaine idée.",
     "footer.info": "My Info",
@@ -508,7 +508,7 @@ const I18N = {
     "work5.type": "Communication visuelle",
     "clients.title": "VOUS N'ÊTES PAS SEUL",
     "clients.lead": "Marques et partenaires qui ont choisi de construire avec nous.",
-    "clients.a11y": "Logos clients : Axit, Hark, Moondream, Bebon, Locked.",
+    "clients.a11y": "Logos clients : Axit, Hark, Moondream, Bebon, Locked, Clover, Harjit.",
     "desc.privacy": "Politique de confidentialité et cookies de Colorado Creative Studio.",
     "desc.termini": "Conditions générales d'utilisation du site Colorado Creative Studio."
   },
@@ -545,7 +545,7 @@ const I18N = {
     "contact.flow.2": "Briefing",
     "contact.flow.2eta": "48h",
     "contact.flow.3": "Kick off",
-    "contact.flow.4": "Project complete",
+    "contact.flow.4": "Project\ncomplete",
     "contact.flow.5": "Feedback",
     "footer.cta": "Demos forma a tu próxima idea.",
     "footer.info": "My Info",
@@ -679,13 +679,13 @@ const I18N = {
     "work5.type": "Comunicación visual",
     "clients.title": "NO ESTÁS SOLO",
     "clients.lead": "Marcas y socios que han elegido construir con nosotros.",
-    "clients.a11y": "Logotipos de clientes: Axit, Hark, Moondream, Bebon, Locked.",
+    "clients.a11y": "Logotipos de clientes: Axit, Hark, Moondream, Bebon, Locked, Clover, Harjit.",
     "desc.privacy": "Aviso de privacidad e información sobre cookies de Colorado Creative Studio.",
     "desc.termini": "Términos y condiciones de uso del sitio web de Colorado Creative Studio."
   }
 };
 
-const I18N_SUPPORTED = ["en", "it", "fr", "es"];
+const I18N_SUPPORTED = ["it", "en", "fr", "es"];
 const I18N_DEFAULT = "it";
 const I18N_STORAGE_KEY = "lang";
 

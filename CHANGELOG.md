@@ -253,3 +253,16 @@ Le voci più recenti sono in fondo al file.
 - Homepage: hero scroll Z al posto del carousel del brief (Z accettata)
 - Homepage bio/CV (29 ago 2026): link a `bio.html` già presente (nav reveal post-scroll Z) — fatto; CV non in homepage né sul sito pubblico (privato, rischio identificazione) — cancellato; estratto bio in homepage — pianificato, da implementare
 - Privacy contatti: nessun indirizzo fisico (via), Maps, telefono o recapiti personali sul sito pubblico; form senza cognome/telefono; identità reale riservata ai collaboratori; email professionale studio (`info.coloradodesign@gmail.com`), città (“Roma” / “Rome, Italy”) e coordinate GPS nel footer (`41°50′01″N 12°28′15″E`) OK in footer/privacy/i18n/SEO/JSON-LD
+- Lingua default del sito: **italiano** (SEO su dominio `.it`); EN/FR/ES restano nel selettore
+- Meta/description: non dichiarare “studio con sede a Roma”; Roma resta in footer e in JSON-LD Organization per Google
+
+### [4.1] — SEO, audio, lingua IT, lavori placeholder, navbar lingue
+- **SEO title home** ripristinato a `Colorado Design — Creative Studio` in `index.html`, `og:title` e `title.home` (IT/EN/FR/ES)
+- **Meta description home** ripristinata al posizionamento creative director (senza “studio a Roma”); allineate `desc.home` / `og:description` e description bio/about/contatti; rimosso `Sede: Rome, Italy` da `privacy.html`
+- **JSON-LD** Organization: mantenuto `addressLocality: Rome` + `addressCountry: IT` (utile a Google); footer con `Rome, Italy · coordinate` invariato
+- Default lingua **`I18N_DEFAULT = "it"`**; `<html lang="it">` e `og:locale` `it_IT` su tutte le pagine; rimosse chiavi i18n hero obsolete (tagline “media design e visual storytelling”, eyebrow/line non usate)
+- **Playlist ambient**: cartella `Music/` (7 MP3) aggiunta al repo e online; aggiornato `blossom.mp3`
+- `sitemap.xml`: `lastmod` sulla homepage per segnalare refresh metadata
+- **Pagine lavoro** (`lavoro-1`, `lavoro-2`, `lavoro-5`): rimosse gallerie/immagini interne non confermate; stage con `.work-gallery__placeholder`; miniature home/portfolio/nav lavori lasciate
+- **Navbar**: allineamento verticale voci (About/Bio/Portfolio/Contatti), chevron Portfolio ridotto; icone custom (globo `language.svg`, tema, chiusura menu) e timeline contatti (`posta` / `pergamena`)
+- **Dropdown lingue**: click sul globo apre EN/IT/FR/ES anche su desktop (prima bloccato); bordo sinistro del pannello allineato al globo; `z-index` header alzato così il menu resta cliccabile anche in cima alla home (non solo dopo lo scroll); testi leggibili a header trasparente

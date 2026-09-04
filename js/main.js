@@ -25,13 +25,15 @@ const UI_ICON_FILES = {
   sun: 'img/icons/sun.svg',
   extlink: 'img/icons/extlink.svg',
   download: 'img/icons/download.svg',
-  'arrow-left': 'img/icons/arrow.svg',
+  'arrow-left': 'img/icons/backarrow.svg',
+  backarrow: 'img/icons/backarrow.svg',
+  send: 'img/icons/send.svg',
   dropdown: 'img/icons/dropdown.svg',
 };
 
 const UI_ICON_TARGETS = [
-  { selector: '.site-footer__email-arrow', icon: 'extlink' },
-  { selector: '.contact-card__submit-arrow', icon: 'extlink' },
+  { selector: '.site-footer__email-arrow', icon: 'send' },
+  { selector: '.contact-card__submit-arrow', icon: 'send' },
   { selector: '.work-download__arrow', icon: 'download' },
   { selector: '.navbar__dropdown-chevron', icon: 'dropdown' },
   { selector: '.portfolio-filter__chevron', icon: 'dropdown' },
@@ -52,9 +54,6 @@ function mountUiIcon(el, iconName) {
   img.decoding = 'async';
   img.width = 24;
   img.height = 24;
-  if (iconName === 'arrow-left') {
-    el.classList.add('ui-icon--flip');
-  }
   el.appendChild(img);
   el.dataset.uiIconMounted = '1';
 }
@@ -113,7 +112,7 @@ function initBackButton(signal) {
   back.className = 'work-back';
   back.setAttribute('aria-label', 'Torna indietro');
   back.setAttribute('data-i18n-aria-label', 'a11y.back');
-  back.innerHTML = '<span class="ui-icon ui-icon--arrow-left ui-icon--flip work-back__icon" aria-hidden="true"><img src="img/icons/arrow.svg" alt="" width="40" height="40" decoding="async"></span>';
+  back.innerHTML = '<span class="ui-icon ui-icon--backarrow work-back__icon" aria-hidden="true"><img src="img/icons/backarrow.svg" alt="" width="40" height="40" decoding="async"></span>';
 
   back.addEventListener('click', () => {
     if (isCategory) {
@@ -163,9 +162,8 @@ function setMenuOpen(open, toggle, menu) {
 
 function setLangOpen(open, langRoot, langToggle) {
   if (!langRoot || !langToggle) return;
-  const next = open && !isDesktopNav();
-  langRoot.classList.toggle('is-open', next);
-  langToggle.setAttribute('aria-expanded', String(next));
+  langRoot.classList.toggle('is-open', open);
+  langToggle.setAttribute('aria-expanded', String(open));
 }
 
 function alignPortfolioDropdown() {
