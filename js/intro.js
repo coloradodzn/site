@@ -17,7 +17,7 @@
     if (!intro || !document.body.classList.contains('home-intro-active')) {
       if (intro) {
         intro.classList.add('is-hidden');
-        intro.classList.remove('is-playing', 'is-gate');
+        intro.classList.remove('is-playing', 'is-gate', 'is-locked');
         intro.setAttribute('aria-hidden', 'true');
       }
       return;
@@ -35,7 +35,7 @@
       }
 
       intro.classList.add('is-hidden');
-      intro.classList.remove('is-playing', 'is-gate');
+      intro.classList.remove('is-playing', 'is-gate', 'is-locked');
       document.body.classList.remove('home-intro-active', 'home-intro-sigla');
 
       window.setTimeout(() => {
@@ -50,6 +50,12 @@
       document.dispatchEvent(new CustomEvent('colorado:intro-dismissed'));
     }
 
+    function unlockGate() {
+      intro.classList.remove('is-locked');
+    }
+
+    /** Fine sigla: il gate compare, ma il bottone di ingresso resta
+     *  nascosto finché la scelta cookie non è stata fatta. */
     function showGate() {
       intro.classList.remove('is-playing');
       intro.classList.add('is-gate');
@@ -58,6 +64,18 @@
       if (video) {
         video.pause();
       }
+
+      const consentPending = typeof window.coloradoCookieChoicePending === 'function'
+        && window.coloradoCookieChoicePending();
+
+      if (consentPending) {
+        intro.classList.add('is-locked');
+        document.addEventListener('colorado:cookies-settled', unlockGate, { once: true, signal });
+      } else {
+        unlockGate();
+      }
+
+      document.dispatchEvent(new CustomEvent('colorado:intro-gate'));
     }
 
     function playSigla() {
@@ -82,6 +100,9 @@
 
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape') return;
+      if (intro.classList.contains('is-locked')) {
+        return;
+      }
       if (intro.classList.contains('is-gate')) {
         dismissIntro();
       } else if (intro.classList.contains('is-playing')) {

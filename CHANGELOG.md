@@ -303,3 +303,10 @@ Le voci più recenti sono in fondo al file.
 - Momentaneamente solo la sfera (marker/griglia/tooltip off); auto-rotate + drag attivi
 - Tema chiaro/scuro: colori mappa adattati; in dark terre abbassate a grigio caldo medio (meno luminose del bianco iniziale)
 - Spec aggiornata in `.cursor/rules/about-globe-spec.mdc`; direzione futura: feature tipo Orbita (marker + archi) restando sull’estetica SVG attuale
+
+### [4.7] — About globe: rotazione fluida + zoom +/-
+- “Vedi tutte le connessioni”: rotazione easing verso l’Europa dalla vista corrente (niente teleport); lo zoom non viene più forzato
+- Controlli **+ / −** sullo stage solo su mobile/touch (`hover: none` o &lt;768px); su desktop resta la rotella
+- Pinch resta disponibile su touch
+- **Esc** (o riclick / ping destinazione) chiude le connessioni; pulsante view-all sotto il globo
+- Favicon PNG / apple-touch su tutte le pagine; cookie consent integrato nel gate intro home

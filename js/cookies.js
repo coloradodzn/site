@@ -160,6 +160,8 @@
     panel.hidden = !open;
     chip.setAttribute('aria-expanded', String(open));
     document.body.classList.toggle('cookie-banner-open', open);
+    // prima scelta in corso: la modale sta sopra l'intro e il gate resta bloccato
+    document.body.classList.toggle('cookie-consent-pending', open && center);
 
     if (open) {
       syncChoiceUi();
@@ -176,13 +178,14 @@
   }
 
   /** Il pannello si rimpicciolisce fin dentro il chip cookie, poi si chiude. */
-  function collapseIntoChip() {
+  function collapseIntoChip(onDone) {
     const banner = getBanner();
     const panel = getPanel();
     const chip = getChip();
 
     if (!banner || !panel || !chip || panel.hidden || prefersReducedMotion()) {
       setPanelOpen(false);
+      onDone?.();
       return;
     }
 
@@ -215,6 +218,7 @@
       panel.style.removeProperty('--cookie-collapse-x');
       panel.style.removeProperty('--cookie-collapse-y');
       setPanelOpen(false);
+      onDone?.();
     }, { once: true });
   }
 
@@ -240,21 +244,38 @@
   function settleCookies(choice) {
     persistChoice(choice);
     syncChoiceUi();
-    collapseIntoChip();
+    // il gate dell'intro si sblocca solo a pannello richiuso
+    collapseIntoChip(() => {
+      document.dispatchEvent(new CustomEvent('colorado:cookies-settled', { detail: { choice } }));
+    });
     document.dispatchEvent(new CustomEvent(
       choice === 'accepted' ? 'colorado:cookies-accepted' : 'colorado:cookies-rejected'
     ));
   }
 
-  function maybeShowAfterIntro(banner) {
-    if (document.body.classList.contains('home-intro-active')) {
-      document.addEventListener('colorado:intro-dismissed', () => {
-        showChip(banner);
-      }, { once: true });
+  /**
+   * Sulla home la modale entra nel gate dell'intro: dopo la sigla e prima
+   * che compaia il bottone di ingresso.
+   */
+  function maybeShowAfterIntro(banner, signal) {
+    const intro = document.getElementById('home-intro');
+    const introRunning = document.body.classList.contains('home-intro-active');
+
+    if (!introRunning || intro?.classList.contains('is-gate')) {
+      showChip(banner);
       return;
     }
 
-    showChip(banner);
+    let shown = false;
+    const reveal = () => {
+      if (shown) return;
+      shown = true;
+      showChip(banner);
+    };
+
+    document.addEventListener('colorado:intro-gate', reveal, { once: true, signal });
+    // rete di sicurezza: intro chiusa senza passare dal gate
+    document.addEventListener('colorado:intro-dismissed', reveal, { once: true, signal });
   }
 
   function initCookieBanner() {
@@ -275,21 +296,27 @@
       setPanelOpen(Boolean(panel?.hidden));
     }, { signal });
 
+    // la prima scelta è obbligatoria: dalla modale centrale non si esce senza decidere
+    const isMandatory = () => banner.classList.contains('cookie-banner--center');
+
     acceptBtn?.addEventListener('click', () => settleCookies('accepted'), { signal });
     rejectBtn?.addEventListener('click', () => settleCookies('rejected'), { signal });
-    dismissBtn?.addEventListener('click', () => setPanelOpen(false), { signal });
+    dismissBtn?.addEventListener('click', () => {
+      if (!isMandatory()) setPanelOpen(false);
+    }, { signal });
 
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape') return;
-      if (banner.hidden) return;
+      if (banner.hidden || isMandatory()) return;
       const panel = getPanel();
       if (panel && !panel.hidden) setPanelOpen(false);
     }, { signal });
 
-    maybeShowAfterIntro(banner);
+    maybeShowAfterIntro(banner, signal);
   }
 
   window.coloradoHasAcceptedCookies = hasAcceptedCookies;
+  window.coloradoCookieChoicePending = () => getStoredChoice() === null;
   window.coloradoInitCookies = initCookieBanner;
 
   initCookieBanner();

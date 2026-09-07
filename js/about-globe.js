@@ -2,7 +2,7 @@
  * About globe — TacticalGlobe3D + archi Roma → destinazione (opzione B).
  * Click ping → stop spin → arco draw → fade → riparte spin.
  */
-import { createElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createElement, Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import TacticalGlobe from './vendor/TacticalGlobe3D.js';
 
@@ -20,8 +20,8 @@ const DESTINATIONS = [
 const ZOOM_MIN = 1;
 const ZOOM_MAX = 2.4;
 const ZOOM_STEP = 0.12;
-/** Zoom su Italia/Europa quando “vedi tutte” */
-const ZOOM_ITALY = 1.85;
+/** Rotazione fluida verso Europa su “vedi tutte” (niente teleport / niente zoom forzato) */
+const VIEW_TWEEN_MS = 1100;
 
 const DRAW_MS = 1400;
 const HOLD_MS = 180;
@@ -59,6 +59,30 @@ function reduceMotion() {
 
 function clamp(v, lo, hi) {
   return v < lo ? lo : v > hi ? hi : v;
+}
+
+function clampZoom(v) {
+  return clamp(v, ZOOM_MIN, ZOOM_MAX);
+}
+
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+}
+
+/** Percorso angolare più corto (gradi). */
+function shortestDelta(from, to) {
+  return ((((to - from) % 360) + 540) % 360) - 180;
+}
+
+function readLiveView(frame, fallback) {
+  if (frame && Number.isFinite(frame.lambda) && Number.isFinite(frame.phi) && Number.isFinite(frame.gamma)) {
+    return {
+      rotateX: frame.gamma,
+      rotateY: frame.phi,
+      rotateZ: frame.lambda,
+    };
+  }
+  return { ...fallback };
 }
 
 function toXYZ(lat, lng) {
@@ -179,9 +203,9 @@ function AboutGlobeApp() {
   const [showAll, setShowAll] = useState(false);
   const [view, setView] = useState(DEFAULT_VIEW);
   const [zoom, setZoom] = useState(1);
-  const focusNonceRef = useRef(0);
   const zoomRef = useRef(1);
   const pinchRef = useRef(null);
+  const viewTweenRef = useRef(null); // { raf, cancel }
 
   const arcPathRef = useRef(null);
   const arcSvgRef = useRef(null);
@@ -189,7 +213,63 @@ function AboutGlobeApp() {
   const frameRef = useRef(null);
   const routeRef = useRef(null); // { from, to, loft, startedAt }
   const showAllRef = useRef(false);
+  const viewRef = useRef(DEFAULT_VIEW);
   const markers = useMemo(() => buildMarkers(isDarkTheme()), [themeTick, dark]);
+
+  const cancelViewTween = useCallback(() => {
+    const tw = viewTweenRef.current;
+    if (!tw) return;
+    if (tw.raf) cancelAnimationFrame(tw.raf);
+    viewTweenRef.current = null;
+  }, []);
+
+  const tweenViewTo = useCallback(
+    (target, { duration = VIEW_TWEEN_MS } = {}) => {
+      cancelViewTween();
+      const from = readLiveView(frameRef.current, viewRef.current);
+      const dX = shortestDelta(from.rotateX, target.rotateX);
+      const dY = shortestDelta(from.rotateY, target.rotateY);
+      const dZ = shortestDelta(from.rotateZ, target.rotateZ);
+      const end = {
+        rotateX: from.rotateX + dX,
+        rotateY: from.rotateY + dY,
+        rotateZ: from.rotateZ + dZ,
+      };
+      const dist = Math.abs(dX) + Math.abs(dY) + Math.abs(dZ);
+
+      if (quiet || dist < 0.35) {
+        viewRef.current = end;
+        setView(end);
+        return;
+      }
+
+      const startedAt = performance.now();
+      const tw = { raf: 0 };
+      viewTweenRef.current = tw;
+
+      const tick = (now) => {
+        const t = clamp((now - startedAt) / duration, 0, 1);
+        const e = easeInOutCubic(t);
+        const next = {
+          rotateX: from.rotateX + dX * e,
+          rotateY: from.rotateY + dY * e,
+          rotateZ: from.rotateZ + dZ * e,
+        };
+        viewRef.current = next;
+        setView(next);
+        if (t < 1) {
+          tw.raf = requestAnimationFrame(tick);
+        } else {
+          viewRef.current = end;
+          setView(end);
+          viewTweenRef.current = null;
+        }
+      };
+
+      tw.raf = requestAnimationFrame(tick);
+    },
+    [cancelViewTween, quiet]
+  );
 
   const clearAllArcs = useCallback(() => {
     const g = allGroupRef.current;
@@ -226,16 +306,36 @@ function AboutGlobeApp() {
   }, [showAll]);
 
   useEffect(() => {
+    viewRef.current = view;
+  }, [view]);
+
+  useEffect(() => {
     zoomRef.current = zoom;
     const stage = document.querySelector('.about-globe__stage');
     if (stage) stage.style.setProperty('--globe-zoom', String(zoom));
   }, [zoom]);
 
+  useEffect(() => () => cancelViewTween(), [cancelViewTween]);
+
+  /* Se l’utente trascina durante il tween, interrompi (niente “tiro” a fine animazione) */
   useEffect(() => {
     const stage = document.querySelector('.about-globe__stage');
     if (!stage) return undefined;
+    const onPointerDown = (e) => {
+      if (e.target.closest?.('.about-globe__zoom')) return;
+      if (!viewTweenRef.current) return;
+      cancelViewTween();
+      const live = readLiveView(frameRef.current, viewRef.current);
+      viewRef.current = live;
+      setView(live);
+    };
+    stage.addEventListener('pointerdown', onPointerDown);
+    return () => stage.removeEventListener('pointerdown', onPointerDown);
+  }, [cancelViewTween]);
 
-    const clampZoom = (v) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, v));
+  useEffect(() => {
+    const stage = document.querySelector('.about-globe__stage');
+    if (!stage) return undefined;
 
     const onWheel = (e) => {
       e.preventDefault();
@@ -303,37 +403,48 @@ function AboutGlobeApp() {
     const btn = document.querySelector('[data-about-globe-all]');
     if (!btn) return undefined;
 
+    const hideAll = () => {
+      if (!showAllRef.current) return;
+      showAllRef.current = false;
+      setShowAll(false);
+      cancelViewTween();
+      clearAllArcs();
+      if (!reduceMotion()) setAutoRotate(true);
+    };
+
     const onClick = () => {
-      setShowAll((prev) => {
-        const next = !prev;
-        showAllRef.current = next;
-        if (next) {
-          routeRef.current = null;
-          /* Porta la visuale sull’Europa così gli archi sono sul lato visibile */
-          focusNonceRef.current += 1;
-          setView({
-            rotateX: EUROPE_VIEW.rotateX,
-            rotateY: EUROPE_VIEW.rotateY,
-            rotateZ: EUROPE_VIEW.rotateZ + focusNonceRef.current * 1e-4,
-          });
-          setZoom(ZOOM_ITALY);
-          setAutoRotate(false);
-        } else {
-          clearAllArcs();
-          setZoom(1);
-          if (!reduceMotion()) setAutoRotate(true);
-        }
-        return next;
-      });
+      if (showAllRef.current) {
+        hideAll();
+        return;
+      }
+      showAllRef.current = true;
+      setShowAll(true);
+      routeRef.current = null;
+      setAutoRotate(false);
+      /* Ruota fluidamente verso Europa; lascia lo zoom com’è */
+      tweenViewTo(EUROPE_VIEW);
+    };
+
+    const onKeyDown = (e) => {
+      if (e.key !== 'Escape') return;
+      hideAll();
     };
 
     btn.addEventListener('click', onClick);
-    return () => btn.removeEventListener('click', onClick);
-  }, [clearAllArcs]);
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      btn.removeEventListener('click', onClick);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [clearAllArcs, tweenViewTo, cancelViewTween]);
 
   useEffect(() => {
     syncAllConnectionsButton(showAll);
   }, [showAll, themeTick]);
+
+  const bumpZoom = useCallback((dir) => {
+    setZoom((z) => clampZoom(z + dir * ZOOM_STEP));
+  }, []);
 
   const paintArc = useCallback(() => {
     const el = arcPathRef.current;
@@ -409,6 +520,7 @@ function AboutGlobeApp() {
     if (showAllRef.current) {
       setShowAll(false);
       showAllRef.current = false;
+      cancelViewTween();
       clearAllArcs();
     }
 
@@ -424,7 +536,7 @@ function AboutGlobeApp() {
       startedAt: performance.now(),
     };
     paintArc();
-  }, [paintArc, clearAllArcs]);
+  }, [paintArc, clearAllArcs, cancelViewTween]);
 
   const globeProps = {
     markers,
@@ -480,31 +592,70 @@ function AboutGlobeApp() {
     },
   };
 
+  const zoomInLabel = 'Ingrandisci globo';
+  const zoomOutLabel = 'Rimpicciolisci globo';
+
   return createElement(
-    'div',
-    { className: 'about-globe__mount' },
-    createElement(TacticalGlobe, globeProps),
+    Fragment,
+    null,
     createElement(
-      'svg',
-      {
-        ref: arcSvgRef,
-        className: 'about-globe__arcs',
-        'aria-hidden': 'true',
-      },
-      createElement('path', {
-        ref: arcPathRef,
-        className: 'about-globe__arc',
-        fill: 'none',
-        stroke: ARC_COLOR,
-        strokeWidth: 2.25,
-        strokeLinecap: 'round',
-        strokeLinejoin: 'round',
-        opacity: 0,
-      }),
-      createElement('g', {
-        ref: allGroupRef,
-        className: 'about-globe__arcs-all',
-      })
+      'div',
+      { className: 'about-globe__mount' },
+      createElement(TacticalGlobe, globeProps),
+      createElement(
+        'svg',
+        {
+          ref: arcSvgRef,
+          className: 'about-globe__arcs',
+          'aria-hidden': 'true',
+        },
+        createElement('path', {
+          ref: arcPathRef,
+          className: 'about-globe__arc',
+          fill: 'none',
+          stroke: ARC_COLOR,
+          strokeWidth: 2.25,
+          strokeLinecap: 'round',
+          strokeLinejoin: 'round',
+          opacity: 0,
+        }),
+        createElement('g', {
+          ref: allGroupRef,
+          className: 'about-globe__arcs-all',
+        })
+      )
+    ),
+    createElement(
+      'div',
+      { className: 'about-globe__zoom', role: 'group', 'aria-label': 'Zoom' },
+      createElement(
+        'button',
+        {
+          type: 'button',
+          className: 'about-globe__zoom-btn',
+          'aria-label': zoomInLabel,
+          'data-i18n-aria-label': 'about.globe.zoomIn',
+          onClick: (e) => {
+            e.stopPropagation();
+            bumpZoom(1);
+          },
+        },
+        '+'
+      ),
+      createElement(
+        'button',
+        {
+          type: 'button',
+          className: 'about-globe__zoom-btn',
+          'aria-label': zoomOutLabel,
+          'data-i18n-aria-label': 'about.globe.zoomOut',
+          onClick: (e) => {
+            e.stopPropagation();
+            bumpZoom(-1);
+          },
+        },
+        '−'
+      )
     )
   );
 }
