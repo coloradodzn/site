@@ -1,0 +1,34 @@
+---
+description: Spec animazioni e comportamento del globo About (da rifare da capo)
+globs: about.html,js/about-globe.js,css/style.css
+alwaysApply: false
+---
+
+# About globe — spec
+
+## Implementazione attuale
+- Framer **TacticalGlobe3D** (`MilitaryMap`, SVG) montato via React ESM
+- URL: `https://framer.com/m/TacticalGlobe3D-uVMtXj.js@UhPxNuaENi2YMvlzEzft`
+- File: `js/about-globe.js` + stub `js/framer-stub.js`
+- Nessuno sfondo di sezione: globo sullo **sfondo del body** (come PNG)
+
+## Posizione pagina
+Ordine About: vision → services → process → why → numbers → **globe** → **CTA** (ultima prima del footer).
+
+## Luoghi (markers)
+- Hub: **Roma** `[41.9028, 12.4964]` — ping bianco (dark) / scuro (light); non avvia arco
+- Destinazioni (arancione): Ireland, Lerici, Salerno, Brescia, Brooklyn, Spain
+- Ireland / Spain: temp. Dublin / Madrid (Spain senza sottotesto UI)
+- Niente pulsanti sotto il globo (solo ping)
+
+## Interazione archi (opzione B)
+1. Click ping destinazione → stop auto-rotate
+2. Arco animato Roma → destinazione
+3. Fine (draw + breve hold + fade) → arco via → riparte spin
+4. Nuovo click interrompe e riparte il flusso
+5. Mobile: da definire dopo desktop
+
+## Layout
+- Container/stage transparenti; niente bande opache
+- Stage quadrato stabile; sfera intera
+- Navbar About come le altre pagine

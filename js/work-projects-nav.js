@@ -25,13 +25,31 @@ const PORTFOLIO_WORKS = [
     tone: 3,
   },
   {
+    href: 'lavoro-4.html',
+    nameKey: 'work4.name',
+    typeKey: 'work4.type',
+    name: 'IED Scholarship',
+    type: 'Brand Identity',
+    image: 'img/IED/miniatura.jpg',
+    tone: null,
+  },
+  {
     href: 'lavoro-5.html',
-    name: 'Axit Collection',
+    nameKey: 'work5.name',
     typeKey: 'work5.type',
     name: 'Axit Collection',
     type: 'Visual Communication',
     image: null,
     tone: 5,
+  },
+  {
+    href: 'lavoro-6.html',
+    nameKey: 'work6.name',
+    typeKey: 'work6.type',
+    name: 'Patagonia',
+    type: 'Brand Identity',
+    image: 'img/Patagonia/patagonia_min.webp',
+    tone: null,
   },
 ];
 

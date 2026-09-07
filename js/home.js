@@ -27,13 +27,15 @@ const CARD_CLICK_OPACITY = 0.4;
 const CARD_CLICK_DEPTH = 0.36;
 const CARD_HIDE_PERCENT = 62;
 const CLAIM_SHOW_PERCENT = 62;
-const CLAIM_SHATTER_START_PERCENT = 63;
-const CLAIM_SHATTER_END_PERCENT = 68;
-const NAV_START_PERCENT = 68;
-const NAV_CENTER_PERCENT = 80;
-const FOOTER_START_PERCENT = 88;
-const FOOTER_END_PERCENT = 97;
-const CLAIM_ANIM_MS = 850;
+const CLAIM_FADE_IN_PERCENT = 5;
+const CLAIM_SHATTER_START_PERCENT = 74;
+const CLAIM_SHATTER_END_PERCENT = 80;
+const NAV_START_PERCENT = 80;
+const NAV_CENTER_PERCENT = 88;
+const FOOTER_START_PERCENT = 92;
+const FOOTER_END_PERCENT = 98;
+const CLAIM_SHATTER_BASE_MS = 900;
+const CLAIM_STAGGER_MS = 8;
 
 const DEFAULT_OFFSETS = [
   { x: -34, y: -12, rotateY: 12 },
@@ -391,6 +393,25 @@ function prepareClaimFragments() {
   homeClaimTrigger.dataset.fragmentCount = String(Math.max(delayIndex, 1));
 }
 
+function getClaimFragmentCount() {
+  return homeClaim?.querySelectorAll('.home-hero-claim__fragment').length || 0;
+}
+
+function getClaimAnimDurationMs() {
+  const count = getClaimFragmentCount();
+  const staggerTail = Math.max(0, count - 1) * CLAIM_STAGGER_MS;
+  return CLAIM_SHATTER_BASE_MS + staggerTail + 120;
+}
+
+function setClaimFragmentDelays(fragments, reverse = false) {
+  const total = fragments.length;
+  fragments.forEach((fragment) => {
+    const delayIndex = Number.parseInt(fragment.dataset.delayIndex || '0', 10);
+    const order = reverse ? (total - 1 - delayIndex) : delayIndex;
+    fragment.style.setProperty('--delay', `${order * (CLAIM_STAGGER_MS / 1000)}s`);
+  });
+}
+
 function assignFragmentScatter(fragment) {
   if (!fragment.dataset.tx) {
     const angle = Math.random() * Math.PI * 2;
@@ -428,14 +449,20 @@ function clearFragmentMotionStyles() {
 function restoreClaimContent() {
   if (!homeClaimTrigger || !homeClaim) return;
 
-  resetClaimFragments();
+  /* Ricostruisce le righe con data-i18n (dopo i fragment char) e riempie dal dizionario,
+     senza richiamare i18nApply — altrimenti colorado:langchange entra in loop. */
+  rebuildClaimLines();
   homeClaim.classList.remove('is-shattered', 'is-shattering', 'is-reassembling');
   homeClaim.style.opacity = '';
 
-  const lang = document.documentElement.lang || 'it';
-  if (typeof i18nApply === 'function') {
-    i18nApply(lang);
-  }
+  const lang = (typeof i18nDetectLang === 'function' && i18nDetectLang())
+    || document.documentElement.lang
+    || 'it';
+  const dict = (typeof I18N !== 'undefined' && I18N[lang]) ? I18N[lang] : {};
+  homeClaimTrigger.querySelectorAll('[data-i18n]').forEach((el) => {
+    const value = dict[el.getAttribute('data-i18n')];
+    if (value != null) el.textContent = value;
+  });
 }
 
 function triggerClaimShatter(fromClick = false) {
@@ -467,11 +494,10 @@ function triggerClaimShatter(fromClick = false) {
 
   const fragments = homeClaim.querySelectorAll('.home-hero-claim__fragment');
   fragments.forEach((fragment) => {
-    const delayIndex = Number.parseInt(fragment.dataset.delayIndex || '0', 10);
     fragment.style.animation = '';
-    fragment.style.setProperty('--delay', `${delayIndex * 0.01}s`);
     assignFragmentScatter(fragment);
   });
+  setClaimFragmentDelays(fragments, false);
 
   void homeClaim.offsetWidth;
 
@@ -487,7 +513,7 @@ function triggerClaimShatter(fromClick = false) {
       navAutoStart = performance.now();
     }
     updateHomeExperience();
-  }, CLAIM_ANIM_MS);
+  }, getClaimAnimDurationMs());
 }
 
 function triggerClaimReassemble() {
@@ -513,13 +539,11 @@ function triggerClaimReassemble() {
   homeClaim.style.opacity = '0';
   homeClaim.setAttribute('aria-hidden', 'true');
 
-  const total = fragments.length;
   fragments.forEach((fragment) => {
-    const delayIndex = Number.parseInt(fragment.dataset.delayIndex || '0', 10);
     fragment.style.animation = 'none';
     setFragmentScatteredState(fragment);
-    fragment.style.setProperty('--delay', `${(total - 1 - delayIndex) * 0.008}s`);
   });
+  setClaimFragmentDelays(fragments, true);
 
   void homeClaim.offsetWidth;
 
@@ -536,7 +560,7 @@ function triggerClaimReassemble() {
     homeClaim.classList.remove('is-reassembling');
     clearFragmentMotionStyles();
     updateHomeExperience();
-  }, CLAIM_ANIM_MS);
+  }, getClaimAnimDurationMs());
 }
 
 function updateHomeClaim(progress, scrollingBack) {
@@ -564,7 +588,9 @@ function updateHomeClaim(progress, scrollingBack) {
     return;
   }
 
-  const opacity = easeOutCubic(clamp((progressPercent - (CLAIM_SHOW_PERCENT - 1)) / 2, 0, 1));
+  const opacity = easeOutCubic(
+    clamp((progressPercent - CLAIM_SHOW_PERCENT) / CLAIM_FADE_IN_PERCENT, 0, 1)
+  );
 
   if (!claimEnterPlayed) {
     claimEnterPlayed = true;
@@ -584,6 +610,7 @@ function updateHomeClaim(progress, scrollingBack) {
   if (
     !scrollingBack
     && progressPercent >= CLAIM_SHATTER_START_PERCENT
+    && opacity >= 1
     && (crossedShatterStart || !homeClaimTrigger?.dataset.fragmentsReady)
   ) {
     triggerClaimShatter(false);
@@ -620,14 +647,10 @@ function initClaimInteraction(signal) {
   }, { signal });
 
   window.addEventListener('colorado:langchange', () => {
-    if (!homeClaimTrigger?.querySelector('.home-hero-claim__fragment')) return;
+    if (!homeClaimTrigger) return;
     claimShattered = false;
     claimShatterAnimating = false;
     restoreClaimContent();
-    const lang = document.documentElement.lang || 'it';
-    if (typeof i18nApply === 'function') {
-      i18nApply(lang);
-    }
     updateHomeExperience();
   }, { signal });
 }

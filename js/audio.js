@@ -145,7 +145,9 @@
   }
 
   function getDict() {
-    const lang = document.documentElement.lang || 'it';
+    const lang = (typeof i18nDetectLang === 'function' && i18nDetectLang())
+      || document.documentElement.lang
+      || 'it';
     return (typeof I18N !== 'undefined' && I18N[lang]) ? I18N[lang] : {};
   }
 
@@ -527,9 +529,8 @@
   tryResumeAfterIntro();
   updateUi();
 
-  if (typeof i18nApply === 'function') {
-    i18nApply(document.documentElement.lang || 'en');
-  }
+  /* Non chiamare i18nApply qui: sovrascriverebbe la lingua scelta dall'utente. */
+  updateUi();
 
   window.addEventListener('colorado:langchange', () => updateUi());
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="img/Coloradologo.svg" type="image/svg+xml">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <title data-i18n="title.independentProjects">Independent Projects — Portfolio</title>
   <meta name="description" content="Lavori autonomi e progetti personali — portfolio Colorado Design." data-i18n-content="desc.independentProjects">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,11 +18,10 @@
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
       <a href="/" class="navbar__logo" aria-label="Torna alla homepage" data-i18n-aria-label="a11y.home">
-        <img src="img/Coloradologo.svg" alt="Logo — homepage" class="navbar__logo-img" width="40" height="40" data-i18n-alt="logo.alt">
+        <img src="img/Coloradologo.svg" alt="Logo — homepage" class="navbar__logo-img" width="36" height="40" data-i18n-alt="logo.alt">
       </a>
       <ul class="navbar__menu" id="navbar-menu">
           <li><a href="about.html" class="navbar__link">About</a></li>
-          <li><a href="bio.html" class="navbar__link">Bio</a></li>
           <li class="navbar__item navbar__item--dropdown">
             <a href="portfolio.html" class="navbar__link navbar__dropdown-trigger is-active" aria-haspopup="true" aria-expanded="false" id="navbar-portfolio-trigger"><span class="navbar__dropdown-label">Portfolio</span><span class="navbar__dropdown-chevron" aria-hidden="true"></span></a>
             <ul class="navbar__dropdown" id="navbar-portfolio-menu" role="menu" aria-label="Portfolio">
@@ -30,6 +29,7 @@
               <li role="none"><a href="independent-projects.html" class="navbar__dropdown-link is-active" role="menuitem">Independent Projects</a></li>
             </ul>
           </li>
+          <li><a href="history.html" class="navbar__link">History</a></li>
           <li><a href="contatti.html" class="navbar__link" data-i18n="nav.contatti">Contatti</a></li>
         </ul>
       <div class="navbar__actions">
@@ -56,9 +56,9 @@
           <img class="navbar__toggle-close" src="img/icons/xmenu.svg" alt="" width="28" height="28" decoding="async" aria-hidden="true">
         </button>
         <ul class="navbar__social" id="navbar-social">
-          <li><a href="https://www.instagram.com/colorado.design/" class="navbar__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="img/icon-instagram.svg" alt="Instagram"><span class="navbar__social-name">Instagram</span></a></li>
-          <li><a href="https://www.behance.net/coloradodzn" class="navbar__social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer"><img src="img/icon-behance.svg" alt="Behance"><span class="navbar__social-name">Behance</span></a></li>
-          <li><a href="https://www.linkedin.com/in/colorado-design-977297308/" class="navbar__social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><img src="img/icon-linkedin.svg" alt="LinkedIn"><span class="navbar__social-name">LinkedIn</span></a></li>
+          <li><a href="https://www.instagram.com/colorado.design/" class="navbar__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="img/icons/icon-instagram.svg" alt="Instagram"><span class="navbar__social-name">Instagram</span></a></li>
+          <li><a href="https://www.behance.net/coloradodzn" class="navbar__social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer"><img src="img/icons/icon-behance.svg" alt="Behance"><span class="navbar__social-name">Behance</span></a></li>
+          <li><a href="https://www.linkedin.com/in/colorado-design-977297308/" class="navbar__social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><img src="img/icons/icon-linkedin.svg" alt="LinkedIn"><span class="navbar__social-name">LinkedIn</span></a></li>
         </ul>
       </div>
     </nav>
@@ -69,7 +69,7 @@
       <div class="portfolio-toolbar" role="search" aria-label="Filtra progetti">
         <div class="portfolio-toolbar__brand">
           <h1 class="portfolio-catalog__title">Independent Projects</h1>
-          <span class="portfolio-catalog__count" data-catalog-count>2</span>
+          <span class="portfolio-catalog__count" data-catalog-count>3</span>
         </div>
         <span class="portfolio-toolbar__divider" aria-hidden="true"></span>
         <span class="portfolio-toolbar__label" data-i18n="portfolio.filterBy">Filtra per</span>
@@ -77,6 +77,34 @@
       </div>
 
       <div class="portfolio-catalog__body">
+        <section class="portfolio-grid-group" data-group="brand">
+          <h2 class="portfolio-grid-group__title" data-i18n="portfolio.service.brand">Brand Identity</h2>
+          <ul class="portfolio-grid">
+            <li class="portfolio-grid__item" data-service="brand visual" data-sector="art-museum">
+              <a href="lavoro-4.html" class="portfolio-card">
+                <div class="portfolio-card__media">
+                  <img src="img/IED/miniatura.jpg" alt="IED Scholarship — anteprima" class="portfolio-card__img" width="960" height="640" loading="lazy">
+                </div>
+                <span class="portfolio-card__meta">
+                  <span class="portfolio-card__name" data-i18n="work4.name">IED Scholarship</span>
+                  <span class="portfolio-card__type" data-i18n="work4.type">Brand Identity</span>
+                </span>
+              </a>
+            </li>
+            <li class="portfolio-grid__item" data-service="brand visual" data-sector="environment-impact fashion">
+              <a href="lavoro-6.html" class="portfolio-card">
+                <div class="portfolio-card__media">
+                  <img src="img/Patagonia/patagonia_min.webp" alt="Patagonia — anteprima" class="portfolio-card__img" width="960" height="640" loading="lazy">
+                </div>
+                <span class="portfolio-card__meta">
+                  <span class="portfolio-card__name" data-i18n="work6.name">Patagonia</span>
+                  <span class="portfolio-card__type" data-i18n="work6.type">Brand Identity</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </section>
+
         <section class="portfolio-grid-group" data-group="research">
           <h2 class="portfolio-grid-group__title">Research</h2>
           <ul class="portfolio-grid">
@@ -99,7 +127,7 @@
     <div class="site-footer__inner">
       <div class="site-footer__identity">
           <div class="site-footer__brand">
-            <img src="img/Coloradologo.svg" alt="Logo Colorado Creative Studio" data-i18n-alt="footer.logo.alt" class="site-footer__logo-img" width="48" height="48">
+            <img src="img/Coloradologo.svg" alt="Logo Colorado Creative Studio" data-i18n-alt="footer.logo.alt" class="site-footer__logo-img" width="43" height="48">
             <p class="site-footer__name">COLORADO</p>
           </div>
           <p class="site-footer__location">Rome, Italy · 41°50′01″N 12°28′15″E</p>
@@ -118,8 +146,8 @@
               <ul class="site-footer__links">
                 <li><a href="/">Home</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a href="bio.html">Bio</a></li>
                 <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="history.html">History</a></li>
                 <li><a href="contatti.html" data-i18n="nav.contatti">Contatti</a></li>
               </ul>
             </nav>

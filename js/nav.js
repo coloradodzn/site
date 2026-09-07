@@ -7,6 +7,7 @@
     'js/main.js',
     'js/i18n.js',
     'js/audio.js',
+    'js/cookies.js',
     'js/nav.js'
   ]);
 
@@ -59,6 +60,15 @@
 
     const lang = doc.documentElement.getAttribute('lang');
     if (lang) document.documentElement.setAttribute('lang', lang);
+
+    /* Import map (About globe / React): serve prima dei module scripts */
+    const nextMap = doc.querySelector('script[type="importmap"]');
+    if (nextMap && !document.querySelector('script[type="importmap"]')) {
+      const map = document.createElement('script');
+      map.type = 'importmap';
+      map.textContent = nextMap.textContent;
+      document.head.appendChild(map);
+    }
   }
 
   function loadScript(src, type) {
@@ -137,6 +147,7 @@
       const html = await response.text();
       const doc = new DOMParser().parseFromString(html, 'text/html');
       const audioWidget = document.getElementById('ambient-audio');
+      const cookieBanner = document.getElementById('cookie-banner');
 
       updateHead(doc);
       document.body.className = doc.body.className;
@@ -151,6 +162,7 @@
 
       document.body.replaceChildren(fragment);
       if (audioWidget) document.body.appendChild(audioWidget);
+      if (cookieBanner) document.body.appendChild(cookieBanner);
 
       window.scrollTo(0, 0);
       if (url.hash) {

@@ -243,6 +243,11 @@ Le voci più recenti sono in fondo al file.
 
 ## [Unreleased]
 
+### Checklist esame
+- Allineati `PLANNING.md` e Plan Cursor `Colorado — checklist esame` allo stato post-4.6: spuntati cookie, SITE_URL, termini, footer CTA, nav History; rinominato bio→history; aggiornati pending (about copy, lavori 1–6, lightbox, QA)
+- Checklist riesposta su feedback prof: struttura/layout OK; focus riempire contenuti; voci contenuto restano pending da spuntare nel Plan Cursor
+- Checklist con pallini spuntabili: task list `- [ ]` in `PLANNING.md` + Plan Cursor (pending in cima); copia in `.cursor/plans/`
+
 ### Footer (pagine a sfondo solido)
 - Verificato e allineato il footer su tutte le pagine a sfondo piano (`portfolio.html`, `success-projects.html`, `independent-projects.html`, `lavoro-1`–`lavoro-5`, `privacy.html`): struttura unificata (identity, CTA, nav/social, legal), copy CTA `footer.cta` (“Diamo forma alla prossima idea.”), i18n su `footer.nav` e `footer.copy`
 - Colori gestiti da `body:not(.page-cover):not(.home) .site-footer` (heading primary, link/CTA lead/legal accent, nome ed email primary)
@@ -273,3 +278,28 @@ Le voci più recenti sono in fondo al file.
 - **Marquee clienti** (`portfolio.html`): aggiunti `clover.svg` e `harjit.svg`; rimosso slot rotto `Risorsa 1.svg`; loop seamless (padding = metà gap); loghi nello stesso box con `object-fit: contain`
 - **Icone UI**: `backarrow`, `send`, timeline contatti; cursore custom `navigation.svg` introdotto poi **rimosso** — ripristinati i cursori di sistema Windows (freccia / manina) per evitare glitch al passaggio sulle zone cliccabili
 - **SEO**: `sitemap.xml` homepage `lastmod` aggiornato a `2026-09-04` (la description live è già corretta; Google SERP può restare in cache fino a reindicizzazione via Search Console)
+
+### [4.3] — Banner cookie homepage
+- Chip **Cookie** discreto in basso a sinistra (dopo intro in home): al click apre un pannello compatto con testo, link a `privacy.html`, **Rifiuta** (sinistra) e **Accetta** (destra)
+- Visibile e funzionante su **tutte le pagine** (caricato da `main.js`; preservato nella navigazione SPA come il tool audio)
+- La scelta salva `colorado_cookies_choice` (`accepted` / `rejected`) in `localStorage`
+- JS puro (`js/cookies.js`), i18n IT/EN/FR/ES; stile pill allineato al tool audio
+
+### [4.4] — IED Scholarship in Independent Projects
+- Miniatura `img/IED/miniatura.jpg` inserita in `independent-projects.html` e nel carosello Independent di `portfolio.html`
+- Creata `lavoro-4.html`: galleria con cover + filmstrip pronta per aggiungere altri lavori in `img/IED/`
+- Aggiornati i18n (IT/EN/FR/ES), `work-projects-nav.js` e `sitemap.xml`
+
+### [4.5] — Patagonia in Independent Projects
+- Miniatura `img/Patagonia/patagonia_min.webp` in catalogo Independent e carosello portfolio
+- Creata `lavoro-6.html`: galleria con cover + filmstrip (`patagonia_min.webp`, `Patagonia.jpg`) pronta per altri asset in `img/Patagonia/`
+- Aggiornati i18n, nav progetti e `sitemap.xml`
+
+### [4.6] — About: globo SVG (TacticalGlobe3D)
+- Rimossa la vecchia integrazione COBE; About riparte da zero sul globo
+- Integrato [TacticalGlobe3D](https://framer.com/m/TacticalGlobe3D-uVMtXj.js@UhPxNuaENi2YMvlzEzft) (Framer / MilitaryMap SVG) via React ESM: `js/about-globe.js`, stub `js/framer-stub.js`, import map in `about.html`
+- Posizione: dopo “By the numbers”, prima della CTA “Let's change together”
+- Layout: sezione e stage trasparenti sullo sfondo del body (come un PNG); spento alone atmosfera (`glowIntensity: 0`) che ritagliava un quadrato via `overflow: hidden`
+- Momentaneamente solo la sfera (marker/griglia/tooltip off); auto-rotate + drag attivi
+- Tema chiaro/scuro: colori mappa adattati; in dark terre abbassate a grigio caldo medio (meno luminose del bianco iniziale)
+- Spec aggiornata in `.cursor/rules/about-globe-spec.mdc`; direzione futura: feature tipo Orbita (marker + archi) restando sull’estetica SVG attuale

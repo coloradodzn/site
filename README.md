@@ -16,7 +16,7 @@ Un sito web personale statico che rappresenti un portfolio professionale complet
 | File | Descrizione |
 |------|-------------|
 | `index.html` | Homepage: presentazione principale e introduzione al portfolio |
-| `bio.html` | Pagina biografia: informazioni personali, background e competenze |
+| `history.html` | Pagina History: informazioni personali, background e competenze |
 | `portfolio.html` | Pagina portfolio: griglia dei lavori realizzati con anteprima |
 | `lavoro-1.html` | Pagina di dettaglio del primo progetto del portfolio |
 | `lavoro-2.html` | Pagina di dettaglio del secondo progetto del portfolio |

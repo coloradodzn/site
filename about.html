@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="img/Coloradologo.svg" type="image/svg+xml">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <title data-i18n="title.about">About — Colorado Design</title>
   <meta name="description" content="Colorado Creative Studio — pratica di media design. Identità, motion, print e digital." data-i18n-content="desc.about">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,22 +12,27 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/seo.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.3.1",
+      "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+      "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+      "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react",
+      "framer": "./js/framer-stub.js"
+    }
+  }
+  </script>
 </head>
-<body class="page-cover page-about">
-
-  <div class="page-cover__bg" aria-hidden="true">
-    <img src="img/colocanyon.jpeg" alt="Canyon del Colorado, sfondo della pagina About">
-  </div>
-  <div class="page-cover__scrim" aria-hidden="true"></div>
+<body class="page-about">
 
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
       <a href="/" class="navbar__logo" aria-label="Torna alla homepage" data-i18n-aria-label="a11y.home">
-        <img src="img/Coloradologo.svg" alt="Logo — homepage" class="navbar__logo-img" width="40" height="40" data-i18n-alt="logo.alt">
+        <img src="img/Coloradologo.svg" alt="Logo — homepage" class="navbar__logo-img" width="36" height="40" data-i18n-alt="logo.alt">
       </a>
       <ul class="navbar__menu" id="navbar-menu">
           <li><a href="about.html" class="navbar__link is-active">About</a></li>
-          <li><a href="bio.html" class="navbar__link">Bio</a></li>
           <li class="navbar__item navbar__item--dropdown">
             <a href="portfolio.html" class="navbar__link navbar__dropdown-trigger" aria-haspopup="true" aria-expanded="false" id="navbar-portfolio-trigger"><span class="navbar__dropdown-label">Portfolio</span><span class="navbar__dropdown-chevron" aria-hidden="true"></span></a>
             <ul class="navbar__dropdown" id="navbar-portfolio-menu" role="menu" aria-label="Portfolio">
@@ -35,6 +40,7 @@
               <li role="none"><a href="independent-projects.html" class="navbar__dropdown-link" role="menuitem">Independent Projects</a></li>
             </ul>
           </li>
+          <li><a href="history.html" class="navbar__link" data-i18n="nav.history">History</a></li>
           <li><a href="contatti.html" class="navbar__link" data-i18n="nav.contatti">Contatti</a></li>
         </ul>
       <div class="navbar__actions">
@@ -61,28 +67,87 @@
           <img class="navbar__toggle-close" src="img/icons/xmenu.svg" alt="" width="28" height="28" decoding="async" aria-hidden="true">
         </button>
         <ul class="navbar__social" id="navbar-social">
-          <li><a href="https://www.instagram.com/colorado.design/" class="navbar__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="img/icon-instagram.svg" alt="Instagram"><span class="navbar__social-name">Instagram</span></a></li>
-          <li><a href="https://www.behance.net/coloradodzn" class="navbar__social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer"><img src="img/icon-behance.svg" alt="Behance"><span class="navbar__social-name">Behance</span></a></li>
-          <li><a href="https://www.linkedin.com/in/colorado-design-977297308/" class="navbar__social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><img src="img/icon-linkedin.svg" alt="LinkedIn"><span class="navbar__social-name">LinkedIn</span></a></li>
+          <li><a href="https://www.instagram.com/colorado.design/" class="navbar__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><img src="img/icons/icon-instagram.svg" alt="Instagram"><span class="navbar__social-name">Instagram</span></a></li>
+          <li><a href="https://www.behance.net/coloradodzn" class="navbar__social-link" aria-label="Behance" target="_blank" rel="noopener noreferrer"><img src="img/icons/icon-behance.svg" alt="Behance"><span class="navbar__social-name">Behance</span></a></li>
+          <li><a href="https://www.linkedin.com/in/colorado-design-977297308/" class="navbar__social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><img src="img/icons/icon-linkedin.svg" alt="LinkedIn"><span class="navbar__social-name">LinkedIn</span></a></li>
         </ul>
       </div>
     </nav>
   </header>
 
-  <main class="about">
-    <article class="about__copy">
-      <h1 id="about-title">About</h1>
-      <p class="about__lead" data-i18n="about.lead">Colorado — Creative Direction</p>
-      <p data-i18n="about.p1">Sono Colorado e sono un direttore creativo, figura che fa da ponte tra arte e design. Unisco sensibilità creativa e mentalità progettuale per coordinare lavori multidisciplinari con team dinamici che ruotano in base alle necessità dei clienti. Mi occupo di brand identity: dalla creazione alla direzione visiva.</p>
-      <p data-i18n="about.p2">L'eco design è la mia visione: la natura viene prima. In ogni progetto mi chiedo che impatto questo abbia sull'ambiente e sulla società — cerco di lasciare il minimo impatto negativo possibile e il massimo valore per le persone.</p>
-    </article>
+  <main class="about-page">
+    <!-- Ordine About:
+         1. Design vision
+         2. Services
+         3. Process
+         4. Why
+         5. Numbers
+         6. Globe (prima della CTA)
+         7. CTA (ultimo blocco prima del footer) -->
+
+    <section class="about-block" aria-labelledby="about-vision-title">
+      <p class="about-block__kicker" data-i18n="about.vision.kicker">Design vision</p>
+      <h2 id="about-vision-title" class="about-block__title" data-i18n="about.vision.title">Clarity from chaos</h2>
+      <p class="about-block__lead" data-i18n="about.vision.lead">Prendo il caos e lo trasformo in una visione chiara e d’impatto — con la natura al primo posto.</p>
+    </section>
+
+    <section class="about-block" aria-labelledby="about-services-title">
+      <p class="about-block__kicker" data-i18n="about.services.kicker">Services</p>
+      <h2 id="about-services-title" class="about-block__title" data-i18n="about.services.title">What I do</h2>
+    </section>
+
+    <section class="about-block" aria-labelledby="about-process-title">
+      <p class="about-block__kicker" data-i18n="about.process.kicker">My process</p>
+      <h2 id="about-process-title" class="about-block__title" data-i18n="about.process.title">How I work</h2>
+    </section>
+
+    <section class="about-block" aria-labelledby="about-why-title">
+      <p class="about-block__kicker" data-i18n="about.why.kicker">Why Colorado</p>
+      <h2 id="about-why-title" class="about-block__title" data-i18n="about.why.title">Why work with me</h2>
+    </section>
+
+    <section class="about-block" aria-labelledby="about-numbers-title">
+      <h2 id="about-numbers-title" class="about-block__title" data-i18n="about.numbers.title">By the numbers</h2>
+      <p class="about-block__lead" data-i18n="about.numbers.lead">Cifre indicative — da aggiornare con i dati reali. Placeholder.</p>
+    </section>
+
+    <section class="about-globe" aria-labelledby="about-globe-title">
+      <header class="about-globe__intro">
+        <h2 id="about-globe-title" class="about-globe__title" data-i18n="about.globe.title">Where I work</h2>
+        <p class="about-globe__lead" data-i18n="about.globe.lead">Clicca un ping arancione: parte il collegamento da Roma.</p>
+      </header>
+      <div class="about-globe__stage" data-about-globe></div>
+      <button
+        type="button"
+        class="about-globe__all"
+        data-about-globe-all
+        aria-pressed="false"
+        data-i18n="about.globe.viewAll"
+      >View all connections</button>
+    </section>
+
+    <section class="about-cta" aria-labelledby="about-cta-statement">
+      <h2 id="about-cta-statement" class="about-cta__statement" data-i18n="about.cta.lead">Il futuro non si può scrivere da soli.</h2>
+      <a class="about-cta__link" href="contatti.html" id="about-cta-title">
+        <span class="about-cta__roll">
+          <span class="about-cta__roll-line">
+            <span data-i18n="about.cta.title">Let's Change Together</span>
+            <span class="about-cta__arrow" aria-hidden="true">↗</span>
+          </span>
+          <span class="about-cta__roll-line about-cta__roll-line--alt" aria-hidden="true">
+            <span data-i18n="about.cta.title">Let's Change Together</span>
+            <span class="about-cta__arrow" aria-hidden="true">↗</span>
+          </span>
+        </span>
+      </a>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="site-footer__inner">
       <div class="site-footer__identity">
           <div class="site-footer__brand">
-            <img src="img/Coloradologo.svg" alt="Logo Colorado Creative Studio" data-i18n-alt="footer.logo.alt" class="site-footer__logo-img" width="48" height="48">
+            <img src="img/Coloradologo.svg" alt="Logo Colorado Creative Studio" data-i18n-alt="footer.logo.alt" class="site-footer__logo-img" width="43" height="48">
             <p class="site-footer__name">COLORADO</p>
           </div>
           <p class="site-footer__location">Rome, Italy · 41°50′01″N 12°28′15″E</p>
@@ -101,8 +166,8 @@
               <ul class="site-footer__links">
                 <li><a href="/">Home</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a href="bio.html">Bio</a></li>
                 <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="history.html" data-i18n="nav.history">History</a></li>
                 <li><a href="contatti.html" data-i18n="nav.contatti">Contatti</a></li>
               </ul>
             </nav>
@@ -128,5 +193,6 @@
 
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
+  <script type="module" src="js/about-globe.js"></script>
 </body>
 </html>

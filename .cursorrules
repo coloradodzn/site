@@ -2,7 +2,7 @@ You are helping build a personal portfolio website for a Media Design student.
 
 ## Project
 - Static HTML/CSS/JS site, no frameworks
-- Files: index.html, bio.html, portfolio.html, lavoro-1/2/3.html, contatti.html
+- Files: index.html, history.html, portfolio.html, lavoro-1/2/3.html, contatti.html
 - CSS in /css/style.css, images in /img/, scripts in /js/main.js
 
 ## Design system
@@ -14,7 +14,7 @@ You are helping build a personal portfolio website for a Media Design student.
 - Body font: Inter
 
 ## Design references (stile / layout)
-Principali: Drams, Williams, Stetson, Kemo Sabe, Filson, Sage East, Paper Crowns.
+Principali: Drams, Williams, Stetson, Kemo Sabe, Filson, Sage East, Paper Crowns, Aquest (https://www.aquest.it/it).
 Direzione: western/heritage + editorial portfolio + chiarezza minimal Rams.
 Dettaglio: `.cursor/rules/design-references.mdc`
 

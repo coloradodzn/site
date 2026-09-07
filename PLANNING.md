@@ -1,51 +1,63 @@
 # Piano progetto — Colorado Design
 
-> **Checklist cliccabile (pallini):** apri il **Plan** in Cursor  
-> **Nome:** `Colorado — checklist esame`  
-> **File:** `C:\Users\sempr\.cursor\plans\colorado_design_exam_checklist.plan.md`  
-> In Cursor: **Command Palette** (`Ctrl+Shift+P`) → cerca **Plans** → seleziona il piano.
-
-Questo file `.md` nel repo è solo **backup/testo** (utile su Git, senza UI interattiva).  
-Per spuntare le cose da fare usa il Plan sopra.
-
----
+> **Pallini spuntabili:** clicca le caselle `- [ ]` qui sotto, oppure apri **Plans** → **Colorado — checklist esame**.
 
 **Riferimento esame:** `../Caratteristiche progetto d'esame.html`  
-**Storico modifiche codice:** `CHANGELOG.md`
+**Storico codice:** `CHANGELOG.md`
 
-**Legenda:** P0 = blocca consegna · P1 = obbligatorio esame · P2 = contenuto · P3 = rifinitura · P4 = extra
-
-Per l’elenco completo aggiornato vedi il Plan in Cursor (si sincronizza quando spunti i todo).
+**Feedback professore:** struttura e **layout pagine OK**. Focus = **riempire e completare** i contenuti.
 
 ---
+
+## Da fare (spuntabili)
+
+Ordine: history → about → lavori → estratto home → rifiniture → QA.
+
+- [ ] Riempire `history.html` — testo, figure, CTA portfolio
+- [ ] Riempire `about.html` — copy professionale + H1 (globo già ok)
+- [ ] Completare `lavoro-1/2/3` — media + testi
+- [ ] Completare `lavoro-4/5/6` — media + testi
+- [ ] Homepage: estratto history
+- [ ] Lightbox su history, portfolio, lavori
+- [ ] `portfolio.html`: CTA finale contatti
+- [ ] Testi SEO abbondanti history/about/portfolio/lavori
+- [ ] H1 visibile per pagina (about / history)
+- [ ] Intro video home: allineare path (`sigla.mp4` vs `intro.mp4`)
+- [ ] Validazione W3C zero errori
+- [ ] QA responsive 375 / 768 / 1280 px
+- [ ] Search Console: reindicizzazione
+
+## Già fatto
+
+- [x] Struttura + layout pagine OK (feedback prof)
+- [x] Navbar: logo → home (nessuna voce Home)
+- [x] Home: scroll Z accettata
+- [x] Cookie banner site-wide
+- [x] Link `history.html` in nav + reveal
+- [x] `SITE_URL` coloradodesign.it
+- [x] `privacy.html` + `termini.html`
+- [x] Footer CTA professionale
+- [x] Portfolio hub + categorie + filtri
+- [x] About globo TacticalGlobe3D
+- [x] contatti.html Formspree + FAQ + timeline
+- [x] i18n IT/EN/FR/ES + tema chiaro/scuro
 
 ## Decisioni prese
 
-- **Navbar** — Nessuna voce Home separata; il logo porta alla homepage. Scelta definitiva.
-- **Home** — Hero scroll Z al posto del carousel del brief. Soluzione accettata (Z accettata).
-- **Privacy / contatti pubblici** — I recapiti personali restano privati: identità reale di Colorado nota solo ai collaboratori; nessun indirizzo fisico (via), mappa Google, telefono o dato identificativo sensibile sul sito pubblico. Contatto via form e email professionale studio (`info.coloradodesign@gmail.com`) in footer, privacy, i18n e SEO — OK. Città (“Roma” / “Rome, Italy”) in meta, footer, privacy e JSON-LD — OK. Coordinate GPS nel footer (`41°50′01″N 12°28′15″E`) — OK. Niente Google Maps, orari, indicazioni stradali, cognome o telefono nel form.
-- **Homepage — bio e CV** (29 ago 2026):
-  - **Link a `bio.html`** — OK / **fatto**: presente nella nav reveal al centro dopo lo scroll Z (About, Bio, Portfolio, Contatti).
-  - **CV** — **cancellato**: non in homepage né sul sito pubblico; CV privato, rischio di identificazione/tracciamento.
-  - **Estratto bio** — **pianificato**: da aggiungere in homepage in un secondo momento (contenuto non ancora implementato).
+- **Struttura / layout** — OK per il professore. Non rifare architettura.
+- **Privacy / contatti** — Niente via, Maps, telefono pubblici. Email studio, Roma, GPS footer OK. Form solo su `contatti.html`.
+- **History (ex Bio)** — in nav; contenuto da riempire. CV non pubblicato.
+- **Form homepage** — escluso (CTA mailto in footer).
 
-### Audit privacy (stato attuale vs policy)
+### Audit privacy
 
 | Elemento | Policy | Stato sul sito |
 |----------|--------|----------------|
 | Indirizzo fisico / via | Non pubblicare | Assente |
 | Google Maps / iframe | Non pubblicare | Assente |
 | Telefono | Non pubblicare | Assente |
-| Cognome nel form contatti | Non richiesto | Assente (solo nome visitatore) |
-| Coordinate GPS | Pubblicare (footer) | **OK** — footer tutte le pagine: `41°50′01″N 12°28′15″E` |
-| Email studio (professionale) | Pubblicare | **Presente** — footer, `privacy.html`, `i18n.js`, `seo.js` (`info.coloradodesign@gmail.com`) |
-| Città (Roma / Rome, Italy) in meta/JSON-LD | Pubblicare (solo livello città) | **OK** — `index.html`, `bio.html`, `i18n.js`, `privacy.html`, `seo.js` |
-| Social (IG, Behance, LinkedIn) | Brand pubblico | Presente — link professionali |
-| Nome/cognome reale | Non pubblicare | Assente (solo brand “Colorado”) |
-
----
-
-## Da fare (backup testuale)
-
-- **P0 — Homepage: estratto bio** — Breve estratto biografico in homepage (link Bio già presente; CV escluso per privacy).
-- **P1 — QA responsive (tutte le pagine)** — Revisione manuale a **375px** (mobile), **768px** (tablet) e **1280px** (desktop): layout, tipografia, navbar/hamburger, footer, hero home (scroll Z), form contatti, portfolio e case study. Stato attuale: poco lavorato finora; da pianificare prima della consegna.
+| Cognome nel form | Non richiesto | Assente |
+| Coordinate GPS | Pubblicare | OK — footer |
+| Email studio | Pubblicare | OK — `info.coloradodesign@gmail.com` |
+| Città Roma | Pubblicare | OK — meta/footer/JSON-LD |
+| Nome/cognome reale | Non pubblicare | Assente (solo “Colorado”) |

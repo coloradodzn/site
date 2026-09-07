@@ -1,3 +1,20 @@
+// ── Import map React/Framer (About globe) — prima di qualsiasi module ──
+(function ensureGlobeImportMap() {
+  if (document.querySelector('script[type="importmap"]')) return;
+  const map = document.createElement('script');
+  map.type = 'importmap';
+  map.textContent = JSON.stringify({
+    imports: {
+      react: 'https://esm.sh/react@18.3.1',
+      'react/jsx-runtime': 'https://esm.sh/react@18.3.1/jsx-runtime',
+      'react-dom': 'https://esm.sh/react-dom@18.3.1?external=react',
+      'react-dom/client': 'https://esm.sh/react-dom@18.3.1/client?external=react',
+      framer: './js/framer-stub.js',
+    },
+  });
+  document.head.appendChild(map);
+})();
+
 // ── SESSIONE SITO (navigazione interna → niente intro in home) ──
 (function loadColoradoNav() {
   if (document.querySelector('script[data-colorado-nav]')) return;
@@ -33,6 +50,7 @@ const UI_ICON_FILES = {
 
 const UI_ICON_TARGETS = [
   { selector: '.site-footer__email-arrow', icon: 'send' },
+  { selector: '.about-cta__arrow', icon: 'send' },
   { selector: '.contact-card__submit-arrow', icon: 'send' },
   { selector: '.work-download__arrow', icon: 'download' },
   { selector: '.navbar__dropdown-chevron', icon: 'dropdown' },
@@ -293,6 +311,27 @@ function loadAmbientAudio() {
   document.body.appendChild(script);
 }
 
+function loadCookieBanner() {
+  if (document.getElementById('cookie-banner')) {
+    if (typeof window.coloradoInitCookies === 'function') {
+      window.coloradoInitCookies();
+    }
+    return;
+  }
+
+  if (typeof window.coloradoInitCookies === 'function') {
+    window.coloradoInitCookies();
+    return;
+  }
+
+  if (document.querySelector('script[data-colorado-cookies]')) return;
+
+  const script = document.createElement('script');
+  script.src = 'js/cookies.js';
+  script.setAttribute('data-colorado-cookies', '');
+  document.body.appendChild(script);
+}
+
 function initWorkGalleryPage() {
   if (!document.querySelector('.work-gallery')) return;
   document.body.classList.add('work-gallery-page');
@@ -357,7 +396,15 @@ function coloradoInitPage() {
   }
 
   document.querySelectorAll('.navbar__lang-btn').forEach((btn) => {
-    btn.addEventListener('click', () => setLangOpen(false, langRoot, langToggle), { signal });
+    btn.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const lang = btn.getAttribute('data-lang');
+      if (lang && typeof window.i18nApply === 'function') {
+        window.i18nApply(lang);
+      }
+      setLangOpen(false, langRoot, langToggle);
+    }, { signal });
   });
 
   document.addEventListener('click', (event) => {
@@ -390,6 +437,7 @@ function coloradoInitPage() {
   initBackButton(signal);
   initContactForm(signal);
   loadAmbientAudio();
+  loadCookieBanner();
   initWorkGalleryPage();
   initWorkPdfViewer();
   initWorkProjectsNav();
