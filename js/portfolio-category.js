@@ -1,13 +1,12 @@
 const PORTFOLIO_SERVICES = [
   { value: 'creative-direction', i18n: 'portfolio.service.creativeDirection' },
+  { value: 'concept', i18n: 'portfolio.service.concept' },
   { value: 'brand', i18n: 'portfolio.service.brand' },
   { value: 'logo', i18n: 'portfolio.service.logo' },
   { value: 'visual', i18n: 'portfolio.service.visual' },
   { value: 'web', i18n: 'portfolio.service.web' },
   { value: 'motion', i18n: 'portfolio.service.motion' },
-  { value: 'uxui', i18n: 'portfolio.service.uxui' },
-  { value: 'editorial', i18n: 'portfolio.service.editorial' },
-  { value: 'photography', i18n: 'portfolio.service.photography' }
+  { value: 'uxui', i18n: 'portfolio.service.uxui' }
 ];
 
 const PORTFOLIO_SECTORS = [

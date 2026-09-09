@@ -442,6 +442,10 @@ function coloradoInitPage() {
   initWorkPdfViewer();
   initWorkProjectsNav();
 
+  if (typeof window.coloradoInitAbout === 'function') {
+    window.coloradoInitAbout();
+  }
+
   applyTheme(currentTheme(), false, themeToggle);
   initUiIcons();
 

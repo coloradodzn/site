@@ -14,7 +14,7 @@ const DESTINATIONS = [
   { id: 'salerno', label: 'Salerno', description: 'Campania', latitude: 40.6824, longitude: 14.7681 },
   { id: 'brescia', label: 'Brescia', description: 'Lombardia', latitude: 45.5416, longitude: 10.2118 },
   { id: 'brooklyn', label: 'Brooklyn', description: 'New York · USA', latitude: 40.6782, longitude: -73.9442 },
-  { id: 'spain', label: 'Spain', description: '', latitude: 40.4168, longitude: -3.7038 },
+  { id: 'spain', label: 'Madrid', description: 'Spain', latitude: 40.4168, longitude: -3.7038 },
 ];
 
 const ZOOM_MIN = 1;

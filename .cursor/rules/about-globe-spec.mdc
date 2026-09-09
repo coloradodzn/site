@@ -17,8 +17,8 @@ Ordine About: vision → services → process → why → numbers → **globe** 
 
 ## Luoghi (markers)
 - Hub: **Roma** `[41.9028, 12.4964]` — ping bianco (dark) / scuro (light); non avvia arco
-- Destinazioni (arancione): Ireland, Lerici, Salerno, Brescia, Brooklyn, Spain
-- Ireland / Spain: temp. Dublin / Madrid (Spain senza sottotesto UI)
+- Destinazioni (arancione): Ireland, Lerici, Salerno, Brescia, Brooklyn, Madrid (Spain)
+- Ireland: sottotesto Dublin; Madrid: sottotesto Spain
 - Niente pulsanti sotto il globo (solo ping)
 
 ## Interazione archi (opzione B)

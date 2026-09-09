@@ -295,6 +295,11 @@ Le voci più recenti sono in fondo al file.
 - Creata `lavoro-6.html`: galleria con cover + filmstrip (`patagonia_min.webp`, `Patagonia.jpg`) pronta per altri asset in `img/Patagonia/`
 - Aggiornati i18n, nav progetti e `sitemap.xml`
 
+### [4.6] — Filtri servizio portfolio
+- Rimosso **Photography** e **Editorial** dai servizi filtro
+- Label **Creative Direction** (ex “Direzione creativa”) su tutte le lingue
+- Aggiunto **Concept Design**
+
 ### [4.6] — About: globo SVG (TacticalGlobe3D)
 - Rimossa la vecchia integrazione COBE; About riparte da zero sul globo
 - Integrato [TacticalGlobe3D](https://framer.com/m/TacticalGlobe3D-uVMtXj.js@UhPxNuaENi2YMvlzEzft) (Framer / MilitaryMap SVG) via React ESM: `js/about-globe.js`, stub `js/framer-stub.js`, import map in `about.html`

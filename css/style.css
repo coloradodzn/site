@@ -3400,7 +3400,7 @@ body.home-flow-complete .home-hero__scroll {
 
 .about-page {
   min-height: 50vh;
-  padding-block: 5.5rem 3rem;
+  padding-block: 5.5rem 0;
   display: flex;
   flex-direction: column;
   gap: clamp(3.5rem, 8vw, 6rem);
@@ -3424,7 +3424,7 @@ body.home-flow-complete .home-hero__scroll {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .about-block__title {
@@ -3446,9 +3446,127 @@ body.home-flow-complete .home-hero__scroll {
   opacity: 0.8;
 }
 
+/* Why — griglia card (ref. process a 3 colonne, qui 7 tratti) */
+.about-why {
+  padding-inline: clamp(1.25rem, 5vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 5vw, 3rem);
+  background: transparent;
+}
+
+.about-why__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.55rem;
+  text-align: center;
+}
+
+.about-why__title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--color-primary);
+}
+
+.about-why__index {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  opacity: 0.7;
+  transform: translateY(0.35em);
+}
+
+.about-why__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+.about-why__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  padding: clamp(1.75rem, 4vw, 2.5rem) clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 14%, transparent);
+  background: transparent;
+}
+
+.about-why__icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  color: var(--color-accent);
+  margin-bottom: 0.35rem;
+}
+
+.about-why__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.about-why__num {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+  opacity: 0.55;
+}
+
+.about-why__name {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: clamp(1.15rem, 2.4vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-accent);
+}
+
+.about-why__text {
+  margin: 0;
+  max-width: 18rem;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--color-accent);
+  opacity: 0.72;
+}
+
+@media (min-width: 768px) {
+  .about-why__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-why__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .about-why__card:last-child:nth-child(3n + 1) {
+    grid-column: 2;
+  }
+}
+
 /* Globe — solo sfera sullo sfondo body (niente box/alone quadrato) */
 .about-globe {
   padding-inline: clamp(1.25rem, 5vw, 3rem);
+  padding-bottom: clamp(0.5rem, 2vw, 1.25rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -3496,11 +3614,13 @@ body.home-flow-complete .home-hero__scroll {
 
 .about-globe__mount {
   position: absolute;
+  /* Centratura senza transform: evita compositing GPU che sfoca l’SVG */
   left: 50%;
   top: 50%;
   width: calc(min(88vw, 28rem) * var(--globe-zoom, 1));
   height: calc(min(88vw, 28rem) * var(--globe-zoom, 1));
-  transform: translate(-50%, -50%);
+  margin-left: calc(min(88vw, 28rem) * var(--globe-zoom, 1) / -2);
+  margin-top: calc(min(88vw, 28rem) * var(--globe-zoom, 1) / -2);
   background: transparent;
 }
 
@@ -3519,14 +3639,15 @@ body.home-flow-complete .home-hero__scroll {
   pointer-events: none;
 }
 
-/* Sotto lo stage; z-index alto se lo zoom del globo lo sovrappone */
+/* Sotto lo stage; allineato ai trigger filtro portfolio (Success) */
 .about-globe__all {
   appearance: none;
   position: relative;
   z-index: 4;
   margin: 1.35rem 0 0;
   padding: 0.55rem 1.15rem;
-  border: 2px solid color-mix(in srgb, var(--color-accent) 28%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
+  border-radius: 0.15rem;
   background: color-mix(in srgb, var(--color-bg) 92%, transparent);
   color: var(--color-accent);
   font-family: var(--font-title);
@@ -3574,7 +3695,8 @@ body.home-flow-complete .home-hero__scroll {
   height: 2.75rem;
   margin: 0;
   padding: 0;
-  border: 2px solid color-mix(in srgb, var(--color-accent) 28%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
+  border-radius: 0.15rem;
   background: color-mix(in srgb, var(--color-bg) 88%, transparent);
   color: var(--color-accent);
   font-family: var(--font-title);
@@ -3612,43 +3734,81 @@ body.home-flow-complete .home-hero__scroll {
 .about-globe__mount svg {
   background: transparent !important;
   overflow: visible;
+  shape-rendering: geometricPrecision;
 }
 
-/* CTA — mini-sezione tipografica prima del footer (ref. Aquest) */
+/* CTA: uno stage a viewport intera — solo claim+CTA in vista, footer sotto */
 .about-cta {
+  /* Annulla il gap del .about-page: lo stage gestisce tutta l’aria */
+  margin-top: calc(-1 * clamp(3.5rem, 8vw, 6rem));
+  margin-bottom: 0;
+  min-height: 100dvh;
   padding-inline: clamp(1.25rem, 5vw, 4rem);
-  padding-block: clamp(4rem, 10vw, 7rem) clamp(5rem, 14vw, 9rem);
-  text-align: center;
+  padding-block: clamp(4rem, 12vh, 8rem);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: clamp(2.5rem, 6vw, 4rem);
+  gap: clamp(2.25rem, 5vw, 3.5rem);
   background: transparent;
 }
 
-.about-cta__statement {
-  margin: 0;
-  width: min(75vw, 100%);
-  max-width: min(75vw, 100%);
-  font-family: var(--font-title);
-  font-size: clamp(2.1rem, 6.5vw, 4.25rem);
-  font-weight: 400;
-  line-height: 1.12;
-  letter-spacing: -0.03em;
-  color: var(--color-accent);
-  text-wrap: balance;
+/* Footer: un po’ di aria dopo lo stage CTA, prima del brand */
+.page-about > .site-footer {
+  padding-top: clamp(3rem, 8vh, 5.5rem);
 }
 
+.about-cta__claim,
+.about-cta__action {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.about-cta__claim {
+  max-width: none;
+  width: 100%;
+}
+
+.about-cta__action {
+  max-width: min(36rem, 92vw);
+}
+
+/* Claim: sempre 2 righe; la size la calcola JS in base alla larghezza */
+.about-cta__statement {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-title);
+  font-size: 2rem; /* fallback prima del fit */
+  font-weight: 300;
+  line-height: 1.28;
+  letter-spacing: -0.03em;
+  color: var(--color-accent);
+}
+
+.about-cta__line {
+  display: block;
+  white-space: nowrap;
+}
+
+.about-cta__statement strong {
+  font-weight: 700;
+}
+
+/* Action: peso tipografico nettamente sotto al claim */
 .about-cta__link {
   display: inline-flex;
   align-items: center;
   color: var(--color-accent);
   text-decoration: none;
   font-family: var(--font-title);
-  font-size: clamp(1.35rem, 3.2vw, 2rem);
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .about-cta__roll {
@@ -3685,8 +3845,8 @@ body.home-flow-complete .home-hero__scroll {
   transform: translateY(-0.04em);
 }
 
-.about-cta__arrow img {
-  /* nero in light — segue il colore della riga via filter dedicato */
+/* Riga a riposo = accent (nero / bianco) */
+.about-cta__roll-line:not(.about-cta__roll-line--alt) .about-cta__arrow img {
   filter: brightness(0);
 }
 
@@ -3700,8 +3860,8 @@ body.home-flow-complete .home-hero__scroll {
   }
 }
 
+/* Riga hover = arancione brand */
 .about-cta__roll-line--alt .about-cta__arrow img {
-  /* arancione brand insieme al testo alt */
   filter: invert(42%) sepia(98%) saturate(2476%) hue-rotate(1deg) brightness(101%) contrast(104%);
 }
 
@@ -3717,6 +3877,33 @@ body.home-flow-complete .home-hero__scroll {
 
 @media (prefers-reduced-motion: reduce) {
   .about-cta__roll-line {
+    transition: none;
+  }
+}
+
+/* About: stessa reveal (fade + salita) per CTA e footer */
+.about-cta.about-cta--reveal,
+.page-about > .site-footer.site-footer--about-reveal {
+  opacity: 0;
+  transform: translateY(5.5rem);
+  transition:
+    opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.about-cta.about-cta--reveal.is-revealed,
+.page-about > .site-footer.site-footer--about-reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-cta.about-cta--reveal,
+  .page-about > .site-footer.site-footer--about-reveal {
+    opacity: 1;
+    transform: none;
     transition: none;
   }
 }
@@ -5325,8 +5512,6 @@ body.home-flow-complete .home-hero__scroll {
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: transparent;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.2s ease;
 }
 
 /* Catalogo categoria: thumb landscape più “alte” come la reference */
@@ -5344,28 +5529,6 @@ body.home-flow-complete .home-hero__scroll {
 
 .portfolio-page--category .portfolio-card__type {
   font-size: clamp(0.85rem, 1.6vw, 0.95rem);
-}
-
-.portfolio-card:hover .portfolio-card__media {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.09);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .portfolio-card__media {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  }
-
-  :root:not([data-theme="light"]) .portfolio-card:hover .portfolio-card__media {
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
-  }
-}
-
-:root[data-theme="dark"] .portfolio-card__media {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-}
-
-:root[data-theme="dark"] .portfolio-card:hover .portfolio-card__media {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 .portfolio-card__img {
