@@ -507,7 +507,9 @@
   window.addEventListener('beforeunload', saveSession);
   window.addEventListener('pagehide', saveSession);
 
-  document.addEventListener('colorado:intro-dismissed', () => {
+  function unlockAndStartAmbient() {
+    if (isPlaying && !isMuted) return;
+
     unlocked = true;
     try {
       sessionStorage.setItem(STORAGE_UNLOCKED, '1');
@@ -516,6 +518,14 @@
     }
     removeGestureListeners();
     if (!isMuted) playAmbient();
+  }
+
+  /* Parte solo a fine sigla (o skip), non durante il video e non al click Welcome. */
+  document.addEventListener('colorado:intro-gate', unlockAndStartAmbient);
+
+  document.addEventListener('colorado:intro-dismissed', () => {
+    /* Se l’intro è già stata saltata senza gate (edge case), sblocca comunque. */
+    if (!unlocked) unlockAndStartAmbient();
   });
 
   document.addEventListener('pointerdown', onUserGesture);

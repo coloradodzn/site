@@ -2,8 +2,6 @@ import * as pdfjsLib from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
 
-const THUMB_WIDTH = 88;
-
 async function initWorkPdf() {
   const root = document.querySelector('.work-pdf');
   if (!root || root.dataset.pdfInit === '1') return;
@@ -19,6 +17,7 @@ async function initWorkPdf() {
   const currentEl = root.querySelector('.work-pdf__current');
   const totalEl = root.querySelector('.work-pdf__total');
   const loadingEl = root.querySelector('.work-pdf__loading');
+  const filmstripMount = root.querySelector('.work-pdf__filmstrip-wrap');
 
   if (!viewportEl || !canvas || !prevBtn || !nextBtn || !currentEl || !totalEl) return;
 
@@ -44,13 +43,14 @@ async function initWorkPdf() {
   if (loadingEl) loadingEl.hidden = true;
   canvas.hidden = false;
 
-  filmstrip = buildFilmstrip(root, totalPages);
-  thumbButtons = [...filmstrip.querySelectorAll('.work-pdf__thumb')];
+  if (filmstripMount) {
+    filmstrip = buildFilmstrip(filmstripMount, totalPages);
+    thumbButtons = [...filmstrip.querySelectorAll('.work-pdf__thumb')];
+  }
 
   updateButtons();
-  updateActiveThumb();
   await renderPage(pageNum);
-  renderThumbnails();
+  if (thumbButtons.length) renderThumbs();
 
   prevBtn.addEventListener('click', () => {
     if (pageNum <= 1) return;
@@ -79,83 +79,63 @@ async function initWorkPdf() {
     resizeTimer = setTimeout(() => queueRender(pageNum), 120);
   });
 
-  function buildFilmstrip(pdfRoot, pages) {
-    const wrap = document.createElement('div');
-    wrap.className = 'work-pdf__filmstrip-wrap';
+  function buildFilmstrip(wrap, pages) {
+    wrap.replaceChildren();
 
     const strip = document.createElement('div');
     strip.className = 'work-pdf__filmstrip';
-    strip.setAttribute('role', 'tablist');
-    strip.setAttribute('aria-label', 'PDF pages');
+    strip.setAttribute('role', 'listbox');
+    strip.setAttribute('aria-label', 'PDF page previews');
     strip.setAttribute('data-i18n-aria-label', 'a11y.work3.pdf.pages');
 
     for (let i = 1; i <= pages; i += 1) {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = `work-pdf__thumb${i === 1 ? ' is-active' : ''}`;
-      btn.setAttribute('role', 'tab');
+      btn.className = 'work-pdf__thumb';
+      btn.setAttribute('role', 'option');
       btn.setAttribute('aria-selected', i === 1 ? 'true' : 'false');
       btn.setAttribute('aria-label', `Page ${i}`);
-      btn.tabIndex = i === 1 ? 0 : -1;
       btn.dataset.page = String(i);
+      if (i === 1) btn.classList.add('is-active');
 
       const thumbCanvas = document.createElement('canvas');
       thumbCanvas.className = 'work-pdf__thumb-canvas';
-      thumbCanvas.width = THUMB_WIDTH;
-      thumbCanvas.height = Math.round(THUMB_WIDTH * 0.5625);
       btn.appendChild(thumbCanvas);
 
-      btn.addEventListener('click', () => queueRender(i, { focus: true }));
+      btn.addEventListener('click', () => queueRender(i));
       strip.appendChild(btn);
     }
 
     wrap.appendChild(strip);
-
-    const controls = pdfRoot.querySelector('.work-pdf__controls');
-    if (controls) {
-      pdfRoot.insertBefore(wrap, controls);
-    } else {
-      pdfRoot.appendChild(wrap);
-    }
-
     return strip;
   }
 
-  async function renderThumbnails() {
-    await Promise.all(
-      thumbButtons.map(async (btn) => {
-        const pageIndex = Number(btn.dataset.page);
-        const thumbCanvas = btn.querySelector('.work-pdf__thumb-canvas');
-        if (!thumbCanvas || thumbCanvas.dataset.rendered === '1') return;
-
-        const page = await pdfDoc.getPage(pageIndex);
-        const baseViewport = page.getViewport({ scale: 1 });
-        const scale = THUMB_WIDTH / baseViewport.width;
-        const viewport = page.getViewport({ scale });
-
-        thumbCanvas.width = Math.floor(viewport.width);
-        thumbCanvas.height = Math.floor(viewport.height);
-
-        await page.render({
-          canvasContext: thumbCanvas.getContext('2d'),
-          viewport,
-        }).promise;
-
-        thumbCanvas.dataset.rendered = '1';
-      })
-    );
+  async function renderThumbs() {
+    const thumbWidth = 144;
+    for (let i = 0; i < thumbButtons.length; i += 1) {
+      const page = await pdfDoc.getPage(i + 1);
+      const base = page.getViewport({ scale: 1 });
+      const scale = thumbWidth / base.width;
+      const viewport = page.getViewport({ scale });
+      const thumbCanvas = thumbButtons[i].querySelector('canvas');
+      if (!thumbCanvas) continue;
+      const ctx = thumbCanvas.getContext('2d');
+      thumbCanvas.width = Math.floor(viewport.width);
+      thumbCanvas.height = Math.floor(viewport.height);
+      await page.render({ canvasContext: ctx, viewport }).promise;
+    }
   }
 
-  function updateActiveThumb() {
-    thumbButtons.forEach((btn) => {
-      const isActive = Number(btn.dataset.page) === pageNum;
-      btn.classList.toggle('is-active', isActive);
-      btn.setAttribute('aria-selected', String(isActive));
-      btn.tabIndex = isActive ? 0 : -1;
-      if (isActive) {
-        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      }
+  function syncFilmstrip(num) {
+    thumbButtons.forEach((btn, index) => {
+      const active = index + 1 === num;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-selected', String(active));
     });
+    const activeThumb = thumbButtons[num - 1];
+    if (activeThumb) {
+      activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
   }
 
   function updateButtons() {
@@ -163,16 +143,16 @@ async function initWorkPdf() {
     nextBtn.disabled = pageNum >= totalPages;
   }
 
-  function queueRender(num, { focus = false } = {}) {
+  function queueRender(num) {
     pageNum = num;
     if (rendering) {
       pendingPage = num;
       return;
     }
-    renderPage(num, { focus });
+    renderPage(num);
   }
 
-  async function renderPage(num, { focus = false } = {}) {
+  async function renderPage(num) {
     rendering = true;
     const page = await pdfDoc.getPage(num);
     const baseViewport = page.getViewport({ scale: 1 });
@@ -191,13 +171,8 @@ async function initWorkPdf() {
     currentEl.textContent = String(num);
     canvas.setAttribute('aria-label', `Page ${num} of ${totalPages}`);
     updateButtons();
-    updateActiveThumb();
+    syncFilmstrip(num);
     rendering = false;
-
-    if (focus) {
-      const activeThumb = thumbButtons.find((btn) => Number(btn.dataset.page) === num);
-      activeThumb?.focus();
-    }
 
     if (pendingPage !== null) {
       const next = pendingPage;

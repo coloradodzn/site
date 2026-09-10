@@ -77,7 +77,7 @@
       '@type': 'Organization',
       name: 'Colorado Design',
       url: SITE_URL || url,
-      logo: `${SITE_URL}/img/favicon-192.png`,
+      logo: `${SITE_URL}/img/Colorado192.svg`,
       email: 'info.coloradodesign@gmail.com',
       address: {
         '@type': 'PostalAddress',

@@ -2,7 +2,7 @@
  * About globe — TacticalGlobe3D + archi Roma → destinazione (opzione B).
  * Click ping → stop spin → arco draw → fade → riparte spin.
  */
-import { createElement, Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import TacticalGlobe from './vendor/TacticalGlobe3D.js';
 
@@ -412,7 +412,9 @@ function AboutGlobeApp() {
       if (!reduceMotion()) setAutoRotate(true);
     };
 
-    const onClick = () => {
+    const onClick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       if (showAllRef.current) {
         hideAll();
         return;
@@ -445,6 +447,20 @@ function AboutGlobeApp() {
   const bumpZoom = useCallback((dir) => {
     setZoom((z) => clampZoom(z + dir * ZOOM_STEP));
   }, []);
+
+  useEffect(() => {
+    const buttons = document.querySelectorAll('[data-about-globe-zoom]');
+    if (!buttons.length) return undefined;
+    const onActivate = (e) => {
+      const btn = e.currentTarget;
+      if (!(btn instanceof HTMLElement)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      bumpZoom(btn.getAttribute('data-about-globe-zoom') === 'in' ? 1 : -1);
+    };
+    buttons.forEach((btn) => btn.addEventListener('click', onActivate));
+    return () => buttons.forEach((btn) => btn.removeEventListener('click', onActivate));
+  }, [bumpZoom]);
 
   const paintArc = useCallback(() => {
     const el = arcPathRef.current;
@@ -592,70 +608,31 @@ function AboutGlobeApp() {
     },
   };
 
-  const zoomInLabel = 'Ingrandisci globo';
-  const zoomOutLabel = 'Rimpicciolisci globo';
-
   return createElement(
-    Fragment,
-    null,
+    'div',
+    { className: 'about-globe__mount' },
+    createElement(TacticalGlobe, globeProps),
     createElement(
-      'div',
-      { className: 'about-globe__mount' },
-      createElement(TacticalGlobe, globeProps),
-      createElement(
-        'svg',
-        {
-          ref: arcSvgRef,
-          className: 'about-globe__arcs',
-          'aria-hidden': 'true',
-        },
-        createElement('path', {
-          ref: arcPathRef,
-          className: 'about-globe__arc',
-          fill: 'none',
-          stroke: ARC_COLOR,
-          strokeWidth: 2.25,
-          strokeLinecap: 'round',
-          strokeLinejoin: 'round',
-          opacity: 0,
-        }),
-        createElement('g', {
-          ref: allGroupRef,
-          className: 'about-globe__arcs-all',
-        })
-      )
-    ),
-    createElement(
-      'div',
-      { className: 'about-globe__zoom', role: 'group', 'aria-label': 'Zoom' },
-      createElement(
-        'button',
-        {
-          type: 'button',
-          className: 'about-globe__zoom-btn',
-          'aria-label': zoomInLabel,
-          'data-i18n-aria-label': 'about.globe.zoomIn',
-          onClick: (e) => {
-            e.stopPropagation();
-            bumpZoom(1);
-          },
-        },
-        '+'
-      ),
-      createElement(
-        'button',
-        {
-          type: 'button',
-          className: 'about-globe__zoom-btn',
-          'aria-label': zoomOutLabel,
-          'data-i18n-aria-label': 'about.globe.zoomOut',
-          onClick: (e) => {
-            e.stopPropagation();
-            bumpZoom(-1);
-          },
-        },
-        '−'
-      )
+      'svg',
+      {
+        ref: arcSvgRef,
+        className: 'about-globe__arcs',
+        'aria-hidden': 'true',
+      },
+      createElement('path', {
+        ref: arcPathRef,
+        className: 'about-globe__arc',
+        fill: 'none',
+        stroke: ARC_COLOR,
+        strokeWidth: 2.25,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        opacity: 0,
+      }),
+      createElement('g', {
+        ref: allGroupRef,
+        className: 'about-globe__arcs-all',
+      })
     )
   );
 }

@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="img/favicon-48.png" type="image/png" sizes="48x48">
-  <link rel="icon" href="img/favicon-192.png" type="image/png" sizes="192x192">
-  <link rel="apple-touch-icon" href="img/apple-touch-icon.png" sizes="180x180">
+  <link rel="icon" href="img/Colorado48.svg" type="image/svg+xml" sizes="48x48">
+  <link rel="icon" href="img/Colorado192.svg" type="image/svg+xml" sizes="192x192">
+  <link rel="apple-touch-icon" href="img/Colorado180.svg" sizes="180x180">
   <title data-i18n="title.home">Colorado Design — Creative Studio</title>
   <meta name="description" content="Colorado Design — direttore creativo che permea arte e design. Progetti multidisciplinari con visione ecosostenibile: natura al primo posto, impatto sociale concreto." data-i18n-content="desc.home">
   <meta property="og:type" content="website">
@@ -40,11 +39,21 @@
     }
   }
 
+  var forceIntro = false;
+  try {
+    forceIntro = new URLSearchParams(window.location.search).get('intro') === '1';
+  } catch (e) {}
+
   var show = true;
   try {
-    if (localStorage.getItem(INTRO_KEY) === '1') show = false;
+    if (forceIntro) {
+      localStorage.removeItem(INTRO_KEY);
+      sessionStorage.removeItem(SESSION_KEY);
+    } else if (localStorage.getItem(INTRO_KEY) === '1') {
+      show = false;
+    }
   } catch (e) {}
-  if (isInternalHomeVisit()) show = false;
+  if (!forceIntro && isInternalHomeVisit()) show = false;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) show = false;
   if (show) document.body.classList.add('home-intro-active');
 })();
@@ -53,7 +62,7 @@
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
       <a href="/" class="navbar__logo" aria-label="Torna alla homepage" data-i18n-aria-label="a11y.home">
-        <img src="img/Coloradologo.svg" alt="Logo — homepage" class="navbar__logo-img" width="36" height="40" data-i18n-alt="logo.alt">
+        <img src="img/Colorado.svg" alt="Logo — homepage" class="navbar__logo-img" width="36" height="40" data-i18n-alt="logo.alt">
       </a>
       <ul class="navbar__menu" id="navbar-menu">
           <li><a href="about.html" class="navbar__link">About</a></li>
@@ -112,26 +121,28 @@
         <div class="home-hero__scene" id="home-hero-scene">
           <ul class="home-works" id="home-works">
             <li class="home-work-card" data-offset-x="-34" data-offset-y="-12" data-rotate-y="12">
-              <a href="lavoro-1.html" class="home-work-card__link home-overlay-ui">
+              <a href="lavoro-6.html" class="home-work-card__link home-overlay-ui">
                 <div class="home-work-card__inner">
                   <span class="home-work-card__meta">
-                    <span class="home-work-card__name" data-i18n="work1.name">Logo Collection</span>
-                    <span class="home-work-card__type" data-i18n="work1.type">Logo Design</span>
+                    <span class="home-work-card__name" data-i18n="work6.name">Patagonia</span>
+                    <span class="home-work-card__type" data-i18n="work6.type">Brand Identity</span>
                   </span>
                   <span class="home-work-card__media">
-                    <img src="img/LogoDesign/Logo-folio.png" alt="Logo Collection — anteprima" class="home-work-card__img" width="640" height="360">
+                    <img src="img/Patagonia/patagonia_min.webp" alt="Patagonia — anteprima" class="home-work-card__img" width="640" height="360" data-i18n-alt="gallery.work6.cover.alt">
                   </span>
                 </div>
               </a>
             </li>
             <li class="home-work-card" data-offset-x="30" data-offset-y="8" data-rotate-y="-10">
-              <a href="lavoro-2.html" class="home-work-card__link home-overlay-ui">
+              <a href="lavoro-4.html" class="home-work-card__link home-overlay-ui">
                 <div class="home-work-card__inner">
                   <span class="home-work-card__meta">
-                    <span class="home-work-card__name">Calyy</span>
-                    <span class="home-work-card__type">Visual campaign</span>
+                    <span class="home-work-card__name" data-i18n="work4.name">IED Scholarship</span>
+                    <span class="home-work-card__type" data-i18n="work4.type">Brand Identity</span>
                   </span>
-                  <span class="home-work-card__media home-work-card__media--placeholder home-work-card__media--tone-2" aria-hidden="true"></span>
+                  <span class="home-work-card__media">
+                    <img src="img/IED/miniatura.jpg" alt="IED Scholarship — anteprima" class="home-work-card__img" width="640" height="360" data-i18n-alt="gallery.work4.cover.alt">
+                  </span>
                 </div>
               </a>
             </li>
@@ -142,7 +153,9 @@
                     <span class="home-work-card__name" data-i18n="work3.name">Analisi del Cinema</span>
                     <span class="home-work-card__type" data-i18n="work3.type">Film study</span>
                   </span>
-                  <span class="home-work-card__media home-work-card__media--placeholder home-work-card__media--tone-3" aria-hidden="true"></span>
+                  <span class="home-work-card__media">
+                    <img src="img/Cinema/nativi%20back.jpg" alt="Analisi del Cinema — anteprima" class="home-work-card__img" width="640" height="360">
+                  </span>
                 </div>
               </a>
             </li>
@@ -153,7 +166,9 @@
                     <span class="home-work-card__name">Axit Collection</span>
                     <span class="home-work-card__type" data-i18n="work5.type">Visual Communication</span>
                   </span>
-                  <span class="home-work-card__media home-work-card__media--placeholder home-work-card__media--tone-5" aria-hidden="true"></span>
+                  <span class="home-work-card__media">
+                    <img src="img/Axit%20Social%20Communication/axitback.jpg" alt="Axit Collection — anteprima" class="home-work-card__img" width="640" height="360">
+                  </span>
                 </div>
               </a>
             </li>
@@ -189,7 +204,7 @@
             <div class="site-footer__home-row">
               <div class="site-footer__identity site-footer__identity--home">
                 <div class="site-footer__brand">
-                  <img src="img/Coloradologo.svg" alt="Logo Colorado Creative Studio" data-i18n-alt="footer.logo.alt" class="site-footer__logo-img" width="43" height="48">
+                  <img src="img/Colorado.svg" alt="Logo Colorado Creative Studio" data-i18n-alt="footer.logo.alt" class="site-footer__logo-img" width="43" height="48">
                   <p class="site-footer__name">COLORADO</p>
                 </div>
                 <p class="site-footer__location">Rome, Italy · 41°50′01″N 12°28′15″E</p>
@@ -217,8 +232,8 @@
     <div class="home-intro__scrim" aria-hidden="true"></div>
 
     <div class="home-intro__video-wrap" id="home-intro-video-wrap">
-      <video class="home-intro__video" id="home-intro-video" playsinline preload="metadata" aria-label="Sigla Colorado Design">
-        <source src="img/sigla.mp4" type="video/mp4">
+      <video class="home-intro__video" id="home-intro-video" playsinline webkit-playsinline preload="auto" aria-label="Sigla Colorado Design">
+        <source src="img/intro.mp4" type="video/mp4">
       </video>
     </div>
 

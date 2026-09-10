@@ -9,7 +9,6 @@
     const { signal } = introAbort;
 
     const intro = document.getElementById('home-intro');
-    const gate = document.getElementById('home-intro-gate');
     const video = document.getElementById('home-intro-video');
     const startBtn = document.getElementById('home-intro-start');
     const skipBtn = document.getElementById('home-intro-skip');
@@ -17,7 +16,7 @@
     if (!intro || !document.body.classList.contains('home-intro-active')) {
       if (intro) {
         intro.classList.add('is-hidden');
-        intro.classList.remove('is-playing', 'is-gate', 'is-locked');
+        intro.classList.remove('is-playing', 'is-gate', 'is-locked', 'is-fading');
         intro.setAttribute('aria-hidden', 'true');
       }
       return;
@@ -35,8 +34,13 @@
       }
 
       intro.classList.add('is-hidden');
-      intro.classList.remove('is-playing', 'is-gate', 'is-locked');
+      intro.classList.remove('is-playing', 'is-gate', 'is-locked', 'is-fading');
       document.body.classList.remove('home-intro-active', 'home-intro-sigla');
+
+      /* Landing immediata sul primo viewport: niente caccia allo scroll */
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      document.body.classList.add('home-intro-landed');
+      window.setTimeout(() => document.body.classList.remove('home-intro-landed'), 4200);
 
       window.setTimeout(() => {
         intro.setAttribute('aria-hidden', 'true');
@@ -54,30 +58,42 @@
       intro.classList.remove('is-locked');
     }
 
-    /** Fine sigla: il gate compare, ma il bottone di ingresso resta
-     *  nascosto finché la scelta cookie non è stata fatta. */
+    /** Fine sigla: dissolvenza sul sito (scrim semitrasparente) + CTA. */
     function showGate() {
+      intro.classList.add('is-fading');
       intro.classList.remove('is-playing');
-      intro.classList.add('is-gate');
       document.body.classList.remove('home-intro-sigla');
 
       if (video) {
         video.pause();
       }
 
-      const consentPending = typeof window.coloradoCookieChoicePending === 'function'
-        && window.coloradoCookieChoicePending();
+      const revealGate = () => {
+        intro.classList.remove('is-fading');
+        intro.classList.add('is-gate');
 
-      if (consentPending) {
-        intro.classList.add('is-locked');
-        document.addEventListener('colorado:cookies-settled', unlockGate, { once: true, signal });
-      } else {
-        unlockGate();
-      }
+        const consentPending = typeof window.coloradoCookieChoicePending === 'function'
+          && window.coloradoCookieChoicePending();
 
-      document.dispatchEvent(new CustomEvent('colorado:intro-gate'));
+        if (consentPending) {
+          intro.classList.add('is-locked');
+          document.addEventListener('colorado:cookies-settled', unlockGate, { once: true, signal });
+        } else {
+          unlockGate();
+        }
+
+        document.dispatchEvent(new CustomEvent('colorado:intro-gate'));
+      };
+
+      /* Lascia completare il fade video → sito prima del bottone */
+      window.setTimeout(revealGate, prefersReducedMotion() ? 0 : 700);
     }
 
+    function prefersReducedMotion() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    /** Autoplay: prova con audio; se bloccato, muted + letterbox (mobile). */
     function playSigla() {
       if (!video) {
         showGate();
@@ -85,18 +101,41 @@
       }
 
       intro.classList.add('is-playing');
-      intro.classList.remove('is-gate');
+      intro.classList.remove('is-gate', 'is-fading');
       document.body.classList.add('home-intro-sigla');
 
-      const playPromise = video.play();
-      if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(() => showGate());
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.playsInline = true;
+
+      const tryPlay = (muted) => {
+        video.muted = muted;
+        return video.play();
+      };
+
+      const start = tryPlay(false);
+      if (start && typeof start.then === 'function') {
+        start.catch(() => {
+          const mutedPlay = tryPlay(true);
+          if (mutedPlay && typeof mutedPlay.then === 'function') {
+            mutedPlay.catch(() => showGate());
+          }
+        });
       }
     }
 
     if (startBtn) startBtn.addEventListener('click', dismissIntro, { signal });
-    if (skipBtn) skipBtn.addEventListener('click', showGate, { signal });
-    if (video) video.addEventListener('ended', showGate, { signal });
+    if (skipBtn) {
+      skipBtn.addEventListener('click', () => {
+        /* Skip = fine anticipata della sigla → stessa fase gate (musica può partire). */
+        showGate();
+      }, { signal });
+    }
+    if (video) {
+      video.addEventListener('ended', () => {
+        showGate();
+      }, { signal });
+    }
 
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape') return;
@@ -105,7 +144,7 @@
       }
       if (intro.classList.contains('is-gate')) {
         dismissIntro();
-      } else if (intro.classList.contains('is-playing')) {
+      } else if (intro.classList.contains('is-playing') || intro.classList.contains('is-fading')) {
         showGate();
       }
     }, { signal });

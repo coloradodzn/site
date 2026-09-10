@@ -5,13 +5,17 @@ const PORTFOLIO_WORKS = [
     typeKey: 'work1.type',
     name: 'Logo Collection',
     type: 'Logo Design',
+    area: 'logo',
     image: 'img/LogoDesign/Logo-folio.png',
     tone: null,
   },
   {
     href: 'lavoro-2.html',
+    nameKey: 'gallery.work2.title',
+    typeKey: 'gallery.work2.category',
     name: 'Calyy',
     type: 'Visual campaign',
+    area: 'visual',
     image: null,
     tone: 2,
   },
@@ -21,8 +25,9 @@ const PORTFOLIO_WORKS = [
     typeKey: 'work3.type',
     name: 'Analisi del Cinema',
     type: 'Film study',
-    image: null,
-    tone: 3,
+    area: 'research',
+    image: 'img/Cinema/nativi back.jpg',
+    tone: null,
   },
   {
     href: 'lavoro-4.html',
@@ -30,6 +35,7 @@ const PORTFOLIO_WORKS = [
     typeKey: 'work4.type',
     name: 'IED Scholarship',
     type: 'Brand Identity',
+    area: 'brand',
     image: 'img/IED/miniatura.jpg',
     tone: null,
   },
@@ -39,8 +45,9 @@ const PORTFOLIO_WORKS = [
     typeKey: 'work5.type',
     name: 'Axit Collection',
     type: 'Visual Communication',
-    image: null,
-    tone: 5,
+    area: 'visual',
+    image: 'img/Axit Social Communication/axitback.jpg',
+    tone: null,
   },
   {
     href: 'lavoro-6.html',
@@ -48,16 +55,68 @@ const PORTFOLIO_WORKS = [
     typeKey: 'work6.type',
     name: 'Patagonia',
     type: 'Brand Identity',
+    area: 'brand',
     image: 'img/Patagonia/patagonia_min.webp',
     tone: null,
+  },
+  {
+    href: 'lavoro-7.html',
+    nameKey: 'work7.name',
+    typeKey: 'work7.type',
+    name: 'B3bon',
+    type: 'Motion Design',
+    area: 'motion',
+    image: null,
+    tone: 3,
+  },
+  {
+    href: 'lavoro-8.html',
+    nameKey: 'work8.name',
+    typeKey: 'work8.type',
+    name: 'Smoove',
+    type: 'Motion Design',
+    area: 'motion',
+    image: null,
+    tone: 4,
+  },
+  {
+    href: 'lavoro-9.html',
+    nameKey: 'work9.name',
+    typeKey: 'work9.type',
+    name: 'TGR',
+    type: 'Motion Design',
+    area: 'motion',
+    image: null,
+    tone: 5,
+  },
+  {
+    href: 'lavoro-10.html',
+    nameKey: 'work10.name',
+    typeKey: 'work10.type',
+    name: 'Plix',
+    type: 'Motion Design',
+    area: 'motion',
+    image: null,
+    tone: 3,
   },
 ];
 
 function initWorkProjectsNav() {
   const main = document.querySelector('main');
-  if (!main || main.querySelector('.work-projects-nav')) return;
+  if (!main) return;
+
+  const existing = main.querySelector('.work-projects-nav');
+  if (existing) existing.remove();
 
   const currentPage = window.location.pathname.split('/').pop() || '';
+  const currentWork = PORTFOLIO_WORKS.find((work) => work.href === currentPage);
+  if (!currentWork) return;
+
+  const relatedWorks = PORTFOLIO_WORKS.filter(
+    (work) => work.area === currentWork.area && work.href !== currentPage
+  );
+  if (relatedWorks.length < 1) return;
+
   const nav = document.createElement('nav');
   nav.className = 'work-projects-nav';
   nav.setAttribute('aria-label', 'Portfolio projects');
@@ -71,7 +130,7 @@ function initWorkProjectsNav() {
   const track = document.createElement('div');
   track.className = 'work-projects-nav__track';
 
-  PORTFOLIO_WORKS.forEach((work) => {
+  relatedWorks.forEach((work) => {
     const isCurrent = work.href === currentPage;
     const link = document.createElement('a');
     link.href = work.href;
@@ -83,13 +142,24 @@ function initWorkProjectsNav() {
     const media = document.createElement('span');
     media.className = 'work-projects-nav__media';
     if (work.image) {
-      const img = document.createElement('img');
-      img.src = work.image;
-      img.alt = '';
-      img.width = 320;
-      img.height = 180;
-      img.decoding = 'async';
-      media.appendChild(img);
+      if (work.video || /\.mp4($|\?)/i.test(work.image)) {
+        const video = document.createElement('video');
+        video.src = work.image;
+        video.muted = true;
+        video.playsInline = true;
+        video.preload = 'metadata';
+        video.width = 320;
+        video.height = 180;
+        media.appendChild(video);
+      } else {
+        const img = document.createElement('img');
+        img.src = work.image;
+        img.alt = '';
+        img.width = 320;
+        img.height = 180;
+        img.decoding = 'async';
+        media.appendChild(img);
+      }
     } else if (work.tone) {
       media.classList.add(`work-projects-nav__media--tone-${work.tone}`);
       media.setAttribute('aria-hidden', 'true');
@@ -115,7 +185,7 @@ function initWorkProjectsNav() {
 
   nav.append(label, track);
 
-  const gallery = main.querySelector('.work-gallery');
+  const gallery = main.querySelector('.work-gallery:not(.work-gallery--embedded)');
   if (gallery) {
     gallery.appendChild(nav);
     return;

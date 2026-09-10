@@ -334,7 +334,9 @@ function loadCookieBanner() {
 
 function initWorkGalleryPage() {
   if (!document.querySelector('.work-gallery')) return;
-  document.body.classList.add('work-gallery-page');
+  if (!document.querySelector('.work--case, .work--presentation')) {
+    document.body.classList.add('work-gallery-page');
+  }
   if (document.querySelector('script[data-colorado-work-gallery]')) return;
   const script = document.createElement('script');
   script.src = 'js/work-gallery.js';

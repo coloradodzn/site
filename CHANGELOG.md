@@ -300,6 +300,15 @@ Le voci più recenti sono in fondo al file.
 - Label **Creative Direction** (ex “Direzione creativa”) su tutte le lingue
 - Aggiunto **Concept Design**
 
+### [4.7] — Analisi del Cinema: layout presentazione
+- `lavoro-3.html`: titolo sopra, PDF grande + testo a fianco, anteprime slide con frecce (niente scrollbar)
+- Miniatura `img/Cinema/nativi back.jpg` in portfolio / independent / nav progetti; path PDF aggiornato a `img/Cinema/`
+
+### [4.8] — Layout lavori + Motion Design
+- Layout presentazione applicato ai lavori immagine (`lavoro-1/2/4/5/6`)
+- Miniatura Axit (`axitback.jpg`) e Calyy (`calyy-banner.jpg`) nelle card portfolio/success
+- Aggiunti shell Motion: B3bon, Smoove, TGR, Plix (`lavoro-7`–`10`) in Success Projects
+
 ### [4.6] — About: globo SVG (TacticalGlobe3D)
 - Rimossa la vecchia integrazione COBE; About riparte da zero sul globo
 - Integrato [TacticalGlobe3D](https://framer.com/m/TacticalGlobe3D-uVMtXj.js@UhPxNuaENi2YMvlzEzft) (Framer / MilitaryMap SVG) via React ESM: `js/about-globe.js`, stub `js/framer-stub.js`, import map in `about.html`
