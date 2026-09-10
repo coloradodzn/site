@@ -88,131 +88,316 @@
          7. CTA (ultimo blocco prima del footer) -->
 
     <section class="about-block" aria-labelledby="about-vision-title">
-      <p class="about-block__kicker" data-i18n="about.vision.kicker">Design vision</p>
-      <h2 id="about-vision-title" class="about-block__title" data-i18n="about.vision.title">Clarity from chaos</h2>
+      <h2 id="about-vision-title" class="about-block__title" data-i18n="about.vision.title">La Mia Visione</h2>
       <p class="about-block__lead" data-i18n="about.vision.lead">Prendo il caos e lo trasformo in una visione chiara e d’impatto — con la natura al primo posto.</p>
     </section>
 
-    <section class="about-block" aria-labelledby="about-services-title">
-      <p class="about-block__kicker" data-i18n="about.services.kicker">Services</p>
-      <h2 id="about-services-title" class="about-block__title" data-i18n="about.services.title">What I do</h2>
+    <section class="about-services" aria-labelledby="about-services-title" data-about-services>
+      <header class="about-services__header">
+        <h2 id="about-services-title" class="about-services__title" data-i18n="about.services.title">I nostri Ambiti</h2>
+      </header>
+
+      <ul class="about-services__list" data-i18n-aria-label="about.services.a11y" aria-label="I nostri Ambiti">
+        <li class="about-services__item">
+          <button type="button" class="about-services__row" data-about-service-index="0">
+            <span class="about-services__num" aria-hidden="true">01</span>
+            <span class="about-services__name" data-i18n="about.services.1.name">Brand Identity</span>
+          </button>
+        </li>
+        <li class="about-services__item">
+          <button type="button" class="about-services__row" data-about-service-index="1">
+            <span class="about-services__num" aria-hidden="true">02</span>
+            <span class="about-services__name" data-i18n="about.services.2.name">Comunicazione visiva</span>
+          </button>
+        </li>
+        <li class="about-services__item">
+          <button type="button" class="about-services__row" data-about-service-index="2">
+            <span class="about-services__num" aria-hidden="true">03</span>
+            <span class="about-services__name" data-i18n="about.services.3.name">Web Development</span>
+          </button>
+        </li>
+        <li class="about-services__item">
+          <button type="button" class="about-services__row" data-about-service-index="3">
+            <span class="about-services__num" aria-hidden="true">04</span>
+            <span class="about-services__name" data-i18n="about.services.4.name">UX UI Design</span>
+          </button>
+        </li>
+        <li class="about-services__item">
+          <button type="button" class="about-services__row" data-about-service-index="4">
+            <span class="about-services__num" aria-hidden="true">05</span>
+            <span class="about-services__name" data-i18n="about.services.5.name">Motion Design</span>
+          </button>
+        </li>
+        <li class="about-services__item">
+          <button type="button" class="about-services__row" data-about-service-index="5">
+            <span class="about-services__num" aria-hidden="true">06</span>
+            <span class="about-services__name" data-i18n="about.services.6.name">Graphic Design</span>
+          </button>
+        </li>
+      </ul>
+
+      <!-- Preview flottante (hover desktop): img/Photos Fields — nome file = ambito -->
+      <div class="about-services__preview" data-about-services-preview aria-hidden="true">
+        <div class="about-services__preview-track" data-about-services-track>
+          <img class="about-services__preview-img" src="img/Photos%20Fields/Brand%20Identity.jpeg" alt="" width="640" height="800" decoding="async">
+          <img class="about-services__preview-img" src="img/colocanyon.jpeg" alt="" width="640" height="800" decoding="async" data-about-services-placeholder="visual">
+          <img class="about-services__preview-img" src="img/Photos%20Fields/Webdesign.jpeg" alt="" width="640" height="800" decoding="async">
+          <img class="about-services__preview-img" src="img/Photos%20Fields/Ux-Ui.jpeg" alt="" width="640" height="800" decoding="async">
+          <img class="about-services__preview-img" src="img/colosnow.jpeg" alt="" width="640" height="800" decoding="async" data-about-services-placeholder="motion">
+          <img class="about-services__preview-img" src="img/colojunk.jpeg" alt="" width="640" height="800" decoding="async" data-about-services-placeholder="graphic">
+        </div>
+      </div>
     </section>
 
     <section class="about-block" aria-labelledby="about-process-title">
-      <p class="about-block__kicker" data-i18n="about.process.kicker">My process</p>
-      <h2 id="about-process-title" class="about-block__title" data-i18n="about.process.title">How I work</h2>
+      <p class="about-block__kicker" data-i18n="about.process.kicker">Il mio processo</p>
+      <h2 id="about-process-title" class="about-block__title" data-i18n="about.process.title">Come lavoro</h2>
     </section>
 
     <section class="about-why" aria-labelledby="about-why-title">
       <header class="about-why__header">
-        <h2 id="about-why-title" class="about-why__title" data-i18n="about.why.title">Why work with me</h2>
-        <span class="about-why__index" aria-hidden="true">004</span>
+        <h2 id="about-why-title" class="about-why__title" data-i18n="about.why.title">Perché scegliere Colorado</h2>
       </header>
 
       <ul class="about-why__grid">
-        <li class="about-why__card">
-          <div class="about-why__icon" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="32" cy="32" r="10"/>
-              <ellipse cx="32" cy="32" rx="22" ry="10" transform="rotate(60 32 32)"/>
-              <ellipse cx="32" cy="32" rx="22" ry="10" transform="rotate(-60 32 32)"/>
-            </svg>
-          </div>
-          <p class="about-why__num">— 1 —</p>
-          <h3 class="about-why__name" data-i18n="about.why.1.name">Curiosità</h3>
-          <p class="about-why__text" data-i18n="about.why.1.text">Mente sempre in movimento: collego riferimenti in fretta, scavo più a fondo e tengo vivo il progetto con domande che aprono direzioni migliori.</p>
+        <li class="about-why__item">
+          <button type="button" class="about-why__card" aria-expanded="false" data-about-why-card>
+            <span class="about-why__face about-why__face--front">
+              <span class="about-why__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="32" cy="32" r="10"/>
+                  <ellipse cx="32" cy="32" rx="22" ry="10" transform="rotate(60 32 32)"/>
+                  <ellipse cx="32" cy="32" rx="22" ry="10" transform="rotate(-60 32 32)"/>
+                </svg>
+              </span>
+              <span class="about-why__num">— 1 —</span>
+              <span class="about-why__name" data-i18n="about.why.1.name">Curiosità</span>
+            </span>
+            <span class="about-why__face about-why__face--back">
+              <span class="about-why__text" data-i18n="about.why.1.text">Mente sempre in movimento: collego riferimenti in fretta, scavo più a fondo e tengo vivo il progetto con domande che aprono direzioni migliori.</span>
+            </span>
+          </button>
         </li>
 
-        <li class="about-why__card">
-          <div class="about-why__icon" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M12 48 L32 12 L52 48 Z"/>
-              <path d="M20 48 L32 26 L44 48"/>
-              <path d="M26 48 L32 36 L38 48"/>
-            </svg>
-          </div>
-          <p class="about-why__num">— 2 —</p>
-          <h3 class="about-why__name" data-i18n="about.why.2.name">Standard alti</h3>
-          <p class="about-why__text" data-i18n="about.why.2.text">Non mi accontento del “va bene così”. Alzo l’asticella finché il risultato non è netto, coerente e degno di restare.</p>
+        <li class="about-why__item">
+          <button type="button" class="about-why__card" aria-expanded="false" data-about-why-card>
+            <span class="about-why__face about-why__face--front">
+              <span class="about-why__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 48 L32 12 L52 48 Z"/>
+                  <path d="M20 48 L32 26 L44 48"/>
+                  <path d="M26 48 L32 36 L38 48"/>
+                </svg>
+              </span>
+              <span class="about-why__num">— 2 —</span>
+              <span class="about-why__name" data-i18n="about.why.2.name">Standard alti</span>
+            </span>
+            <span class="about-why__face about-why__face--back">
+              <span class="about-why__text" data-i18n="about.why.2.text">Non mi accontento del “va bene così”. Alzo l’asticella finché il risultato non è netto, coerente e degno di restare.</span>
+            </span>
+          </button>
         </li>
 
-        <li class="about-why__card">
-          <div class="about-why__icon" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="14" y="14" width="36" height="36"/>
-              <rect x="22" y="22" width="20" height="20"/>
-              <rect x="28" y="28" width="8" height="8"/>
-            </svg>
-          </div>
-          <p class="about-why__num">— 3 —</p>
-          <h3 class="about-why__name" data-i18n="about.why.3.name">Occhio critico</h3>
-          <p class="about-why__text" data-i18n="about.why.3.text">Analizzo struttura, tipografia, ritmo e dettagli. Vedo subito cosa non regge — e lo correggo prima che diventi un problema.</p>
+        <li class="about-why__item">
+          <button type="button" class="about-why__card" aria-expanded="false" data-about-why-card>
+            <span class="about-why__face about-why__face--front">
+              <span class="about-why__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="14" y="14" width="36" height="36"/>
+                  <rect x="22" y="22" width="20" height="20"/>
+                  <rect x="28" y="28" width="8" height="8"/>
+                </svg>
+              </span>
+              <span class="about-why__num">— 3 —</span>
+              <span class="about-why__name" data-i18n="about.why.3.name">Occhio critico</span>
+            </span>
+            <span class="about-why__face about-why__face--back">
+              <span class="about-why__text" data-i18n="about.why.3.text">Analizzo struttura, tipografia, ritmo e dettagli. Vedo subito cosa non regge — e lo correggo prima che diventi un problema.</span>
+            </span>
+          </button>
         </li>
 
-        <li class="about-why__card">
-          <div class="about-why__icon" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M18 40 L32 16 L46 40"/>
-              <path d="M24 40 L32 26 L40 40"/>
-              <line x1="16" y1="48" x2="48" y2="48"/>
-            </svg>
-          </div>
-          <p class="about-why__num">— 4 —</p>
-          <h3 class="about-why__name" data-i18n="about.why.4.name">Determinazione</h3>
-          <p class="about-why__text" data-i18n="about.why.4.text">Porto le cose fino in fondo. Chiarezza sugli obiettivi, costanza nell’esecuzione, zero abbandoni a metà strada.</p>
+        <li class="about-why__item">
+          <button type="button" class="about-why__card" aria-expanded="false" data-about-why-card>
+            <span class="about-why__face about-why__face--front">
+              <span class="about-why__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M18 40 L32 16 L46 40"/>
+                  <path d="M24 40 L32 26 L40 40"/>
+                  <line x1="16" y1="48" x2="48" y2="48"/>
+                </svg>
+              </span>
+              <span class="about-why__num">— 4 —</span>
+              <span class="about-why__name" data-i18n="about.why.4.name">Determinazione</span>
+            </span>
+            <span class="about-why__face about-why__face--back">
+              <span class="about-why__text" data-i18n="about.why.4.text">Porto le cose fino in fondo. Chiarezza sugli obiettivi, costanza nell’esecuzione, zero abbandoni a metà strada.</span>
+            </span>
+          </button>
         </li>
 
-        <li class="about-why__card">
-          <div class="about-why__icon" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="22" cy="26" r="7"/>
-              <circle cx="42" cy="26" r="7"/>
-              <path d="M10 48c2-8 8-12 12-12s10 4 12 8c2-4 8-8 12-8s10 4 12 12"/>
-            </svg>
-          </div>
-          <p class="about-why__num">— 5 —</p>
-          <h3 class="about-why__name" data-i18n="about.why.5.name">Teamwork</h3>
-          <p class="about-why__text" data-i18n="about.why.5.text">Lavoro bene con gli altri: ascolto, confronto e condivisione. Il progetto avanza meglio quando le idee si uniscono.</p>
+        <li class="about-why__item">
+          <button type="button" class="about-why__card" aria-expanded="false" data-about-why-card>
+            <span class="about-why__face about-why__face--front">
+              <span class="about-why__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="22" cy="26" r="7"/>
+                  <circle cx="42" cy="26" r="7"/>
+                  <path d="M10 48c2-8 8-12 12-12s10 4 12 8c2-4 8-8 12-8s10 4 12 12"/>
+                </svg>
+              </span>
+              <span class="about-why__num">— 5 —</span>
+              <span class="about-why__name" data-i18n="about.why.5.name">Teamwork</span>
+            </span>
+            <span class="about-why__face about-why__face--back">
+              <span class="about-why__text" data-i18n="about.why.5.text">Lavoro bene con gli altri: ascolto, confronto e condivisione. Il progetto avanza meglio quando le idee si uniscono.</span>
+            </span>
+          </button>
         </li>
 
-        <li class="about-why__card">
-          <div class="about-why__icon" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="32" cy="18" r="7"/>
-              <path d="M18 52c2-12 8-18 14-18s12 6 14 18"/>
-              <path d="M12 36h40"/>
-              <path d="M32 28v8"/>
-            </svg>
-          </div>
-          <p class="about-why__num">— 6 —</p>
-          <h3 class="about-why__name" data-i18n="about.why.6.name">Leadership</h3>
-          <p class="about-why__text" data-i18n="about.why.6.text">So prendere direzione quando serve: decisioni chiare, priorità nette, e responsabilità su ciò che propongo.</p>
+        <li class="about-why__item">
+          <button type="button" class="about-why__card" aria-expanded="false" data-about-why-card>
+            <span class="about-why__face about-why__face--front">
+              <span class="about-why__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="32" cy="18" r="7"/>
+                  <path d="M18 52c2-12 8-18 14-18s12 6 14 18"/>
+                  <path d="M12 36h40"/>
+                  <path d="M32 28v8"/>
+                </svg>
+              </span>
+              <span class="about-why__num">— 6 —</span>
+              <span class="about-why__name" data-i18n="about.why.6.name">Leadership</span>
+            </span>
+            <span class="about-why__face about-why__face--back">
+              <span class="about-why__text" data-i18n="about.why.6.text">So prendere direzione quando serve: decisioni chiare, priorità nette, e responsabilità su ciò che propongo.</span>
+            </span>
+          </button>
         </li>
 
-        <li class="about-why__card">
-          <div class="about-why__icon" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="32" cy="32" r="18"/>
-              <path d="M22 34c2 4 6 6 10 6s8-2 10-6"/>
-              <circle cx="24" cy="28" r="2" fill="currentColor" stroke="none"/>
-              <circle cx="40" cy="28" r="2" fill="currentColor" stroke="none"/>
-            </svg>
-          </div>
-          <p class="about-why__num">— 7 —</p>
-          <h3 class="about-why__name" data-i18n="about.why.7.name">Energia relazionale</h3>
-          <p class="about-why__text" data-i18n="about.why.7.text">Estroverso e sociabile: creo dialogo facile con clienti e team. Comunicazione diretta, atmosfera leggera, collaborazione reale.</p>
+        <li class="about-why__item">
+          <button type="button" class="about-why__card" aria-expanded="false" data-about-why-card>
+            <span class="about-why__face about-why__face--front">
+              <span class="about-why__icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="32" cy="32" r="18"/>
+                  <path d="M22 34c2 4 6 6 10 6s8-2 10-6"/>
+                  <circle cx="24" cy="28" r="2" fill="currentColor" stroke="none"/>
+                  <circle cx="40" cy="28" r="2" fill="currentColor" stroke="none"/>
+                </svg>
+              </span>
+              <span class="about-why__num">— 7 —</span>
+              <span class="about-why__name" data-i18n="about.why.7.name">Energia relazionale</span>
+            </span>
+            <span class="about-why__face about-why__face--back">
+              <span class="about-why__text" data-i18n="about.why.7.text">Estroverso e sociabile: creo dialogo facile con clienti e team. Comunicazione diretta, atmosfera leggera, collaborazione reale.</span>
+            </span>
+          </button>
         </li>
       </ul>
     </section>
 
-    <section class="about-block" aria-labelledby="about-numbers-title">
-      <h2 id="about-numbers-title" class="about-block__title" data-i18n="about.numbers.title">By the numbers</h2>
-      <p class="about-block__lead" data-i18n="about.numbers.lead">Cifre indicative — da aggiornare con i dati reali. Placeholder.</p>
+    <!-- Media: colocanyon.jpeg — atmospheric Colorado heritage still; portrait crop via object-fit. -->
+    <section class="about-numbers" aria-labelledby="about-numbers-title">
+      <div class="about-numbers__media">
+        <img
+          src="img/colocanyon.jpeg"
+          alt="Canyon roccioso immerso nella luce calda, orizzonte ampio e cielo aperto"
+          width="800"
+          height="533"
+          loading="lazy"
+          decoding="async"
+        >
+      </div>
+      <div class="about-numbers__content">
+        <h2 id="about-numbers-title" class="about-numbers__title" data-i18n="about.numbers.title">In numeri</h2>
+        <p class="about-numbers__lead" data-i18n-html="about.numbers.lead">Esperienza sul campo, clienti reali, risultati chiari.<br>Craft e chiarezza — dal primo brief all’ultimo dettaglio.</p>
+        <div class="about-numbers__grid">
+          <div class="about-numbers__stat">
+            <span class="about-numbers__value" data-i18n="about.numbers.1.value">+5</span>
+            <span class="about-numbers__label" data-i18n="about.numbers.1.label">Anni di esperienza</span>
+          </div>
+          <div class="about-numbers__stat">
+            <span class="about-numbers__value" data-i18n="about.numbers.2.value">+45</span>
+            <span class="about-numbers__label" data-i18n="about.numbers.2.label">Clienti</span>
+          </div>
+          <div class="about-numbers__stat">
+            <span class="about-numbers__value" data-i18n="about.numbers.3.value">+95%</span>
+            <span class="about-numbers__label" data-i18n="about.numbers.3.label">Clienti soddisfatti</span>
+          </div>
+          <!-- Slot 4: scholarships for now; will become design awards later -->
+          <div class="about-numbers__stat">
+            <span class="about-numbers__value" data-i18n="about.numbers.4.value">2</span>
+            <span class="about-numbers__label" data-i18n="about.numbers.4.label">Borse di studio</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq" aria-labelledby="about-faq-title">
+      <div class="faq__inner">
+        <header class="faq__intro">
+          <h2 id="about-faq-title" class="faq__title" data-i18n="faq.title">FAQ</h2>
+          <p class="faq__lead" data-i18n="faq.lead">Risposte rapide su processo, ambiti e modo di lavorare. Testi provvisori — li aggiornerò a breve.</p>
+        </header>
+
+        <div class="faq__list">
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span data-i18n="faq.1.q">Come affronti un nuovo progetto di design?</span>
+              <span class="faq__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <p data-i18n="faq.1.a">Parto da un briefing chiaro, poi definisco obiettivi, mood e vincoli. Solo dopo passo a concept e visual.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span data-i18n="faq.2.q">Lavori con startup o anche con aziende strutturate?</span>
+              <span class="faq__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <p data-i18n="faq.2.a">Con entrambi: adatto ritmo e metodo al contesto, dalla prima idea al brand già consolidato.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span data-i18n="faq.3.q">Puoi ridisegnare un sito o un’app già esistenti?</span>
+              <span class="faq__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <p data-i18n="faq.3.a">Sì: parto da un’analisi di ciò che funziona e di ciò che no, poi propongo un restyling coerente.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span data-i18n="faq.4.q">SEO e digital marketing sono inclusi?</span>
+              <span class="faq__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <p data-i18n="faq.4.a">Di base lavoro su design e comunicazione visiva; SEO e ads si possono valutare a parte se servono.</p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span data-i18n="faq.5.q">Quanto dura in media un progetto?</span>
+              <span class="faq__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="faq__answer">
+              <p data-i18n="faq.5.a">Dipende dallo scope: un’identità può richiedere poche settimane, un pacchetto più ampio diversi mesi.</p>
+            </div>
+          </details>
+        </div>
+      </div>
     </section>
 
     <section class="about-globe" aria-labelledby="about-globe-title">
       <header class="about-globe__intro">
-        <h2 id="about-globe-title" class="about-globe__title" data-i18n="about.globe.title">Where Colorado Worked</h2>
+        <h2 id="about-globe-title" class="about-globe__title" data-i18n="about.globe.title">Dove ha lavorato Colorado</h2>
         <p class="about-globe__lead" data-i18n="about.globe.lead">Clicca un ping arancione: parte il collegamento da Roma.</p>
       </header>
       <div class="about-globe__stage" data-about-globe></div>

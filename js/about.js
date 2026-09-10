@@ -103,6 +103,171 @@
     });
   }
 
+  /** Desktop: flip via CSS hover. Touch: tap per girare; Esc chiude. */
+  function initWhyFlipCards(signal) {
+    const cards = [...document.querySelectorAll('[data-about-why-card]')];
+    if (!cards.length) return;
+
+    const hoverFlip = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    const setFlipped = (card, open) => {
+      card.classList.toggle('is-flipped', open);
+      card.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+
+    const closeOthers = (except) => {
+      cards.forEach((card) => {
+        if (card !== except) setFlipped(card, false);
+      });
+    };
+
+    if (hoverFlip) {
+      cards.forEach((card) => {
+        const item = card.closest('.about-why__item');
+        if (!item) return;
+        item.addEventListener('mouseenter', () => setFlipped(card, true), { signal });
+        item.addEventListener('mouseleave', () => setFlipped(card, false), { signal });
+        card.addEventListener('focus', () => setFlipped(card, true), { signal });
+        card.addEventListener('blur', () => setFlipped(card, false), { signal });
+      });
+      return;
+    }
+
+    cards.forEach((card) => {
+      let startX = 0;
+      let startY = 0;
+      let dragged = false;
+
+      card.addEventListener('pointerdown', (event) => {
+        startX = event.clientX;
+        startY = event.clientY;
+        dragged = false;
+      }, { signal });
+
+      card.addEventListener('pointermove', (event) => {
+        if (Math.hypot(event.clientX - startX, event.clientY - startY) > 10) {
+          dragged = true;
+        }
+      }, { signal });
+
+      card.addEventListener('click', () => {
+        if (dragged) {
+          dragged = false;
+          return;
+        }
+        const open = !card.classList.contains('is-flipped');
+        if (open) closeOthers(card);
+        setFlipped(card, open);
+      }, { signal });
+    });
+
+    const grid = document.querySelector('.about-why__grid');
+    if (grid) {
+      let scrollClose = false;
+      grid.addEventListener('scroll', () => {
+        if (scrollClose) return;
+        scrollClose = true;
+        requestAnimationFrame(() => {
+          scrollClose = false;
+          closeOthers(null);
+        });
+      }, { passive: true, signal });
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      closeOthers(null);
+    }, { signal });
+  }
+
+  /** Lista servizi AQuest-style: preview immagine che segue il mouse. */
+  function initAboutServices(signal) {
+    const root = document.querySelector('[data-about-services]');
+    const preview = document.querySelector('[data-about-services-preview]');
+    const track = document.querySelector('[data-about-services-track]');
+    const rows = [...document.querySelectorAll('[data-about-service-index]')];
+    if (!root || !preview || !track || !rows.length) return;
+
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!canHover) return;
+
+    const count = Math.max(rows.length, 1);
+    preview.style.setProperty('--services-count', String(count));
+
+    let active = -1;
+    let visible = false;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let raf = 0;
+
+    const setIndex = (index) => {
+      active = index;
+      track.style.transform = `translate3d(0, ${index * -(100 / count)}%, 0)`;
+      rows.forEach((row, i) => {
+        row.closest('.about-services__item')?.classList.toggle('is-active', i === index);
+      });
+    };
+
+    const show = () => {
+      visible = true;
+      preview.classList.add('is-visible');
+      preview.setAttribute('aria-hidden', 'false');
+    };
+
+    const hide = () => {
+      visible = false;
+      active = -1;
+      preview.classList.remove('is-visible');
+      preview.setAttribute('aria-hidden', 'true');
+      rows.forEach((row) => row.closest('.about-services__item')?.classList.remove('is-active'));
+    };
+
+    const tick = () => {
+      currentX += (targetX - currentX) * 0.14;
+      currentY += (targetY - currentY) * 0.14;
+      preview.style.left = `${currentX}px`;
+      preview.style.top = `${currentY}px`;
+      raf = visible ? requestAnimationFrame(tick) : 0;
+    };
+
+    const onMove = (event) => {
+      targetX = event.clientX;
+      targetY = event.clientY;
+      if (!raf && visible) raf = requestAnimationFrame(tick);
+    };
+
+    rows.forEach((row) => {
+      const index = Number.parseInt(row.getAttribute('data-about-service-index') || '0', 10);
+      row.addEventListener('mouseenter', (event) => {
+        setIndex(index);
+        targetX = event.clientX;
+        targetY = event.clientY;
+        if (!visible) {
+          currentX = targetX;
+          currentY = targetY;
+          preview.style.left = `${currentX}px`;
+          preview.style.top = `${currentY}px`;
+        }
+        show();
+        if (!raf) raf = requestAnimationFrame(tick);
+      }, { signal });
+
+      row.addEventListener('focus', () => {
+        setIndex(index);
+        show();
+      }, { signal });
+    });
+
+    root.addEventListener('mouseleave', hide, { signal });
+    root.addEventListener('mousemove', onMove, { passive: true, signal });
+    signal.addEventListener('abort', () => {
+      cancelAnimationFrame(raf);
+      hide();
+    }, { once: true });
+  }
+
   function initAboutPage() {
     aboutAbort?.abort();
     aboutAbort = new AbortController();
@@ -111,6 +276,8 @@
     if (!document.body.classList.contains('page-about')) return;
 
     initAboutReveals(signal);
+    initWhyFlipCards(signal);
+    initAboutServices(signal);
     scheduleClaimFit();
 
     window.addEventListener('resize', scheduleClaimFit, { passive: true, signal });

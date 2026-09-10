@@ -56,8 +56,13 @@
 
     function unlockGate() {
       intro.classList.remove('is-locked');
+      if (startBtn) {
+        startBtn.removeAttribute('aria-disabled');
+        startBtn.disabled = false;
+      }
     }
 
+    /** Fine sigla: dissolvenza sul sito + cartello Welcome (button.png). */
     function showGate() {
       intro.classList.add('is-fading');
       intro.classList.remove('is-playing', 'is-arming');
@@ -76,6 +81,10 @@
 
         if (consentPending) {
           intro.classList.add('is-locked');
+          if (startBtn) {
+            startBtn.setAttribute('aria-disabled', 'true');
+            startBtn.disabled = true;
+          }
           document.addEventListener('colorado:cookies-settled', unlockGate, { once: true, signal });
         } else {
           unlockGate();

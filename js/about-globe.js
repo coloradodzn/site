@@ -504,7 +504,7 @@ function AboutGlobeApp() {
     } else if (elapsed < DRAW_MS + HOLD_MS) {
       progress = 1;
       opacity = 1;
-    } else {
+      } else {
       progress = 1;
       opacity = Math.max(0, 1 - (elapsed - DRAW_MS - HOLD_MS) / FADE_MS);
       if (opacity <= 0) done = true;

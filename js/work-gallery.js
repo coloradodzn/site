@@ -2,10 +2,12 @@
   const gallery = document.querySelector('.work-gallery');
   if (!gallery) return;
 
+  const stage = gallery.querySelector('.work-gallery__stage');
   const stageImg = gallery.querySelector('.work-gallery__image');
   const stageVideo = gallery.querySelector('.work-gallery__video');
+  const stageSet = gallery.querySelector('.work-gallery__set');
   const thumbs = [...gallery.querySelectorAll('.work-gallery__thumb')];
-  if ((!stageImg && !stageVideo) || !thumbs.length) return;
+  if ((!stageImg && !stageVideo && !stageSet) || !thumbs.length) return;
 
   const prevBtn = gallery.querySelector('.work-gallery__btn--prev');
   const nextBtn = gallery.querySelector('.work-gallery__btn--next');
@@ -32,8 +34,17 @@
     stageVideo.pause();
   }
 
-  function showImage(src, alt) {
+  function hideSet() {
+    if (!stageSet) return;
+    stageSet.hidden = true;
+    stageSet.replaceChildren();
+    stageSet.classList.remove('work-gallery__set--portrait');
+    if (stage) stage.classList.remove('work-gallery__stage--set');
+  }
+
+  function showImage(src, alt, { portrait = false } = {}) {
     pauseStageVideo();
+    hideSet();
     if (stageVideo) {
       stageVideo.removeAttribute('src');
       stageVideo.load();
@@ -41,6 +52,7 @@
     }
     if (!stageImg) return;
     stageImg.hidden = false;
+    stageImg.classList.toggle('is-portrait', portrait);
     if (stageImg.getAttribute('src') !== src) {
       stageImg.classList.add('is-swapping');
       stageImg.addEventListener('load', () => stageImg.classList.remove('is-swapping'), { once: true });
@@ -49,8 +61,39 @@
     if (alt) stageImg.alt = alt;
   }
 
+  function showSet(srcs, { portrait = false } = {}) {
+    if (!stageSet || !srcs.length) return;
+    pauseStageVideo();
+    if (stageVideo) {
+      stageVideo.removeAttribute('src');
+      stageVideo.load();
+      stageVideo.hidden = true;
+    }
+    if (stageImg) {
+      stageImg.hidden = true;
+      stageImg.classList.remove('is-portrait');
+    }
+    stageSet.hidden = false;
+    stageSet.classList.toggle('work-gallery__set--portrait', portrait);
+    if (stage) stage.classList.add('work-gallery__stage--set');
+    stageSet.replaceChildren(
+      ...srcs.map((src) => {
+        const img = document.createElement('img');
+        img.className = 'work-gallery__set-img';
+        img.src = src;
+        img.alt = '';
+        img.decoding = 'async';
+        return img;
+      })
+    );
+  }
+
   function showVideo(src, poster) {
-    if (stageImg) stageImg.hidden = true;
+    hideSet();
+    if (stageImg) {
+      stageImg.hidden = true;
+      stageImg.classList.remove('is-portrait');
+    }
     if (!stageVideo) return;
     pauseStageVideo();
     stageVideo.hidden = false;
@@ -78,9 +121,15 @@
     const nextSrc = thumb.dataset.src || thumb.querySelector('img, video')?.getAttribute('src') || '';
     const nextAlt = thumb.dataset.alt || '';
     const poster = thumb.dataset.poster || '';
+    const setSrcs = (thumb.dataset.srcs || '')
+      .split('|')
+      .map((src) => src.trim())
+      .filter(Boolean);
+    const portrait = thumb.dataset.layout === 'portrait' || type === 'portrait';
 
     if (type === 'video' && nextSrc) showVideo(nextSrc, poster);
-    else if (nextSrc) showImage(nextSrc, nextAlt);
+    else if (type === 'set' && setSrcs.length) showSet(setSrcs, { portrait });
+    else if (nextSrc) showImage(nextSrc, nextAlt, { portrait });
 
     if (currentEl) currentEl.textContent = String(safeIndex + 1);
 

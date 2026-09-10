@@ -4,6 +4,7 @@ const PORTFOLIO_SERVICES = [
   { value: 'brand', i18n: 'portfolio.service.brand' },
   { value: 'logo', i18n: 'portfolio.service.logo' },
   { value: 'visual', i18n: 'portfolio.service.visual' },
+  { value: 'graphic', i18n: 'portfolio.service.graphic' },
   { value: 'web', i18n: 'portfolio.service.web' },
   { value: 'motion', i18n: 'portfolio.service.motion' },
   { value: 'uxui', i18n: 'portfolio.service.uxui' }
@@ -12,12 +13,15 @@ const PORTFOLIO_SERVICES = [
 const PORTFOLIO_SECTORS = [
   { value: 'gaming', i18n: 'portfolio.sector.gaming' },
   { value: 'food-beverage', i18n: 'portfolio.sector.foodBeverage' },
+  { value: 'restaurant', i18n: 'portfolio.sector.restaurant' },
   { value: 'fashion', i18n: 'portfolio.sector.fashion' },
+  { value: 'outdoor', i18n: 'portfolio.sector.outdoor' },
   { value: 'sport', i18n: 'portfolio.sector.sport' },
   { value: 'social-media', i18n: 'portfolio.sector.socialMedia' },
   { value: 'esports', i18n: 'portfolio.sector.esports' },
   { value: 'entertainment', i18n: 'portfolio.sector.entertainment' },
   { value: 'music', i18n: 'portfolio.sector.music' },
+  { value: 'cinema', i18n: 'portfolio.sector.cinema' },
   { value: 'art-museum', i18n: 'portfolio.sector.artMuseum' },
   { value: 'tourism', i18n: 'portfolio.sector.tourism' },
   { value: 'social-impact', i18n: 'portfolio.sector.socialImpact' },
@@ -84,7 +88,7 @@ function updateFilterSummary(filterEl) {
   if (!checked.length) {
     summaryEl.textContent = getDictText(
       filterEl.dataset.filterGroup === 'service' ? 'portfolio.filter.allServices' : 'portfolio.filter.allSectors',
-      filterEl.dataset.filterGroup === 'service' ? 'Tutti i servizi' : 'Tutti i settori'
+      filterEl.dataset.filterGroup === 'service' ? 'I Nostri Ambiti' : 'I Nostri Settori'
     );
     return;
   }

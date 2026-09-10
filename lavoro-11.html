@@ -6,8 +6,8 @@
   <link rel="icon" href="img/Colorado48.svg" type="image/svg+xml" sizes="48x48">
   <link rel="icon" href="img/Colorado192.svg" type="image/svg+xml" sizes="192x192">
   <link rel="apple-touch-icon" href="img/Colorado180.svg" sizes="180x180">
-  <title data-i18n="title.successProjects">Success Projects — Portfolio</title>
-  <meta name="description" content="Progetti commissionati e lavori per clienti — portfolio Colorado Design." data-i18n-content="desc.successProjects">
+  <title data-i18n="title.lavoro11">Locked — Colorado Design</title>
+  <meta name="description" content="Locked — case study di comunicazione visiva." data-i18n-content="desc.lavoro11">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="js/seo.js"></script>
 </head>
-<body class="is-portfolio-category">
+<body>
 
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
@@ -27,7 +27,7 @@
           <li class="navbar__item navbar__item--dropdown">
             <a href="portfolio.html" class="navbar__link navbar__dropdown-trigger is-active" aria-haspopup="true" aria-expanded="false" id="navbar-portfolio-trigger"><span class="navbar__dropdown-label" data-i18n="nav.portfolio">Portfolio</span><span class="navbar__dropdown-chevron" aria-hidden="true"></span></a>
             <ul class="navbar__dropdown" id="navbar-portfolio-menu" role="menu" aria-label="Portfolio">
-              <li role="none"><a href="success-projects.html" class="navbar__dropdown-link is-active" role="menuitem">Success Projects</a></li>
+              <li role="none"><a href="success-projects.html" class="navbar__dropdown-link" role="menuitem">Success Projects</a></li>
               <li role="none"><a href="independent-projects.html" class="navbar__dropdown-link" role="menuitem">Independent Projects</a></li>
             </ul>
           </li>
@@ -66,113 +66,44 @@
     </nav>
   </header>
 
-  <main class="portfolio-page portfolio-page--category">
-    <div class="portfolio-catalog" data-portfolio-catalog="success">
-      <div class="portfolio-toolbar" role="search" aria-label="Filtra progetti">
-        <div class="portfolio-toolbar__brand">
-          <h1 class="portfolio-catalog__title">Success Projects</h1>
-          <span class="portfolio-catalog__count" data-catalog-count>8</span>
+  <main class="work work--presentation">
+    <header class="work-hero work-hero--centered">
+      <p class="work-hero__eyebrow" data-i18n="gallery.work11.category">Comunicazione visiva</p>
+      <h1 class="work-hero__title" data-i18n="gallery.work11.title">Locked</h1>
+      <p class="work-hero__lead" data-i18n="desc.lavoro11">Locked — case study di comunicazione visiva.</p>
+    </header>
+
+    <section class="work-stage" aria-label="Galleria">
+      <div class="work-gallery work-gallery--embedded" id="work-gallery" tabindex="0">
+        <figure class="work-gallery__stage">
+          <img class="work-gallery__image" src="img/Social%20Assets/locked%20banner.jpg" alt="Locked — banner" width="1600" height="1000" decoding="async">
+        </figure>
+        <div class="work-gallery__nav">
+          <button type="button" class="work-gallery__btn work-gallery__btn--prev" aria-label="Immagine precedente">←</button>
+          <div class="work-gallery__filmstrip-wrap">
+            <div class="work-gallery__filmstrip" role="listbox" aria-label="Galleria">
+              <button type="button" class="work-gallery__thumb is-active" role="option" aria-selected="true" tabindex="0" data-src="img/Social%20Assets/locked%20banner.jpg" data-alt="Locked — banner">
+                <img src="img/Social%20Assets/locked%20banner.jpg" alt="" width="160" height="120" decoding="async">
+              </button>
+            </div>
+          </div>
+          <button type="button" class="work-gallery__btn work-gallery__btn--next" aria-label="Immagine successiva">→</button>
         </div>
-        <span class="portfolio-toolbar__divider" aria-hidden="true"></span>
-        <span class="portfolio-toolbar__label" data-i18n="portfolio.filterBy">Filtra per</span>
-        <div class="portfolio-toolbar__filters" data-filter-mount></div>
+        <p class="work-gallery__status" aria-live="polite">
+          <span class="work-gallery__current">1</span> / <span class="work-gallery__total">—</span>
+        </p>
       </div>
+    </section>
 
-      <div class="portfolio-catalog__body">
-        <section class="portfolio-grid-group" data-group="logo">
-          <h2 class="portfolio-grid-group__title" data-i18n="portfolio.service.logo">Logo Design</h2>
-          <ul class="portfolio-grid">
-            <li class="portfolio-grid__item" data-service="logo" data-sector="fashion">
-              <a href="lavoro-1.html" class="portfolio-card">
-                <div class="portfolio-card__media">
-                  <img src="img/LogoDesign/Logo-folio.png" alt="Logo Collection — anteprima" class="portfolio-card__img" width="960" height="640" loading="lazy">
-                </div>
-                <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name" data-i18n="work1.name">Logo Collection</span>
-                  <span class="portfolio-card__type" data-i18n="work1.type">Logo Design</span>
-                </span>
-              </a>
-            </li>
-          </ul>
-        </section>
-
-        <section class="portfolio-grid-group" data-group="visual">
-          <h2 class="portfolio-grid-group__title" data-i18n="contact.subject.visual">Visual Communication</h2>
-          <ul class="portfolio-grid">
-            <li class="portfolio-grid__item" data-service="visual" data-sector="social-media">
-              <a href="lavoro-2.html" class="portfolio-card">
-                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-2" aria-hidden="true"></div>
-                <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name" data-i18n="gallery.work2.title">Calyy</span>
-                  <span class="portfolio-card__type" data-i18n="gallery.work2.category">Comunicazione visiva</span>
-                </span>
-              </a>
-            </li>
-            <li class="portfolio-grid__item" data-service="visual" data-sector="esports social-media">
-              <a href="lavoro-11.html" class="portfolio-card">
-                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-4" aria-hidden="true"></div>
-                <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name" data-i18n="gallery.work11.title">Locked</span>
-                  <span class="portfolio-card__type" data-i18n="gallery.work11.category">Comunicazione visiva</span>
-                </span>
-              </a>
-            </li>
-            <li class="portfolio-grid__item" data-service="visual" data-sector="esports social-media">
-              <a href="lavoro-5.html" class="portfolio-card">
-                <div class="portfolio-card__media">
-                  <img src="img/Axit%20Social%20Communication/axitback.jpg" alt="Axit Collection — anteprima" class="portfolio-card__img" width="960" height="640" loading="lazy">
-                </div>
-                <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name" data-i18n="work5.name">Axit Collection</span>
-                  <span class="portfolio-card__type" data-i18n="work5.type">Visual Communication</span>
-                </span>
-              </a>
-            </li>
-          </ul>
-        </section>
-
-        <section class="portfolio-grid-group" data-group="motion">
-          <h2 class="portfolio-grid-group__title" data-i18n="portfolio.service.motion">Motion Design</h2>
-          <ul class="portfolio-grid">
-            <li class="portfolio-grid__item" data-service="motion" data-sector="esports social-media">
-              <a href="lavoro-7.html" class="portfolio-card">
-                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-3" aria-hidden="true"></div>
-                <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name" data-i18n="work7.name">B3bon</span>
-                  <span class="portfolio-card__type" data-i18n="work7.type">Motion Design</span>
-                </span>
-              </a>
-            </li>
-            <li class="portfolio-grid__item" data-service="motion" data-sector="esports social-media">
-              <a href="lavoro-8.html" class="portfolio-card">
-                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-4" aria-hidden="true"></div>
-                <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name" data-i18n="work8.name">Smoove</span>
-                  <span class="portfolio-card__type" data-i18n="work8.type">Motion Design</span>
-                </span>
-              </a>
-            </li>
-            <li class="portfolio-grid__item" data-service="motion" data-sector="esports social-media">
-              <a href="lavoro-9.html" class="portfolio-card">
-                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-5" aria-hidden="true"></div>
-                <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name" data-i18n="work9.name">TGR</span>
-                  <span class="portfolio-card__type" data-i18n="work9.type">Motion Design</span>
-                </span>
-              </a>
-            </li>
-            <li class="portfolio-grid__item" data-service="motion" data-sector="esports social-media">
-              <a href="lavoro-10.html" class="portfolio-card">
-                <div class="portfolio-card__media portfolio-card__media--placeholder portfolio-card__media--tone-3" aria-hidden="true"></div>
-                <span class="portfolio-card__meta">
-                  <span class="portfolio-card__name" data-i18n="work10.name">Plix</span>
-                  <span class="portfolio-card__type" data-i18n="work10.type">Motion Design</span>
-                </span>
-              </a>
-            </li>
-          </ul>
-        </section>
-      </div>
+    <div class="work-content work-content--below">
+      <section class="work-section" aria-labelledby="work11-context">
+        <h2 id="work11-context" class="work-section__title" data-i18n="work3.context.title">Contesto</h2>
+        <p data-i18n="desc.lavoro11">Locked — case study di comunicazione visiva.</p>
+      </section>
+      <section class="work-section" aria-labelledby="work11-method">
+        <h2 id="work11-method" class="work-section__title" data-i18n="gallery.work11.category">Comunicazione visiva</h2>
+        <p data-i18n="gallery.work11.title">Locked</p>
+      </section>
     </div>
   </main>
 
@@ -226,6 +157,5 @@
 
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
-  <script src="js/portfolio-category.js"></script>
 </body>
 </html>

@@ -347,3 +347,28 @@ Le voci più recenti sono in fondo al file.
 ### [4.14] — Intro: audio obbligatorio + full-bleed desktop
 - Niente più autoplay muted: se il browser blocca l’audio → CTA «Riproduci con audio»
 - Desktop: video `object-fit: cover` a tutto schermo (niente bande laterali); mobile ≤767 resta `contain` (bande sopra/sotto)
+
+### [4.15] — Navbar dropdown senza bagliore
+- Portfolio e lingue: `box-shadow` nero rimosso (restano bordo soft + blur); vale su tutte le pagine via `style.css`
+
+### [4.16] — Bordo UI arancione leggibile
+- Chip audio/cookie e dropdown lingue/Portfolio: bordo da primary al 18% (quasi invisibile) a `--color-ui-edge` (45% brand); hover/open → primary pieno
+
+### [4.17] — About Why: titolo + flip card
+- Titolo: **Why choose Colorado** (designer + studio)
+- Card medie, layout **2–3–2**; fronte icona/numero/titolo; hover (desktop) o tap (mobile) → flip con testo di approfondimento
+
+### [4.18] — About: By the numbers
+- Sezione a due colonne (foto portrait + titolo/lead + griglia 2×2) con stats reali (+5 / +45 / +95% / 2 borse)
+- i18n IT/EN/FR/ES aggiornato; slot 4 pronto per premi design in seguito
+
+### [4.19] — About Servizi stile AQuest
+- Lista tipografica 01–04; hover desktop: preview immagine flottante che segue il cursore (placeholder: colocanyon / colojunk / colosnow / mainback)
+
+### [4.20] — Ambiti al posto di Servizi
+- About: titolo **I nostri Ambiti** (EN: Our Fields); lista 6 voci — Brand Identity, Comunicazione visiva, Web Development, UX UI Design, Motion Design, Graphic Design
+- Filtri portfolio: IT **I Nostri Ambiti** (EN resta **Our Fields**); label filtro IT Ambito; `Web Design` → `Web Development`
+- Preview hover: foto da `img/Photos Fields/` (Brand Identity, Webdesign, Ux-Ui); restano placeholder per Visual / Motion / Graphic
+- History: placeholder **Coming soon..** centrato sullo sfondo cover
+- About: sezione **FAQ** (stesse voci di Contatti) subito prima del globo, palette chiara
+- About: rotaia unica `--about-max: 72rem` per Ambiti / Why / Numeri / FAQ / Globe (niente più scaletta di larghezze)
