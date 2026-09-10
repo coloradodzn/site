@@ -309,18 +309,41 @@ Le voci più recenti sono in fondo al file.
 - Miniatura Axit (`axitback.jpg`) e Calyy (`calyy-banner.jpg`) nelle card portfolio/success
 - Aggiunti shell Motion: B3bon, Smoove, TGR, Plix (`lavoro-7`–`10`) in Success Projects
 
-### [4.6] — About: globo SVG (TacticalGlobe3D)
+### [4.9] — About: globo SVG (TacticalGlobe3D)
 - Rimossa la vecchia integrazione COBE; About riparte da zero sul globo
 - Integrato [TacticalGlobe3D](https://framer.com/m/TacticalGlobe3D-uVMtXj.js@UhPxNuaENi2YMvlzEzft) (Framer / MilitaryMap SVG) via React ESM: `js/about-globe.js`, stub `js/framer-stub.js`, import map in `about.html`
-- Posizione: dopo “By the numbers”, prima della CTA “Let's change together”
-- Layout: sezione e stage trasparenti sullo sfondo del body (come un PNG); spento alone atmosfera (`glowIntensity: 0`) che ritagliava un quadrato via `overflow: hidden`
-- Momentaneamente solo la sfera (marker/griglia/tooltip off); auto-rotate + drag attivi
-- Tema chiaro/scuro: colori mappa adattati; in dark terre abbassate a grigio caldo medio (meno luminose del bianco iniziale)
-- Spec aggiornata in `.cursor/rules/about-globe-spec.mdc`; direzione futura: feature tipo Orbita (marker + archi) restando sull’estetica SVG attuale
+- Posizione: dopo “By the numbers”, prima della CTA
+- Layout: sezione e stage trasparenti sullo sfondo del body; spento alone atmosfera (`glowIntensity: 0`)
+- Auto-rotate + drag; tema chiaro/scuro adattato
+- Spec in `.cursor/rules/about-globe-spec.mdc`
 
-### [4.7] — About globe: rotazione fluida + zoom +/-
-- “Vedi tutte le connessioni”: rotazione easing verso l’Europa dalla vista corrente (niente teleport); lo zoom non viene più forzato
-- Controlli **+ / −** sullo stage solo su mobile/touch (`hover: none` o &lt;768px); su desktop resta la rotella
-- Pinch resta disponibile su touch
-- **Esc** (o riclick / ping destinazione) chiude le connessioni; pulsante view-all sotto il globo
-- Favicon PNG / apple-touch su tutte le pagine; cookie consent integrato nel gate intro home
+### [4.10] — About globe: rotazione fluida + zoom +/-
+- “Vedi tutte le connessioni”: rotazione easing verso l’Europa (niente teleport)
+- Controlli **+ / −** solo su mobile/touch; desktop resta la rotella; pinch su touch
+- **Esc** (o riclick) chiude le connessioni; pulsante view-all sotto il globo
+- Cookie consent integrato nel gate intro home
+
+### [4.11] — About: CTA a piena viewport + claim + Why
+- Blocco claim + CTA (“Let's Change Together”) come stage `min-height: 100dvh`, centrato, con la stessa reveal (fade + salita) del footer
+- Footer About si anima solo dopo ulteriore scroll, così non compete con la CTA contatti
+- Claim tipografico su 3 righe con fit JS; copy “da soli” / i18n IT EN FR ES
+- Sezione Why (7 card: Curiosità, Standard alti, Occhio critico, Determinazione, Teamwork, Leadership, Energia relazionale)
+- Titoli sezione About in primary; CTA tipografica uppercase con hover roll
+
+### [4.12] — Logo SVG, intro, home featured, dropdown UI, media
+- **Logo / favicon**: `Coloradologo.svg` e PNG sostituiti da `Colorado.svg` + `Colorado48/180/192.svg` su tutte le pagine; Organization schema su `Colorado192.svg`
+- **Intro home**: path `img/intro.mp4`; letterbox nero (video landscape non tagliato); fine video → dissolvenza su scrim semitrasparente + bottone; autoplay con fallback muted; `?intro=1` per rivederla; dopo START scroll a 0 + cue SCROLL
+- **Home works**: al posto di Logo Collection e Calyy → **Patagonia** e **IED Scholarship** (con Cinema e Axit)
+- **Dropdown** Portfolio e lingue: bordo/chrome allineati a cookie + audio (`2px` primary soft, blur, niente bagliore in dark)
+- **Cinema (`lavoro-3`)**: lead sotto il titolo; PDF al centro; Contesto/Metodo/CTA sotto le preview, tutto centrato
+- **Media Motion**: asset riorganizzati in `img/B3bon/`, `img/TGR/`, `img/Plix/`, `img/Smoove/`, `img/Cinema/`; shell `lavoro-7`–`10` e miniature Axit aggiornate
+
+### [4.13] — Navbar uniformata su tutte le pagine
+- Toggle tema su `contatti.html`: emoji `☾` sostituita da `moon.svg` come sulle altre pagine
+- `data-i18n="nav.history"` e `data-i18n="nav.portfolio"` aggiunti alla navbar di tutte le HTML (prima mancavano su molte pagine)
+- Markup azioni (lang / tema / hamburger / social) allineato al pattern canonico
+- Light/dark: chevron allineato all’accent al hover; solidify header solo con menu hamburger aperto; niente ombre elevate in dark (come dropdown/lingue)
+
+### [4.14] — Intro: audio obbligatorio + full-bleed desktop
+- Niente più autoplay muted: se il browser blocca l’audio → CTA «Riproduci con audio»
+- Desktop: video `object-fit: cover` a tutto schermo (niente bande laterali); mobile ≤767 resta `contain` (bande sopra/sotto)

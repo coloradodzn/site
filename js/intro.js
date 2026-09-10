@@ -12,11 +12,12 @@
     const video = document.getElementById('home-intro-video');
     const startBtn = document.getElementById('home-intro-start');
     const skipBtn = document.getElementById('home-intro-skip');
+    const playBtn = document.getElementById('home-intro-play');
 
     if (!intro || !document.body.classList.contains('home-intro-active')) {
       if (intro) {
         intro.classList.add('is-hidden');
-        intro.classList.remove('is-playing', 'is-gate', 'is-locked', 'is-fading');
+        intro.classList.remove('is-playing', 'is-gate', 'is-locked', 'is-fading', 'is-arming');
         intro.setAttribute('aria-hidden', 'true');
       }
       return;
@@ -34,10 +35,9 @@
       }
 
       intro.classList.add('is-hidden');
-      intro.classList.remove('is-playing', 'is-gate', 'is-locked', 'is-fading');
+      intro.classList.remove('is-playing', 'is-gate', 'is-locked', 'is-fading', 'is-arming');
       document.body.classList.remove('home-intro-active', 'home-intro-sigla');
 
-      /* Landing immediata sul primo viewport: niente caccia allo scroll */
       window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
       document.body.classList.add('home-intro-landed');
       window.setTimeout(() => document.body.classList.remove('home-intro-landed'), 4200);
@@ -58,10 +58,9 @@
       intro.classList.remove('is-locked');
     }
 
-    /** Fine sigla: dissolvenza sul sito (scrim semitrasparente) + CTA. */
     function showGate() {
       intro.classList.add('is-fading');
-      intro.classList.remove('is-playing');
+      intro.classList.remove('is-playing', 'is-arming');
       document.body.classList.remove('home-intro-sigla');
 
       if (video) {
@@ -85,7 +84,6 @@
         document.dispatchEvent(new CustomEvent('colorado:intro-gate'));
       };
 
-      /* Lascia completare il fade video → sito prima del bottone */
       window.setTimeout(revealGate, prefersReducedMotion() ? 0 : 700);
     }
 
@@ -93,41 +91,82 @@
       return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
-    /** Autoplay: prova con audio; se bloccato, muted + letterbox (mobile). */
-    function playSigla() {
+    /** Schermo nero + CTA: il click è il gesto che permette l’audio. */
+    function showArming() {
       if (!video) {
         showGate();
         return;
       }
 
+      video.pause();
+      video.muted = false;
+      video.currentTime = 0;
+
+      intro.classList.add('is-arming');
+      intro.classList.remove('is-playing', 'is-gate', 'is-fading');
+      document.body.classList.add('home-intro-sigla');
+    }
+
+    /** Parte solo con audio — mai muted. */
+    function playWithSound() {
+      if (!video) {
+        showGate();
+        return;
+      }
+
+      intro.classList.remove('is-arming');
       intro.classList.add('is-playing');
-      intro.classList.remove('is-gate', 'is-fading');
       document.body.classList.add('home-intro-sigla');
 
       video.setAttribute('playsinline', '');
       video.setAttribute('webkit-playsinline', '');
       video.playsInline = true;
+      video.muted = false;
+      video.volume = 1;
+      video.removeAttribute('muted');
 
-      const tryPlay = (muted) => {
-        video.muted = muted;
-        return video.play();
-      };
-
-      const start = tryPlay(false);
-      if (start && typeof start.then === 'function') {
-        start.catch(() => {
-          const mutedPlay = tryPlay(true);
-          if (mutedPlay && typeof mutedPlay.then === 'function') {
-            mutedPlay.catch(() => showGate());
-          }
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.catch(() => {
+          /* Ancora bloccato: resta sul tap-to-play, niente mute */
+          showArming();
         });
       }
     }
 
+    /**
+     * Prova autoplay CON suono. Se il browser lo blocca → tap-to-play
+     * (mai fallback muted: la sigla ha audio).
+     */
+    function beginSigla() {
+      if (!video) {
+        showGate();
+        return;
+      }
+
+      video.muted = false;
+      video.volume = 1;
+      video.removeAttribute('muted');
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.playsInline = true;
+
+      intro.classList.add('is-playing');
+      intro.classList.remove('is-arming', 'is-gate', 'is-fading');
+      document.body.classList.add('home-intro-sigla');
+
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.catch(() => showArming());
+      }
+    }
+
+    if (playBtn) {
+      playBtn.addEventListener('click', playWithSound, { signal });
+    }
     if (startBtn) startBtn.addEventListener('click', dismissIntro, { signal });
     if (skipBtn) {
       skipBtn.addEventListener('click', () => {
-        /* Skip = fine anticipata della sigla → stessa fase gate (musica può partire). */
         showGate();
       }, { signal });
     }
@@ -138,6 +177,13 @@
     }
 
     document.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        if (intro.classList.contains('is-arming')) {
+          event.preventDefault();
+          playWithSound();
+          return;
+        }
+      }
       if (event.key !== 'Escape') return;
       if (intro.classList.contains('is-locked')) {
         return;
@@ -146,10 +192,12 @@
         dismissIntro();
       } else if (intro.classList.contains('is-playing') || intro.classList.contains('is-fading')) {
         showGate();
+      } else if (intro.classList.contains('is-arming')) {
+        showGate();
       }
     }, { signal });
 
-    playSigla();
+    beginSigla();
   }
 
   initHomeIntro();
