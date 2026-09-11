@@ -3280,9 +3280,14 @@ body.home-intro-active.cookie-consent-pending .cookie-banner {
   z-index: 340;
   display: grid;
   place-items: center;
-  padding: clamp(1.5rem, 6vw, 3rem);
+  /* Padding alto sotto la navbar trasparente (logo / hamburger) */
+  padding:
+    clamp(5.25rem, 14vh, 7.5rem)
+    clamp(1.5rem, 6vw, 3rem)
+    clamp(2rem, 8vh, 4rem);
   pointer-events: none;
   opacity: 0;
+  overflow: hidden;
 }
 
 .home-hero-claim.is-visible {
@@ -3468,6 +3473,12 @@ body.home-intro-active.cookie-consent-pending .cookie-banner {
 body.home-nav-reveal-active .home-hero__scene,
 body.home-nav-reveal-active .home-hero-claim {
   pointer-events: none;
+}
+
+/* Claim fuori scena quando compare la nav centrale (niente overlap con header/nav) */
+body.home-nav-reveal-active .home-hero-claim {
+  opacity: 0 !important;
+  visibility: hidden;
 }
 
 body.home-nav-reveal-active .home-nav-reveal__link {

@@ -47,11 +47,12 @@ const TIMELINE_MOBILE = {
   cardHide: 52,
   claimShow: 52,
   claimFadeIn: 12,
-  claimShatterStart: 68,
-  claimShatterEnd: 82,
-  navStart: 78,
-  navCenter: 92,
-  footerStart: 92,
+  claimShatterStart: 66,
+  claimShatterEnd: 80,
+  // Nav solo DOPO lo shatter — altrimenti claim e navbar si sovrappongono
+  navStart: 82,
+  navCenter: 94,
+  footerStart: 94,
   footerEnd: 99,
   navAutoMs: 1800,
 };
@@ -451,10 +452,14 @@ function setClaimFragmentDelays(fragments, reverse = false) {
 
 function assignFragmentScatter(fragment) {
   if (!fragment.dataset.tx) {
-    const angle = Math.random() * Math.PI * 2;
+    // Evita che i frammenti volino nella fascia navbar (soprattutto mobile)
+    const angle = (Math.random() * Math.PI * 1.35) + (Math.PI * 0.3);
     const distance = 48 + Math.random() * 200;
-    fragment.dataset.tx = String(Math.cos(angle) * distance);
-    fragment.dataset.ty = String(Math.sin(angle) * distance);
+    let tx = Math.cos(angle) * distance;
+    let ty = Math.sin(angle) * distance;
+    if (ty < -28) ty = -12 - Math.random() * 24;
+    fragment.dataset.tx = String(tx);
+    fragment.dataset.ty = String(ty);
     fragment.dataset.rot = String((Math.random() - 0.5) * 720);
   }
 
@@ -607,6 +612,17 @@ function updateHomeClaim(progress, scrollingBack) {
   const progressPercent = Math.round(progress * 100);
   const tl = getHomeTimeline();
 
+  // Se la nav centrale è già in scena, il claim non deve restare sotto/sopra la navbar
+  if (!claimShattered && progressPercent >= tl.navStart) {
+    homeClaim.classList.remove('is-visible', 'is-shattering', 'is-reassembling');
+    homeClaim.classList.add('is-shattered');
+    homeClaim.style.opacity = '0';
+    homeClaim.setAttribute('aria-hidden', 'true');
+    claimShattered = true;
+    lastProgressPercent = progressPercent;
+    return;
+  }
+
   if (claimShattered) {
     homeClaim.classList.remove('is-visible', 'is-shattering', 'is-reassembling');
     homeClaim.classList.add('is-shattered');
@@ -718,8 +734,8 @@ function updateHomeExperience() {
 
   let { tunnelPhase, exitPhase, claimPhase, navPhase, footerPhase, pos } = phases;
 
-  // Durante lo shatter (soprattutto mobile) non far partire la nav in mezzo all’animazione
-  if (claimShatterAnimating) {
+  // Claim e nav non devono convivere (shatter o claim ancora in scena)
+  if (claimShatterAnimating || (!claimShattered && progressPercent < tl.navStart)) {
     navPhase = 0;
     footerPhase = 0;
   }
