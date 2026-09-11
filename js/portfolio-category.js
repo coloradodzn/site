@@ -22,11 +22,9 @@ const PORTFOLIO_SECTORS = [
   { value: 'entertainment', i18n: 'portfolio.sector.entertainment' },
   { value: 'music', i18n: 'portfolio.sector.music' },
   { value: 'cinema', i18n: 'portfolio.sector.cinema' },
-  { value: 'art-museum', i18n: 'portfolio.sector.artMuseum' },
-  { value: 'tourism', i18n: 'portfolio.sector.tourism' },
   { value: 'social-impact', i18n: 'portfolio.sector.socialImpact' },
-  { value: 'environment-impact', i18n: 'portfolio.sector.environmentImpact' },
-  { value: 'mobility-transport', i18n: 'portfolio.sector.mobilityTransport' }
+  { value: 'environment-impact', i18n: 'portfolio.sector.environmentImpact' }
+  // nascosti per ora: art-museum, tourism, mobility-transport
 ];
 
 function getDictText(key, fallback = '') {

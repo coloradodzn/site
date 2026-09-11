@@ -128,7 +128,6 @@
       document.body.classList.add('home-intro-sigla');
 
       video.setAttribute('playsinline', '');
-      video.setAttribute('webkit-playsinline', '');
       video.playsInline = true;
       video.muted = false;
       video.volume = 1;
@@ -157,7 +156,6 @@
       video.volume = 1;
       video.removeAttribute('muted');
       video.setAttribute('playsinline', '');
-      video.setAttribute('webkit-playsinline', '');
       video.playsInline = true;
 
       intro.classList.add('is-playing');

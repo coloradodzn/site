@@ -2676,7 +2676,7 @@ body.home-intro-active .home-intro {
 
 @media (max-width: 767px) {
   .home-intro__video {
-    object-fit: contain;
+  object-fit: contain;
   }
 }
 
@@ -2758,7 +2758,8 @@ body.home-intro-active .home-intro {
   background: transparent;
   cursor: pointer;
   line-height: 0;
-  max-width: min(32rem, 86vw);
+  /* Più grande: CTA evidente dopo la sigla */
+  max-width: min(46rem, 94vw);
   width: 100%;
   transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
 }
@@ -2774,8 +2775,12 @@ body.home-intro-active .home-intro {
 }
 
 .home-intro__start:hover {
-  transform: translateY(-2px) scale(1.02);
-  filter: brightness(1.06);
+  transform: translateY(-3px) scale(1.045);
+  filter: brightness(1.08);
+}
+
+.home-intro__start:active {
+  transform: translateY(-1px) scale(1.02);
 }
 
 .home-intro__start:focus-visible {
@@ -4074,14 +4079,14 @@ body.page-history > .site-footer {
   --about-max: 72rem;
   --about-pad: clamp(1.25rem, 5vw, 3rem);
   min-height: 50vh;
-  padding-block: 5.5rem 0;
+  padding-block: 0;
   display: flex;
   flex-direction: column;
   gap: 0;
   background: transparent;
 }
 
-/* Una sola “rotaia” di larghezza: evita sezioni a scaletta */
+/* Una sola “rotaia” di larghezza: evita sezioni a scaletta (CTA = full stage) */
 .about-page > section:not(.about-cta) {
   width: min(100%, var(--about-max));
   max-width: var(--about-max);
@@ -4131,6 +4136,62 @@ body.page-history > .site-footer {
   line-height: 1.6;
   color: var(--color-accent);
   opacity: 0.8;
+}
+
+.about-block__body {
+  margin: 1rem 0 0;
+  max-width: 42rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  text-align: center;
+}
+
+.about-block__body p {
+  margin: 0;
+  font-size: var(--font-size-copy);
+  line-height: 1.65;
+  color: var(--color-accent);
+  opacity: 0.85;
+}
+
+/* Visione: stessa rotaia degli Ambiti, senza vuoto forzato sotto */
+.about-block--vision {
+  box-sizing: border-box;
+  padding-top: clamp(5.5rem, 12vh, 7rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0;
+}
+
+.about-block--vision .about-block__title {
+  text-align: center;
+  width: 100%;
+}
+
+.about-block--vision .about-block__lead,
+.about-block--vision .about-block__body {
+  max-width: none;
+  width: 100%;
+  text-align: left;
+}
+
+/* Aria titolo → testo = stessa degli Ambiti */
+.about-block--vision .about-block__lead {
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+.about-block--vision .about-block__body {
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+@media (max-width: 767px) {
+  .about-block--vision {
+    padding-top: clamp(5rem, 12vh, 6.5rem);
+  }
 }
 
 /* Processo — flusso editoriale numerato */
