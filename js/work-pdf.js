@@ -133,9 +133,15 @@ async function initWorkPdf() {
       btn.setAttribute('aria-selected', String(active));
     });
     const activeThumb = thumbButtons[num - 1];
-    if (activeThumb) {
-      activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
+    if (!activeThumb) return;
+    const filmstrip = activeThumb.closest('.work-pdf__filmstrip, .work-gallery__filmstrip');
+    if (!filmstrip) return;
+    const target =
+      activeThumb.offsetLeft - (filmstrip.clientWidth - activeThumb.offsetWidth) / 2;
+    filmstrip.scrollTo({
+      left: Math.max(0, target),
+      behavior: 'smooth',
+    });
   }
 
   function updateButtons() {

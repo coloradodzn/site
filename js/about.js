@@ -7,29 +7,42 @@
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  /** Scala il font del claim finché entrambe le righe entrano nella larghezza disponibile. */
+  /** Scala il font del claim finché le 3 righe entrano (mobile: ultima può wrap → max 4). */
   function fitClaimToWidth() {
     const statement = document.querySelector('.about-cta__statement');
     const claim = document.querySelector('.about-cta__claim');
     if (!statement || !claim) return;
 
-    const lines = statement.querySelectorAll('.about-cta__line');
+    const lines = [...statement.querySelectorAll('.about-cta__line')];
     if (!lines.length) return;
 
     const maxWidth = claim.clientWidth;
     if (maxWidth <= 0) return;
 
-    const minPx = 11;
-    const maxPx = Math.min(56, maxWidth * 0.08);
+    const isMobile = window.innerWidth < 768;
+    const last = lines[lines.length - 1];
+    const fixedLines = isMobile && last ? lines.slice(0, -1) : lines;
+
+    // Mobile: fit sulle prime 2 nowrap; l’ultima può andare a capo una volta
+    const minPx = isMobile ? 13 : 11;
+    const maxPx = isMobile
+      ? Math.min(22, Math.max(15, maxWidth * 0.055))
+      : Math.min(56, maxWidth * 0.08);
     let lo = minPx;
     let hi = maxPx;
 
     const fits = (size) => {
       statement.style.fontSize = `${size}px`;
-      return [...lines].every((line) => line.scrollWidth <= maxWidth + 0.5);
+      const fixedOk = fixedLines.every((line) => line.scrollWidth <= maxWidth + 0.5);
+      if (!fixedOk) return false;
+      if (!isMobile || !last) return true;
+      // ultima riga: ok se sta in una riga, o wrap in al massimo 2 (totale ≤ 4)
+      if (last.scrollWidth <= maxWidth + 0.5) return true;
+      const style = getComputedStyle(last);
+      const lineHeight = parseFloat(style.lineHeight) || size * 1.28;
+      return last.scrollHeight <= lineHeight * 2.15;
     };
 
-    // se anche il minimo non entra, resta al minimo (mobile molto stretto)
     if (!fits(minPx)) {
       statement.style.fontSize = `${minPx}px`;
       return;
@@ -180,7 +193,7 @@
     }, { signal });
   }
 
-  /** Lista servizi AQuest-style: preview immagine che segue il mouse. */
+  /** Lista servizi AQuest-style: preview al hover (desktop) o al tap (mobile). */
   function initAboutServices(signal) {
     const root = document.querySelector('[data-about-services]');
     const preview = document.querySelector('[data-about-services-preview]');
@@ -188,11 +201,10 @@
     const rows = [...document.querySelectorAll('[data-about-service-index]')];
     if (!root || !preview || !track || !rows.length) return;
 
-    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    if (!canHover) return;
-
     const count = Math.max(rows.length, 1);
     preview.style.setProperty('--services-count', String(count));
+
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
     let active = -1;
     let visible = false;
@@ -223,6 +235,23 @@
       preview.setAttribute('aria-hidden', 'true');
       rows.forEach((row) => row.closest('.about-services__item')?.classList.remove('is-active'));
     };
+
+    if (!canHover) {
+      rows.forEach((row) => {
+        const index = Number.parseInt(row.getAttribute('data-about-service-index') || '0', 10);
+        row.addEventListener('click', () => {
+          if (active === index && visible) {
+            hide();
+            return;
+          }
+          setIndex(index);
+          show();
+        }, { signal });
+      });
+
+      signal.addEventListener('abort', hide, { once: true });
+      return;
+    }
 
     const tick = () => {
       currentX += (targetX - currentX) * 0.14;
@@ -268,6 +297,187 @@
     }, { once: true });
   }
 
+  /** Processo: freccia pull-to-reveal (drag ↓ o tap; scroll pagina libero). */
+  function initAboutProcess(signal) {
+    const root = document.querySelector('[data-about-process]');
+    const pull = document.querySelector('[data-about-process-pull]');
+    const stem = pull?.querySelector('.about-process__pull-stem');
+    const steps = [...document.querySelectorAll('[data-about-process-step]')];
+    if (!root || !pull || !stem || steps.length < 2) return;
+
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+    const THRESHOLD = coarse ? 44 : 56;
+    const STEM_BASE = 26;
+    const STEM_MAX = coarse ? 56 : 72;
+
+    const revealAll = () => {
+      steps.forEach((step) => {
+        step.hidden = false;
+        step.classList.add('is-visible');
+      });
+      root.classList.add('is-complete');
+      pull.hidden = true;
+    };
+
+    if (prefersReducedMotion()) {
+      revealAll();
+      return;
+    }
+
+    let visibleCount = Math.max(
+      1,
+      steps.filter((s) => s.classList.contains('is-visible') && !s.hidden).length
+    );
+    const pullLabelBase =
+      pull.getAttribute('aria-label') || 'Trascina o tocca per lo step successivo';
+
+    const sync = () => {
+      steps.forEach((step, i) => {
+        const show = i < visibleCount;
+        step.hidden = !show;
+        step.classList.toggle('is-visible', show);
+      });
+
+      const done = visibleCount >= steps.length;
+      const wasComplete = root.classList.contains('is-complete');
+      root.classList.toggle('is-complete', done);
+      pull.hidden = done;
+      if (!done) {
+        pull.setAttribute('aria-label', `${pullLabelBase} (${visibleCount}/${steps.length})`);
+        return;
+      }
+      if (!wasComplete) {
+        root.classList.remove('is-celebrating');
+        void root.offsetWidth;
+        root.classList.add('is-celebrating');
+        // Porta tutto il flusso in vista (centro) per vedere il glow completo
+        requestAnimationFrame(() => {
+          const list = root.querySelector('.about-process__list');
+          const target = list || root;
+          try {
+            target.scrollIntoView({
+              block: 'center',
+              inline: 'nearest',
+              behavior: prefersReducedMotion() ? 'auto' : 'smooth'
+            });
+          } catch (_) {
+            /* no-op */
+          }
+        });
+      }
+    };
+
+    const revealNext = () => {
+      if (visibleCount >= steps.length) return;
+      visibleCount += 1;
+      const completing = visibleCount >= steps.length;
+      sync();
+      // Durante il reveal step-by-step: solo nearest.
+      // Al complete: sync fa già scroll center sul flusso intero.
+      if (completing) return;
+      const revealed = steps[visibleCount - 1];
+      if (!revealed?.scrollIntoView) return;
+      try {
+        const rect = revealed.getBoundingClientRect();
+        const vh = window.innerHeight || 0;
+        const inView = rect.top >= 0 && rect.bottom <= vh;
+        if (!inView) {
+          revealed.scrollIntoView({
+            block: 'nearest',
+            behavior: prefersReducedMotion() ? 'auto' : 'smooth'
+          });
+        }
+      } catch (_) {
+        /* no-op */
+      }
+    };
+
+    const resetPullVisual = () => {
+      pull.classList.remove('is-dragging');
+      pull.style.transform = '';
+      stem.style.transform = '';
+    };
+
+    let pointerId = null;
+    let startY = 0;
+    let pullDist = 0;
+    let dragged = false;
+    let suppressClick = false;
+
+    const onPointerDown = (event) => {
+      if (event.button != null && event.button !== 0) return;
+      if (visibleCount >= steps.length) return;
+      pointerId = event.pointerId;
+      startY = event.clientY;
+      pullDist = 0;
+      dragged = false;
+      pull.classList.add('is-dragging');
+      try {
+        pull.setPointerCapture?.(pointerId);
+      } catch (_) {
+        /* alcuni browser possono rifiutare capture */
+      }
+    };
+
+    const onPointerMove = (event) => {
+      if (pointerId == null || event.pointerId !== pointerId) return;
+      const dy = Math.max(0, event.clientY - startY);
+      pullDist = dy;
+      if (dy > 8) dragged = true;
+      // scaleY = niente reflow (più leggero di height su mobile)
+      const scale = Math.min(STEM_MAX / STEM_BASE, 1 + dy * 0.02);
+      stem.style.transform = `scaleY(${scale})`;
+      pull.style.transform = `translateY(${Math.min(dy * 0.35, 28)}px)`;
+      if (dragged) event.preventDefault();
+    };
+
+    const onPointerUp = (event) => {
+      if (pointerId == null || event.pointerId !== pointerId) return;
+      const shouldReveal = pullDist >= THRESHOLD || (!dragged && pullDist < 10);
+      pointerId = null;
+      resetPullVisual();
+      if (!shouldReveal) return;
+      suppressClick = true;
+      revealNext();
+      window.setTimeout(() => {
+        suppressClick = false;
+      }, 320);
+    };
+
+    const onPointerCancel = (event) => {
+      if (pointerId == null || event.pointerId !== pointerId) return;
+      pointerId = null;
+      resetPullVisual();
+    };
+
+    pull.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      revealNext();
+    }, { signal });
+
+    // Evita doppio reveal: pointerup + click sintetico su mobile
+    pull.addEventListener('click', (event) => {
+      if (suppressClick) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      revealNext();
+    }, { signal });
+
+    pull.addEventListener('pointerdown', onPointerDown, { signal });
+    pull.addEventListener('pointermove', onPointerMove, { signal, passive: false });
+    pull.addEventListener('pointerup', onPointerUp, { signal });
+    pull.addEventListener('pointercancel', onPointerCancel, { signal });
+    pull.addEventListener('lostpointercapture', () => {
+      pointerId = null;
+      resetPullVisual();
+    }, { signal });
+
+    sync();
+  }
+
   function initAboutPage() {
     aboutAbort?.abort();
     aboutAbort = new AbortController();
@@ -278,6 +488,7 @@
     initAboutReveals(signal);
     initWhyFlipCards(signal);
     initAboutServices(signal);
+    initAboutProcess(signal);
     scheduleClaimFit();
 
     window.addEventListener('resize', scheduleClaimFit, { passive: true, signal });

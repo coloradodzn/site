@@ -474,3 +474,24 @@ function coloradoInitPage() {
 window.coloradoInitPage = coloradoInitPage;
 window.initUiIcons = initUiIcons;
 coloradoInitPage();
+
+/* Allinea solo l’altezza hero al visualViewport; non spingere i chip sotto il frame Inspect. */
+(function syncVisualViewportInsets() {
+  const root = document.documentElement;
+
+  function apply() {
+    const vv = window.visualViewport;
+    if (!vv || vv.scale !== 1 || !vv.height) {
+      root.style.removeProperty('--vv-height');
+      return;
+    }
+
+    root.style.setProperty('--vv-height', `${Math.round(vv.height)}px`);
+  }
+
+  apply();
+  window.addEventListener('resize', apply);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', apply);
+  }
+})();

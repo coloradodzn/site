@@ -23,19 +23,46 @@ const BG_ZOOM_START = 1;
 const BG_ZOOM_END = 2.35;
 const HOME_SCRIM_MAX = 0.24;
 const EXTRA_SCROLL_SEGMENTS = 4;
+const EXTRA_SCROLL_SEGMENTS_MOBILE = 8;
 const CARD_CLICK_OPACITY = 0.4;
 const CARD_CLICK_DEPTH = 0.36;
-const CARD_HIDE_PERCENT = 62;
-const CLAIM_SHOW_PERCENT = 62;
-const CLAIM_FADE_IN_PERCENT = 5;
-const CLAIM_SHATTER_START_PERCENT = 74;
-const CLAIM_SHATTER_END_PERCENT = 80;
-const NAV_START_PERCENT = 80;
-const NAV_CENTER_PERCENT = 88;
-const FOOTER_START_PERCENT = 92;
-const FOOTER_END_PERCENT = 98;
 const CLAIM_SHATTER_BASE_MS = 900;
 const CLAIM_STAGGER_MS = 8;
+
+/** Desktop: finestre strette (rotella). Mobile: più scroll e fasi più lunghe (dito). */
+const TIMELINE_DESKTOP = {
+  cardHide: 62,
+  claimShow: 62,
+  claimFadeIn: 5,
+  claimShatterStart: 74,
+  claimShatterEnd: 80,
+  navStart: 80,
+  navCenter: 88,
+  footerStart: 92,
+  footerEnd: 98,
+  navAutoMs: 1200,
+};
+
+const TIMELINE_MOBILE = {
+  cardHide: 52,
+  claimShow: 52,
+  claimFadeIn: 12,
+  claimShatterStart: 68,
+  claimShatterEnd: 82,
+  navStart: 78,
+  navCenter: 92,
+  footerStart: 92,
+  footerEnd: 99,
+  navAutoMs: 1800,
+};
+
+function isHomeMobile() {
+  return window.innerWidth < 768;
+}
+
+function getHomeTimeline() {
+  return isHomeMobile() ? TIMELINE_MOBILE : TIMELINE_DESKTOP;
+}
 
 const DEFAULT_OFFSETS = [
   { x: -34, y: -12, rotateY: 12 },
@@ -81,12 +108,17 @@ function easeOutCubic(t) {
   return 1 - (1 - t) ** 3;
 }
 
+function easeOutQuint(t) {
+  return 1 - (1 - t) ** 5;
+}
+
 function getCardCount() {
   return workCards.length || Number.parseInt(homeHero?.dataset.cardCount || '5', 10);
 }
 
 function getTotalSegments() {
-  return getCardCount() + EXTRA_SCROLL_SEGMENTS;
+  const extra = isHomeMobile() ? EXTRA_SCROLL_SEGMENTS_MOBILE : EXTRA_SCROLL_SEGMENTS;
+  return getCardCount() + extra;
 }
 
 function getSpreadMultiplier() {
@@ -119,6 +151,7 @@ function getScrollPhases(progress) {
   const cardCount = getCardCount();
   const totalSegments = getTotalSegments();
   const pos = progress * totalSegments;
+  const tl = getHomeTimeline();
 
   let cardPhase = clamp(pos / cardCount, 0, 1);
   let exitPhase = 0;
@@ -133,10 +166,10 @@ function getScrollPhases(progress) {
 
   const progressPercent = Math.round(progress * 100);
 
-  if (progressPercent >= CLAIM_SHATTER_START_PERCENT) {
+  if (progressPercent >= tl.claimShatterStart) {
     claimPhase = clamp(
-      (progressPercent - CLAIM_SHATTER_START_PERCENT)
-        / (CLAIM_SHATTER_END_PERCENT - CLAIM_SHATTER_START_PERCENT),
+      (progressPercent - tl.claimShatterStart)
+        / (tl.claimShatterEnd - tl.claimShatterStart),
       0,
       1
     );
@@ -146,18 +179,18 @@ function getScrollPhases(progress) {
     exitPhase = 1;
   }
 
-  if (progressPercent >= NAV_START_PERCENT) {
+  if (progressPercent >= tl.navStart) {
     navPhase = clamp(
-      (progressPercent - NAV_START_PERCENT) / (NAV_CENTER_PERCENT - NAV_START_PERCENT),
+      (progressPercent - tl.navStart) / (tl.navCenter - tl.navStart),
       0,
       1
     );
   }
 
-  if (progressPercent >= NAV_CENTER_PERCENT) {
+  if (progressPercent >= tl.navCenter) {
     navPhase = 1;
     footerPhase = clamp(
-      (progressPercent - FOOTER_START_PERCENT) / (FOOTER_END_PERCENT - FOOTER_START_PERCENT),
+      (progressPercent - tl.footerStart) / (tl.footerEnd - tl.footerStart),
       0,
       1
     );
@@ -237,7 +270,7 @@ function updateNavReveal(navPhase) {
 
   const isDesktop = window.matchMedia('(min-width: 768px)').matches;
   const targets = getNavRowTargets(navRevealLinks.length);
-  const eased = easeOutCubic(navPhase);
+  const eased = isDesktop ? easeOutCubic(navPhase) : easeOutQuint(navPhase);
   const active = navPhase > 0.03;
 
   document.body.classList.toggle('home-nav-reveal-active', active);
@@ -254,20 +287,23 @@ function updateNavReveal(navPhase) {
       const rect = source.getBoundingClientRect();
       startX = rect.left + rect.width / 2;
       startY = rect.top + rect.height / 2;
-    } else if (!isDesktop) {
-      startY = target.y + 32;
     }
 
+    // Mobile: fade/scale in loco (niente salita dal basso)
     const x = startX + (target.x - startX) * eased;
     const y = startY + (target.y - startY) * eased;
-    const scale = 0.94 + eased * 0.12;
-    const opacity = Math.min(1, eased * 1.1);
+    const scale = isDesktop
+      ? (0.94 + eased * 0.12)
+      : (0.9 + eased * 0.1);
+    const opacity = isDesktop
+      ? Math.min(1, eased * 1.1)
+      : Math.min(1, eased * 1.05);
 
     link.style.left = `${x}px`;
     link.style.top = `${y}px`;
     link.style.transform = `translate(-50%, -50%) scale(${scale})`;
     link.style.opacity = String(opacity);
-    link.classList.toggle('is-active', navPhase > 0.4);
+    link.classList.toggle('is-active', navPhase > 0.12);
   });
 }
 
@@ -275,10 +311,11 @@ function updateHomeFooter(footerPhase) {
   if (!homeFooter) return;
 
   const eased = easeOutCubic(footerPhase);
+  const rise = isHomeMobile() ? 0.85 : 1.25;
 
   homeFooter.style.opacity = String(eased);
   homeFooter.style.pointerEvents = footerPhase > 0.35 ? 'auto' : 'none';
-  homeFooter.style.transform = `translateY(${(1 - eased) * 1.25}rem)`;
+  homeFooter.style.transform = `translateY(${(1 - eased) * rise}rem)`;
   homeFooter.setAttribute('aria-hidden', String(footerPhase < 0.2));
 }
 
@@ -476,7 +513,7 @@ function triggerClaimShatter(fromClick = false) {
     homeClaim.classList.add('is-shattered');
     homeClaim.style.opacity = '0';
     homeClaim.setAttribute('aria-hidden', 'true');
-    if (fromClick) {
+    if (fromClick || isHomeMobile()) {
       navAutoDrive = true;
       navAutoStart = performance.now();
     }
@@ -508,7 +545,8 @@ function triggerClaimShatter(fromClick = false) {
     homeClaim.classList.add('is-shattered');
     homeClaim.style.opacity = '0';
     homeClaim.setAttribute('aria-hidden', 'true');
-    if (fromClick) {
+    // Mobile: dopo lo shatter guida la nav nel tempo, così uno swipe non la salta
+    if (fromClick || isHomeMobile()) {
       navAutoDrive = true;
       navAutoStart = performance.now();
     }
@@ -567,6 +605,7 @@ function updateHomeClaim(progress, scrollingBack) {
   if (!homeClaim || claimShatterAnimating) return;
 
   const progressPercent = Math.round(progress * 100);
+  const tl = getHomeTimeline();
 
   if (claimShattered) {
     homeClaim.classList.remove('is-visible', 'is-shattering', 'is-reassembling');
@@ -577,7 +616,7 @@ function updateHomeClaim(progress, scrollingBack) {
     return;
   }
 
-  if (progressPercent < CLAIM_SHOW_PERCENT) {
+  if (progressPercent < tl.claimShow) {
     if (!homeClaimTrigger?.dataset.fragmentsReady) {
       claimEnterPlayed = false;
     }
@@ -589,7 +628,7 @@ function updateHomeClaim(progress, scrollingBack) {
   }
 
   const opacity = easeOutCubic(
-    clamp((progressPercent - CLAIM_SHOW_PERCENT) / CLAIM_FADE_IN_PERCENT, 0, 1)
+    clamp((progressPercent - tl.claimShow) / tl.claimFadeIn, 0, 1)
   );
 
   if (!claimEnterPlayed) {
@@ -604,12 +643,12 @@ function updateHomeClaim(progress, scrollingBack) {
   homeClaim.style.opacity = String(opacity);
   homeClaim.setAttribute('aria-hidden', String(opacity < 0.08));
 
-  const crossedShatterStart = progressPercent >= CLAIM_SHATTER_START_PERCENT
-    && lastProgressPercent < CLAIM_SHATTER_START_PERCENT;
+  const crossedShatterStart = progressPercent >= tl.claimShatterStart
+    && lastProgressPercent < tl.claimShatterStart;
 
   if (
     !scrollingBack
-    && progressPercent >= CLAIM_SHATTER_START_PERCENT
+    && progressPercent >= tl.claimShatterStart
     && opacity >= 1
     && (crossedShatterStart || !homeClaimTrigger?.dataset.fragmentsReady)
   ) {
@@ -622,7 +661,8 @@ function updateHomeClaim(progress, scrollingBack) {
 function getDrivenNavPhase(navPhase) {
   if (!navAutoDrive) return navPhase;
 
-  const autoPhase = easeOutCubic(clamp((performance.now() - navAutoStart) / 1200, 0, 1));
+  const duration = getHomeTimeline().navAutoMs;
+  const autoPhase = easeOutQuint(clamp((performance.now() - navAutoStart) / duration, 0, 1));
   if (autoPhase >= 1) navAutoDrive = false;
   return Math.max(navPhase, autoPhase);
 }
@@ -663,29 +703,36 @@ function updateHomeExperience() {
   const scrollingBack = progress < lastHeroProgress - 0.0001;
   lastHeroProgress = progress;
   const progressPercent = Math.round(progress * 100);
+  const tl = getHomeTimeline();
   let phases = getScrollPhases(progress);
 
   if (
     claimShattered
     && !claimShatterAnimating
     && scrollingBack
-    && progressPercent < CLAIM_SHATTER_END_PERCENT
+    && progressPercent < tl.claimShatterEnd
   ) {
     triggerClaimReassemble();
     phases = getScrollPhases(progress);
   }
 
-  const { tunnelPhase, exitPhase, claimPhase, navPhase, footerPhase, pos } = phases;
+  let { tunnelPhase, exitPhase, claimPhase, navPhase, footerPhase, pos } = phases;
+
+  // Durante lo shatter (soprattutto mobile) non far partire la nav in mezzo all’animazione
+  if (claimShatterAnimating) {
+    navPhase = 0;
+    footerPhase = 0;
+  }
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scrollOffset = tunnelPhase * Z_STEP * cardCount + exitPhase * Z_STEP * 1.35;
   let cardVisibility = 1;
 
-  if (navPhase > 0 || progressPercent >= CARD_HIDE_PERCENT) {
+  if (navPhase > 0 || progressPercent >= tl.cardHide) {
     cardVisibility = 0;
   } else if (exitPhase > 0) {
     cardVisibility = 1 - easeOutCubic(
-      clamp((progressPercent - (CARD_HIDE_PERCENT - 2)) / 2, 0, 1)
+      clamp((progressPercent - (tl.cardHide - 2)) / 2, 0, 1)
     );
   }
   const settleEased = getSettlePhase(pos, cardCount);
@@ -847,6 +894,10 @@ function initHomePage() {
   updateHomeExperience();
   window.addEventListener('scroll', updateHomeExperience, { passive: true, signal });
   window.addEventListener('resize', () => {
+    setHeroHeight();
+    updateHomeExperience();
+  }, { signal });
+  window.visualViewport?.addEventListener('resize', () => {
     setHeroHeight();
     updateHomeExperience();
   }, { signal });

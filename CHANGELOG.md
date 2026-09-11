@@ -368,7 +368,10 @@ Le voci più recenti sono in fondo al file.
 ### [4.20] — Ambiti al posto di Servizi
 - About: titolo **I nostri Ambiti** (EN: Our Fields); lista 6 voci — Brand Identity, Comunicazione visiva, Web Development, UX UI Design, Motion Design, Graphic Design
 - Filtri portfolio: IT **I Nostri Ambiti** (EN resta **Our Fields**); label filtro IT Ambito; `Web Design` → `Web Development`
-- Preview hover: foto da `img/Photos Fields/` (Brand Identity, Webdesign, Ux-Ui); restano placeholder per Visual / Motion / Graphic
+- Preview hover: foto da `img/Photos Fields/` (Brand Identity, Webdesign, Ux-Ui, motion design); restano placeholder per Visual / Graphic
 - History: placeholder **Coming soon..** centrato sullo sfondo cover
 - About: sezione **FAQ** (stesse voci di Contatti) subito prima del globo, palette chiara
 - About: rotaia unica `--about-max: 72rem` per Ambiti / Why / Numeri / FAQ / Globe (niente più scaletta di larghezze)
+- About: flusso **Come Lavoriamo** in 6 step (Briefing → Proposte → Timeline → Sviluppo → Anteprima → Consegna), senza dettaglio economico
+- About: processo interattivo (click per lo step successivo; scroll libero); preview Ambiti complete (Brand, Visual, Web, UX UI, Motion, Graphic)
+- About: processo con freccia pull-to-reveal (drag ↓ o tap; niente bottone/hint)

@@ -88,8 +88,7 @@
          7. CTA (ultimo blocco prima del footer) -->
 
     <section class="about-block" aria-labelledby="about-vision-title">
-      <h2 id="about-vision-title" class="about-block__title" data-i18n="about.vision.title">La Mia Visione</h2>
-      <p class="about-block__lead" data-i18n="about.vision.lead">Prendo il caos e lo trasformo in una visione chiara e d’impatto — con la natura al primo posto.</p>
+      <h2 id="about-vision-title" class="about-block__title" data-i18n="about.vision.title">La Nostra Visione</h2>
     </section>
 
     <section class="about-services" aria-labelledby="about-services-title" data-about-services>
@@ -140,18 +139,85 @@
       <div class="about-services__preview" data-about-services-preview aria-hidden="true">
         <div class="about-services__preview-track" data-about-services-track>
           <img class="about-services__preview-img" src="img/Photos%20Fields/Brand%20Identity.jpeg" alt="" width="640" height="800" decoding="async">
-          <img class="about-services__preview-img" src="img/colocanyon.jpeg" alt="" width="640" height="800" decoding="async" data-about-services-placeholder="visual">
+          <img class="about-services__preview-img" src="img/Photos%20Fields/visual%20communication.jpg" alt="" width="640" height="800" decoding="async">
           <img class="about-services__preview-img" src="img/Photos%20Fields/Webdesign.jpeg" alt="" width="640" height="800" decoding="async">
           <img class="about-services__preview-img" src="img/Photos%20Fields/Ux-Ui.jpeg" alt="" width="640" height="800" decoding="async">
-          <img class="about-services__preview-img" src="img/colosnow.jpeg" alt="" width="640" height="800" decoding="async" data-about-services-placeholder="motion">
-          <img class="about-services__preview-img" src="img/colojunk.jpeg" alt="" width="640" height="800" decoding="async" data-about-services-placeholder="graphic">
+          <img class="about-services__preview-img" src="img/Photos%20Fields/motion%20design.jpeg" alt="" width="640" height="800" decoding="async">
+          <img class="about-services__preview-img" src="img/Photos%20Fields/graphic%20design.jpg" alt="" width="640" height="800" decoding="async">
         </div>
       </div>
     </section>
 
-    <section class="about-block" aria-labelledby="about-process-title">
-      <p class="about-block__kicker" data-i18n="about.process.kicker">Il mio processo</p>
-      <h2 id="about-process-title" class="about-block__title" data-i18n="about.process.title">Come lavoro</h2>
+    <section class="about-process" aria-labelledby="about-process-title" data-about-process>
+      <header class="about-process__header">
+        <p class="about-process__kicker" data-i18n="about.process.kicker">Il nostro processo</p>
+        <h2 id="about-process-title" class="about-process__title" data-i18n="about.process.title">Come Lavoriamo</h2>
+        <p class="about-process__lead" data-i18n="about.process.lead">Dal primo confronto alla consegna: un percorso chiaro, con il cliente al centro di ogni scelta.</p>
+      </header>
+
+      <ol class="about-process__list">
+        <li class="about-process__item is-visible" data-about-process-step>
+          <span class="about-process__num" aria-hidden="true">01</span>
+          <div class="about-process__body">
+            <h3 class="about-process__name" data-i18n="about.process.1.name">Briefing</h3>
+            <p class="about-process__text" data-i18n="about.process.1.text">Individuiamo il problema, acquisiamo identità e valori del cliente e definiamo il perimetro del progetto.</p>
+          </div>
+        </li>
+        <li class="about-process__item" data-about-process-step hidden>
+          <span class="about-process__num" aria-hidden="true">02</span>
+          <div class="about-process__body">
+            <h3 class="about-process__name" data-i18n="about.process.2.name">Proposte</h3>
+            <p class="about-process__text" data-i18n="about.process.2.text">Presentiamo direzioni di risoluzione chiare, così si sceglie insieme la strada più solida.</p>
+          </div>
+        </li>
+        <li class="about-process__item" data-about-process-step hidden>
+          <span class="about-process__num" aria-hidden="true">03</span>
+          <div class="about-process__body">
+            <h3 class="about-process__name" data-i18n="about.process.3.name">Timeline</h3>
+            <p class="about-process__text" data-i18n="about.process.3.text">Concordiamo tempistiche e deadline: un calendario realistico, condiviso e rispettato.</p>
+          </div>
+        </li>
+        <li class="about-process__item" data-about-process-step hidden>
+          <span class="about-process__num" aria-hidden="true">04</span>
+          <div class="about-process__body">
+            <h3 class="about-process__name" data-i18n="about.process.4.name">Sviluppo</h3>
+            <p class="about-process__text" data-i18n="about.process.4.text">Sviluppiamo la proposta concordata con revisioni costanti a ogni passaggio di stile.</p>
+          </div>
+        </li>
+        <li class="about-process__item" data-about-process-step hidden>
+          <span class="about-process__num" aria-hidden="true">05</span>
+          <div class="about-process__body">
+            <h3 class="about-process__name" data-i18n="about.process.5.name">Anteprima</h3>
+            <p class="about-process__text" data-i18n="about.process.5.text">Consegnamo un’anteprima completa, con spazio per modifiche minime e dettagli finali.</p>
+          </div>
+        </li>
+        <li class="about-process__item" data-about-process-step hidden>
+          <span class="about-process__num" aria-hidden="true">06</span>
+          <div class="about-process__body">
+            <h3 class="about-process__name" data-i18n="about.process.6.name">Consegna</h3>
+            <p class="about-process__text" data-i18n="about.process.6.text">Chiusura del progetto e handoff chiaro — file, linee guida e tutto ciò che serve per andare avanti.</p>
+          </div>
+        </li>
+      </ol>
+
+      <button
+        type="button"
+        class="about-process__pull"
+        data-about-process-pull
+        data-i18n-aria-label="about.process.pull"
+        aria-label="Trascina o tocca per lo step successivo"
+      >
+        <span class="about-process__pull-stem" aria-hidden="true"></span>
+        <img
+          class="about-process__pull-icon"
+          src="img/icons/backarrow.svg"
+          alt=""
+          width="48"
+          height="45"
+          decoding="async"
+          aria-hidden="true"
+        >
+      </button>
     </section>
 
     <section class="about-why" aria-labelledby="about-why-title">
@@ -310,7 +376,7 @@
         >
       </div>
       <div class="about-numbers__content">
-        <h2 id="about-numbers-title" class="about-numbers__title" data-i18n="about.numbers.title">In numeri</h2>
+        <h2 id="about-numbers-title" class="about-numbers__title" data-i18n="about.numbers.title">I Nostri Traguardi</h2>
         <p class="about-numbers__lead" data-i18n-html="about.numbers.lead">Esperienza sul campo, clienti reali, risultati chiari.<br>Craft e chiarezza — dal primo brief all’ultimo dettaglio.</p>
         <div class="about-numbers__grid">
           <div class="about-numbers__stat">

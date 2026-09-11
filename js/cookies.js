@@ -260,8 +260,10 @@
   function maybeShowAfterIntro(banner, signal) {
     const intro = document.getElementById('home-intro');
     const introRunning = document.body.classList.contains('home-intro-active');
+    const gateReady = intro?.classList.contains('is-gate');
 
-    if (!introRunning || intro?.classList.contains('is-gate')) {
+    // Stessa procedura desktop/mobile: dopo la sigla (gate), oppure subito se non c’è intro
+    if (!introRunning || gateReady) {
       showChip(banner);
       return;
     }

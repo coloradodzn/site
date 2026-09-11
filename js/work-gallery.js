@@ -20,7 +20,16 @@
   if (activeIndex < 0) activeIndex = 0;
 
   function scrollThumbIntoView(thumb) {
-    thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    const filmstrip = thumb.closest('.work-gallery__filmstrip');
+    if (!filmstrip) return;
+
+    // Scroll only inside the filmstrip — never the page (avoids cutting the title).
+    const target =
+      thumb.offsetLeft - (filmstrip.clientWidth - thumb.offsetWidth) / 2;
+    filmstrip.scrollTo({
+      left: Math.max(0, target),
+      behavior: 'smooth',
+    });
   }
 
   function updateButtons() {
@@ -105,7 +114,7 @@
     }
   }
 
-  function setActive(index, { focus = false } = {}) {
+  function setActive(index, { focus = false, scroll = true } = {}) {
     const safeIndex = ((index % thumbs.length) + thumbs.length) % thumbs.length;
     activeIndex = safeIndex;
     const thumb = thumbs[safeIndex];
@@ -133,9 +142,9 @@
 
     if (currentEl) currentEl.textContent = String(safeIndex + 1);
 
-    scrollThumbIntoView(thumb);
+    if (scroll) scrollThumbIntoView(thumb);
     updateButtons();
-    if (focus) thumb.focus();
+    if (focus) thumb.focus({ preventScroll: true });
   }
 
   thumbs.forEach((thumb, index) => {
@@ -160,5 +169,5 @@
     if (event.key === 'End') setActive(thumbs.length - 1, { focus: true });
   });
 
-  setActive(activeIndex);
+  setActive(activeIndex, { scroll: false });
 })();
