@@ -363,6 +363,140 @@ function initWorkProjectsNav() {
   document.body.appendChild(script);
 }
 
+/** FAQ accordion: altezza + fade fluidi (details nativo è istantaneo). */
+function initFaqAccordion(signal) {
+  const items = document.querySelectorAll('.faq__item');
+  if (!items.length) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DURATION = 450;
+  const EASING = 'cubic-bezier(0.4, 0.2, 0.2, 1)';
+
+  function clearAnim(answer) {
+    answer.style.transition = '';
+    answer.removeAttribute('data-faq-animating');
+  }
+
+  function setClosedStyles(answer) {
+    answer.style.height = '0px';
+    answer.style.opacity = '0';
+    answer.style.overflow = 'hidden';
+  }
+
+  function setOpenStyles(answer) {
+    answer.style.height = 'auto';
+    answer.style.opacity = '1';
+    answer.style.overflow = 'hidden';
+  }
+
+  function finishOpen(item, answer) {
+    if (!item.open) return;
+    answer.style.height = 'auto';
+    clearAnim(answer);
+  }
+
+  function finishClose(item, answer) {
+    item.open = false;
+    setClosedStyles(answer);
+    clearAnim(answer);
+  }
+
+  function openItem(item, answer) {
+    if (reduceMotion) {
+      item.open = true;
+      setOpenStyles(answer);
+      return;
+    }
+
+    item.open = true;
+    answer.dataset.faqAnimating = '1';
+    answer.style.overflow = 'hidden';
+    answer.style.transition = 'none';
+    answer.style.height = '0px';
+    answer.style.opacity = '0';
+    // Forza layout prima della misura, altrimenti scrollHeight può essere 0
+    void answer.offsetHeight;
+
+    const end = answer.scrollHeight;
+    void answer.offsetHeight;
+
+    requestAnimationFrame(() => {
+      answer.style.transition = `height ${DURATION}ms ${EASING}, opacity ${Math.round(DURATION * 0.75)}ms ${EASING}`;
+      answer.style.height = `${end}px`;
+      answer.style.opacity = '1';
+    });
+
+    const onEnd = (event) => {
+      if (event.target !== answer || event.propertyName !== 'height') return;
+      answer.removeEventListener('transitionend', onEnd);
+      window.clearTimeout(fallback);
+      finishOpen(item, answer);
+    };
+    const fallback = window.setTimeout(() => {
+      answer.removeEventListener('transitionend', onEnd);
+      finishOpen(item, answer);
+    }, DURATION + 80);
+    answer.addEventListener('transitionend', onEnd);
+  }
+
+  function closeItem(item, answer) {
+    if (reduceMotion) {
+      item.open = false;
+      setClosedStyles(answer);
+      return;
+    }
+
+    answer.dataset.faqAnimating = '1';
+    answer.style.overflow = 'hidden';
+    answer.style.transition = 'none';
+    answer.style.height = `${answer.scrollHeight}px`;
+    answer.style.opacity = '1';
+    // Reflow obbligatorio: senza, height auto→0 collassa senza transitionend
+    void answer.offsetHeight;
+
+    requestAnimationFrame(() => {
+      answer.style.transition = `height ${DURATION}ms ${EASING}, opacity ${Math.round(DURATION * 0.65)}ms ${EASING}`;
+      answer.style.height = '0px';
+      answer.style.opacity = '0';
+    });
+
+    const onEnd = (event) => {
+      if (event.target !== answer || event.propertyName !== 'height') return;
+      answer.removeEventListener('transitionend', onEnd);
+      window.clearTimeout(fallback);
+      finishClose(item, answer);
+    };
+    const fallback = window.setTimeout(() => {
+      answer.removeEventListener('transitionend', onEnd);
+      finishClose(item, answer);
+    }, DURATION + 80);
+    answer.addEventListener('transitionend', onEnd);
+  }
+
+  items.forEach((item) => {
+    const summary = item.querySelector('.faq__question');
+    const answer = item.querySelector('.faq__answer');
+    if (!summary || !answer) return;
+
+    if (item.open) {
+      setOpenStyles(answer);
+    } else {
+      setClosedStyles(answer);
+    }
+
+    summary.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (answer.dataset.faqAnimating === '1') return;
+
+      if (item.open) {
+        closeItem(item, answer);
+      } else {
+        openItem(item, answer);
+      }
+    }, { signal });
+  });
+}
+
 function coloradoInitPage() {
   pageAbort.abort();
   pageAbort = new AbortController();
@@ -438,6 +572,7 @@ function coloradoInitPage() {
   initPortfolioDropdown(signal);
   initBackButton(signal);
   initContactForm(signal);
+  initFaqAccordion(signal);
   loadAmbientAudio();
   loadCookieBanner();
   initWorkGalleryPage();

@@ -375,3 +375,8 @@ Le voci più recenti sono in fondo al file.
 - About: flusso **Come Lavoriamo** in 6 step (Briefing → Proposte → Timeline → Sviluppo → Anteprima → Consegna), senza dettaglio economico
 - About: processo interattivo (click per lo step successivo; scroll libero); preview Ambiti complete (Brand, Visual, Web, UX UI, Motion, Graphic)
 - About: processo con freccia pull-to-reveal (drag ↓ o tap; niente bottone/hint)
+
+### [4.21] — FAQ fluide (About + Contatti)
+- Accordion FAQ con apertura/chiusura animata (altezza + fade, ~450ms, curva About)
+- Icona +/− più morbida; hover leggero sulle domande; rispetto di `prefers-reduced-motion`
+- Logica in `initFaqAccordion` (`js/main.js`); stili aggiornati in `css/style.css`

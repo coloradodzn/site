@@ -6569,6 +6569,11 @@ body.page-history > .site-footer {
   font-weight: 500;
   line-height: 1.4;
   color: var(--color-navbar-overlay);
+  transition: opacity 0.28s ease;
+}
+
+.faq__question:hover {
+  opacity: 0.78;
 }
 
 .faq__question::-webkit-details-marker {
@@ -6589,7 +6594,7 @@ body.page-history > .site-footer {
   top: 50%;
   left: 50%;
   background: var(--color-navbar-overlay);
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1), opacity 0.35s ease;
 }
 
 .faq__toggle::before {
@@ -6606,20 +6611,32 @@ body.page-history > .site-footer {
 
 .faq__item[open] .faq__toggle::after {
   opacity: 0;
+  transform: translate(-50%, -50%) scaleY(0);
 }
 
 .faq__answer {
-  padding: 0 1.75rem 1rem 0;
+  overflow: hidden;
+  padding: 0 1.75rem 0 0;
+  /* altezza/opacity gestite da initFaqAccordion in main.js */
 }
 
 .faq__answer p {
   margin: 0;
+  padding-bottom: 1rem;
   font-family: var(--font-body);
   /* Allineato alle domande: prima era --font-size-copy (1.25rem) e sembrava un altro livello */
   font-size: clamp(0.88rem, 2.1vw, 0.98rem);
   line-height: 1.4;
   color: var(--color-navbar-overlay);
   opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__question,
+  .faq__toggle::before,
+  .faq__toggle::after {
+    transition: none;
+  }
 }
 
 @media (max-width: 767px) {
@@ -6638,10 +6655,11 @@ body.page-history > .site-footer {
   }
 
   .faq__answer {
-    padding: 0 1.65rem 0.85rem 0.1rem;
+    padding: 0 1.65rem 0 0.1rem;
   }
 
   .faq__answer p {
+    padding-bottom: 0.85rem;
     font-size: 0.88rem;
     line-height: 1.4;
   }
