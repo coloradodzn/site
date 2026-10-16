@@ -768,6 +768,56 @@ body.home-intro-active .ambient-audio {
 }
 
 @media (max-width: 767px) {
+  /*
+   * Mobile presentation:
+   * 1) categoria + titolo + concept lead
+   * 2) gallery (stage + 3 thumbs + frecce + counter)
+   * 3) contesto / metodo
+   */
+  .work--presentation .work-hero {
+    display: contents;
+  }
+
+  .work--presentation .work-hero__eyebrow {
+    order: 1;
+    width: 100%;
+    margin-bottom: 0.55rem;
+  }
+
+  .work--presentation .work-hero__title {
+    order: 1;
+    width: 100%;
+    margin-bottom: 0.65rem;
+  }
+
+  /* Concept lead sotto al titolo, prima della gallery */
+  .work--presentation .work-hero__lead {
+    order: 1;
+    width: 100%;
+    margin: 0 auto clamp(1rem, 3vw, 1.25rem);
+    text-align: center;
+  }
+
+  .work--presentation .work-stage {
+    order: 2;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .work--presentation .work-content--below {
+    order: 3;
+    width: 100%;
+    margin-top: clamp(1.35rem, 4.5vw, 1.85rem);
+    text-align: left;
+  }
+
+  /* Nav “Altri progetti” (iniettata in fondo a main): non deve risalire per order:0 */
+  .work--presentation .work-download-row,
+  .work--presentation .work-projects-nav {
+    order: 10;
+    width: 100%;
+  }
+
   .work--presentation .work-gallery--embedded .work-gallery__set--portrait {
     justify-content: flex-start;
     overflow-x: auto;
@@ -793,8 +843,61 @@ body.home-intro-active .ambient-audio {
     max-height: 100%;
   }
 
+  /* Stage alto al contenuto + aria equilibrata sopra/sotto */
   .work--presentation .work-gallery--embedded .work-gallery__stage {
-    --work-gallery-stage-h: min(58vh, 32rem);
+    --work-gallery-stage-h: auto;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    align-items: center;
+    padding-block: 0.35rem;
+  }
+
+  .work--presentation .work-gallery--embedded .work-gallery__image {
+    width: 100%;
+    max-width: 100%;
+    max-height: min(40vh, 20rem);
+    height: auto;
+  }
+
+  .work--presentation .work-gallery--embedded .work-gallery__video,
+  .work--presentation .work-gallery--embedded .work-gallery__set {
+    max-height: min(40vh, 20rem);
+  }
+
+  .work--presentation .work-gallery--embedded .work-gallery__nav {
+    gap: 0.65rem;
+    margin-top: 1rem;
+  }
+
+  /* Solo 3 miniature visibili; il resto si scorre */
+  .work--presentation .work-gallery--embedded .work-gallery__filmstrip-wrap {
+    --work-thumb-w: clamp(4.6rem, 22vw, 5.4rem);
+    --work-thumb-gap: 0.45rem;
+    width: calc(var(--work-thumb-w) * 3 + var(--work-thumb-gap) * 2);
+    max-width: calc(100% - 6.5rem);
+  }
+
+  .work--presentation .work-gallery--embedded .work-gallery__filmstrip {
+    gap: var(--work-thumb-gap);
+  }
+
+  .work--presentation .work-gallery--embedded .work-gallery__thumb {
+    flex: 0 0 var(--work-thumb-w);
+    flex-basis: var(--work-thumb-w);
+  }
+
+  /* Frecce più grandi / tap-friendly, senza cerchio */
+  .work--presentation .work-gallery--embedded .work-gallery__btn {
+    width: 3.25rem;
+    height: 3.25rem;
+    min-width: 3.25rem;
+    font-size: 1.85rem;
+  }
+
+  .work--presentation .work-gallery--embedded .work-gallery__status {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
   }
 }
 
@@ -863,32 +966,45 @@ body.home-intro-active .ambient-audio {
   color: var(--color-accent);
 }
 
+/* Frecce gallery: come work-back — icona tipografica, niente cerchio/pill */
 .work-gallery__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
-  border-radius: 999px;
-  background: transparent;
+  border: none;
+  border-radius: 0;
+  background: none;
   color: var(--color-primary);
-  font-size: 1.1rem;
+  font-family: var(--font-title);
+  font-size: 1.65rem;
+  font-weight: 500;
   line-height: 1;
   cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
 }
 
-.work-gallery__btn:hover:not(:disabled) {
+.work-gallery__btn--prev:hover:not(:disabled) {
   color: var(--color-accent);
-  border-color: var(--color-primary);
-  background: color-mix(in srgb, var(--color-primary) 6%, transparent);
+  transform: translateX(-2px);
+}
+
+.work-gallery__btn--next:hover:not(:disabled) {
+  color: var(--color-accent);
+  transform: translateX(2px);
+}
+
+.work-gallery__btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
 }
 
 .work-gallery__btn:disabled {
   opacity: 0.35;
   cursor: not-allowed;
+  transform: none;
 }
 
 .work-content .work-hero__lead {
@@ -986,33 +1102,34 @@ body.home-intro-active .ambient-audio {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
-  border-radius: 999px;
-  background: transparent;
+  border: none;
+  border-radius: 0;
+  background: none;
   color: var(--color-primary);
-  font-size: 1.1rem;
+  font-family: var(--font-title);
+  font-size: 1.65rem;
+  font-weight: 500;
   line-height: 1;
   cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
 }
 
 .work-pdf__btn:hover:not(:disabled) {
   color: var(--color-accent);
-  border-color: var(--color-primary);
-  background: color-mix(in srgb, var(--color-primary) 6%, transparent);
 }
 
 .work-pdf__btn:disabled {
   opacity: 0.35;
   cursor: not-allowed;
+  transform: none;
 }
 
 .work-pdf__btn:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
 }
 
 .work-pdf__status {
@@ -1113,7 +1230,8 @@ body.home-intro-active .ambient-audio {
     grid-template-columns: 1fr;
   }
 
-  .work-stage {
+  /* Solo layout legacy a 2 colonne: gallery prima del testo laterale */
+  .work-layout .work-stage {
     order: -1;
   }
 }
@@ -1473,8 +1591,28 @@ body.work-gallery-page .site-footer {
     padding-bottom: max(clamp(1rem, 2.8vh, 1.5rem), env(safe-area-inset-bottom, 0px));
   }
 
+  /* Mobile: freccia nel flusso (non fixed/absolute) — niente overlap sul contenuto */
   .work-back {
-    top: clamp(4.5rem, 11vh, 5rem);
+    position: static;
+    top: auto;
+    left: auto;
+    z-index: auto;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 0 0 0.85rem;
+    align-self: flex-start;
+  }
+
+  .work--presentation > .work-back,
+  .work > .work-back {
+    order: 0;
+    align-self: flex-start;
+  }
+
+  /* Categoria portfolio: main senza padding laterale (è sul catalog) → allinea al titolo */
+  .portfolio-page--category > .work-back {
+    margin-inline: clamp(1.25rem, 5vw, 3rem);
+    margin-bottom: 0.85rem;
   }
 }
 

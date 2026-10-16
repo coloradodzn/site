@@ -157,7 +157,13 @@ function initBackButton(signal) {
     }
   }, { signal });
 
-  document.body.insertBefore(back, document.body.firstChild);
+  // In main: su mobile sta nel flusso (niente overlap); su desktop resta fixed via CSS
+  const main = document.querySelector('main');
+  if (main) {
+    main.insertBefore(back, main.firstChild);
+  } else {
+    document.body.insertBefore(back, document.body.firstChild);
+  }
 }
 
 const DESKTOP_NAV = 768;
