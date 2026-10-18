@@ -4,7 +4,8 @@
   --color-primary:        #FF4D0A;   /* colore principale del brand */
   --color-accent:         #000000;   /* colore secondario / CTA */
   --color-bg:             #ffffff;   /* sfondo generale */
-  --color-text:           #FF4D0A;   /* testo principale */
+  --color-text:           #1a1a1a;   /* body copy — contrasto WCAG AA su bianco */
+  --color-link:           #C43A00;   /* link / nav su chiaro — AA ≥ 4.5:1 */
   --color-surface:        #FF4D0A;   /* sfondo card o sezioni alternate */
   --color-navbar-overlay: #ffffff;   /* elementi navbar sopra la hero (resta bianco in entrambi i temi) */
   --color-ui-edge:        color-mix(in srgb, var(--color-primary) 45%, transparent); /* bordo chip/dropdown */
@@ -58,7 +59,8 @@
     --color-accent:   #ffffff;   /* il secondario diventa chiaro per contrasto */
     --color-bg:       #0a0a0a;   /* sfondo generale scuro (neutro) */
     --color-bg-elevated: #141414; /* superfici rialzate (campi, chip) */
-    --color-text:     #FF4D0A;   /* testo principale */
+    --color-text:     #f0ebe3;   /* body copy chiaro su sfondo scuro */
+    --color-link:     #FF4D0A;   /* link brand — AA su #0a0a0a */
     --color-surface:  #FF4D0A;   /* sfondo card o sezioni alternate */
     --color-contact-panel:        var(--color-bg);
     --color-contact-sand:         var(--color-bg-elevated);
@@ -78,7 +80,8 @@
   --color-accent:   #ffffff;
   --color-bg:       #0a0a0a;
   --color-bg-elevated: #141414;
-  --color-text:     #FF4D0A;
+  --color-text:     #f0ebe3;
+  --color-link:     #FF4D0A;
   --color-surface:  #FF4D0A;
   --color-contact-panel:        var(--color-bg);
   --color-contact-sand:         var(--color-bg-elevated);
@@ -116,6 +119,35 @@ body:has(> .site-footer) > .site-footer {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-title);
+  color: var(--color-primary);
+}
+
+a {
+  color: var(--color-link);
+}
+
+/* Skip link — WCAG 2.4.1 Bypass Blocks */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 0.65rem 1rem;
+  background: var(--color-bg);
+  color: var(--color-link);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  transform: translateY(-120%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 /* ───────────── NAVBAR ───────────── */
@@ -358,11 +390,6 @@ body.is-work-detail {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-}
-
-body.home-intro-active .ambient-audio {
-  opacity: 0;
-  pointer-events: none;
 }
 
 @media (max-width: 767px) {
@@ -1865,7 +1892,7 @@ body.work-gallery-page .site-footer {
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.2;
-  color: var(--color-primary);
+  color: var(--color-link);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -2014,7 +2041,7 @@ body.work-gallery-page .site-footer {
     font-weight: 600;
     font-size: 0.875rem;
     letter-spacing: 0.01em;
-    color: var(--color-primary);
+    color: var(--color-link);
     text-decoration: none;
     white-space: nowrap;
     transition: background-color 0.15s ease, color 0.15s ease;
@@ -2663,7 +2690,7 @@ body.work-gallery-page .site-footer {
   pointer-events: none;
 }
 
-body.home:not(.home-intro-active) .home-hero__scroll {
+body.home .home-hero__scroll {
   position: fixed;
   right: calc(clamp(1rem, 3vw, 1.5rem) + 5.5rem + 2rem);
   left: auto;
@@ -2672,321 +2699,10 @@ body.home:not(.home-intro-active) .home-hero__scroll {
   z-index: 310;
 }
 
-body.home-intro-active .home-hero__scroll {
-  opacity: 0;
-}
-
 /* Temporaneo: scroll nascosto ma presente nel DOM */
 .home-hero__scroll.is-temporarily-hidden {
   visibility: hidden;
   opacity: 0;
-}
-
-body.home-intro-active {
-  overflow: hidden;
-}
-
-body.home-intro-active .site-header,
-body.home-intro-active .home-hero,
-body.home-intro-active .site-footer {
-  filter: blur(3px);
-  transform: none;
-  transition: filter 0.7s ease, transform 0.7s ease;
-}
-
-/* Durante la sigla: sito nascosto dietro nero pieno (bande letterbox) */
-body.home-intro-sigla .site-header,
-body.home-intro-sigla .home-hero,
-body.home-intro-sigla .site-footer {
-  filter: none;
-  visibility: hidden;
-}
-
-/* Intro gate — homepage + sigla video */
-.home-intro {
-  position: fixed;
-  inset: 0;
-  z-index: 400;
-  display: none;
-  place-items: center;
-  pointer-events: none;
-  transition: opacity 0.65s ease, visibility 0.65s ease;
-  background: #000;
-}
-
-body.home-intro-active .home-intro {
-  display: grid;
-  pointer-events: auto;
-}
-
-.home-intro.is-hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  background: transparent;
-}
-
-.home-intro__scrim {
-  position: absolute;
-  inset: 0;
-  background: color-mix(in srgb, #000 58%, transparent);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  transition: background 0.8s ease, backdrop-filter 0.8s ease, opacity 0.8s ease;
-}
-
-/* Sigla: nero pieno → bande sopra/sotto sul video landscape */
-.home-intro.is-playing .home-intro__scrim {
-  background: #000;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-.home-intro.is-playing .home-intro__video-wrap {
-  background: #000;
-}
-
-.home-intro.is-playing .home-intro__video-wrap::before {
-  content: none;
-}
-
-/* Fine video: dissolvenza verso sito + nero semitrasparente */
-.home-intro.is-fading .home-intro__scrim,
-.home-intro.is-gate .home-intro__scrim {
-  background: color-mix(in srgb, #000 62%, transparent);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-}
-
-.home-intro.is-fading {
-  background: transparent;
-}
-
-.home-intro.is-gate {
-  background: transparent;
-}
-
-.home-intro__gate,
-.home-intro__video-wrap {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-}
-
-.home-intro__gate {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.85s ease, visibility 0.85s ease;
-}
-
-.home-intro.is-gate .home-intro__gate {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.home-intro.is-fading .home-intro__video-wrap,
-.home-intro.is-gate .home-intro__video-wrap {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.home-intro__video-wrap {
-  background: #000;
-  transition: opacity 0.85s ease, visibility 0.85s ease;
-}
-
-/* Video: desktop full-bleed cover (no side bars); mobile contain → bande sopra/sotto */
-.home-intro__video {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  background: #000;
-}
-
-@media (max-width: 767px) {
-  .home-intro__video {
-  object-fit: contain;
-  }
-}
-
-.home-intro__play {
-  position: relative;
-  z-index: 410;
-  display: none;
-  margin: 0 auto;
-  padding: 1rem 2.25rem;
-  border: 2px solid var(--color-bg);
-  border-radius: 0;
-  background: color-mix(in srgb, var(--color-bg) 12%, transparent);
-  font-family: var(--font-title);
-  font-size: clamp(0.72rem, 2.2vw, 0.85rem);
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-bg);
-  cursor: pointer;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-bg) 35%, transparent);
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-}
-
-.home-intro.is-arming .home-intro__play {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  animation: home-intro-enter 0.85s ease both;
-}
-
-.home-intro.is-arming {
-  display: grid;
-  place-items: center;
-  background: #000;
-}
-
-.home-intro.is-arming .home-intro__video-wrap,
-.home-intro.is-arming .home-intro__gate,
-.home-intro.is-arming .home-intro__skip {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.home-intro__play:hover {
-  background: var(--color-bg);
-  color: var(--color-primary);
-  transform: translateY(-1px);
-}
-
-.home-intro__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-  text-align: center;
-  padding: 2rem;
-}
-
-.home-intro__logo {
-  width: clamp(3.5rem, 10vw, 4.5rem);
-  height: auto;
-}
-
-.home-intro__brand {
-  margin: 0;
-  font-family: var(--font-title);
-  font-size: clamp(1.75rem, 5vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--color-primary);
-}
-
-.home-intro__start {
-  margin-top: 0.5rem;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  cursor: pointer;
-  line-height: 0;
-  /* Più grande: CTA evidente dopo la sigla */
-  max-width: min(46rem, 94vw);
-  width: 100%;
-  transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
-}
-
-.home-intro__start-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  pointer-events: none;
-  user-select: none;
-  /* PNG su nero: il nero sparisce sullo scrim scuro del gate */
-  mix-blend-mode: lighten;
-}
-
-.home-intro__start:hover {
-  transform: translateY(-3px) scale(1.045);
-  filter: brightness(1.08);
-}
-
-.home-intro__start:active {
-  transform: translateY(-1px) scale(1.02);
-}
-
-.home-intro__start:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 6px;
-}
-
-.home-intro__skip {
-  position: fixed;
-  right: max(1rem, env(safe-area-inset-right, 0px));
-  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
-  z-index: 410;
-  padding: 0.55rem 1.1rem;
-  border: 1px solid color-mix(in srgb, var(--color-bg) 55%, transparent);
-  border-radius: 0;
-  background: transparent;
-  font-family: var(--font-title);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-bg);
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-@media (min-width: 768px) {
-  .home-intro__skip {
-    right: max(1.5rem, env(safe-area-inset-right, 0px));
-    bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
-  }
-}
-
-.home-intro__skip:hover {
-  background: color-mix(in srgb, var(--color-bg) 14%, transparent);
-  border-color: var(--color-bg);
-}
-
-.home-intro:not(.is-playing) .home-intro__skip {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Cookie in sospeso: cartello già visibile, non cliccabile finché non scegli */
-.home-intro.is-gate.is-locked .home-intro__start {
-  pointer-events: none;
-  cursor: default;
-}
-
-.home-intro.is-gate .home-intro__start {
-  animation: home-intro-enter 0.85s ease both;
-}
-
-/* Dopo START: SCROLL più leggibile sul primo viewport */
-body.home-intro-landed .home-hero__scroll {
-  animation: home-scroll-cue 1.4s ease 0.35s 2 both;
-}
-
-@keyframes home-scroll-cue {
-  0%,
-  100% {
-    opacity: 0.7;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(-4px);
-  }
 }
 
 /* Cookie — chip pill come ambient-audio (basso sinistra) */
@@ -3004,16 +2720,7 @@ body.home-intro-landed .home-hero__scroll {
   pointer-events: none;
 }
 
-body.home-intro-active .cookie-banner {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Scelta obbligatoria nel gate: la modale deve stare sopra l'overlay
-   dell'intro (z-index 400) e sopra il pulsante Skip (410).
-   Vale desktop e mobile: stessa procedura di apparizione. */
-body.cookie-consent-pending .cookie-banner,
-body.home-intro-active.cookie-consent-pending .cookie-banner {
+body.cookie-consent-pending .cookie-banner {
   z-index: 420;
   opacity: 1;
   pointer-events: auto;
@@ -3386,26 +3093,6 @@ body.home-intro-active.cookie-consent-pending .cookie-banner {
   .cookie-banner__chip.is-catching {
     animation: none;
   }
-}
-
-@keyframes home-intro-enter {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-.home-intro__progress {
-  margin: 0;
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  color: var(--color-primary);
-  opacity: 0.55;
 }
 
 .home-hero__progress {
@@ -4054,10 +3741,6 @@ body.home-flow-complete .home-hero__scroll {
 
   .home-hero__sticky {
     transition: none;
-  }
-
-  .home-intro {
-    transition-duration: 0.01ms;
   }
 
   .home-hero-claim__trigger {
@@ -7698,7 +7381,7 @@ body.page-history > .site-footer {
 }
 
 .legal__section a {
-  color: var(--color-primary);
+  color: var(--color-link);
   text-decoration: underline;
   text-underline-offset: 0.12em;
 }

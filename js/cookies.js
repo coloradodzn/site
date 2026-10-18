@@ -160,7 +160,6 @@
     panel.hidden = !open;
     chip.setAttribute('aria-expanded', String(open));
     document.body.classList.toggle('cookie-banner-open', open);
-    // prima scelta in corso: la modale sta sopra l'intro e il gate resta bloccato
     document.body.classList.toggle('cookie-consent-pending', open && center);
 
     if (open) {
@@ -244,40 +243,12 @@
   function settleCookies(choice) {
     persistChoice(choice);
     syncChoiceUi();
-    // il gate dell'intro si sblocca solo a pannello richiuso
     collapseIntoChip(() => {
       document.dispatchEvent(new CustomEvent('colorado:cookies-settled', { detail: { choice } }));
     });
     document.dispatchEvent(new CustomEvent(
       choice === 'accepted' ? 'colorado:cookies-accepted' : 'colorado:cookies-rejected'
     ));
-  }
-
-  /**
-   * Sulla home la modale entra nel gate dell'intro: dopo la sigla e prima
-   * che compaia il bottone di ingresso.
-   */
-  function maybeShowAfterIntro(banner, signal) {
-    const intro = document.getElementById('home-intro');
-    const introRunning = document.body.classList.contains('home-intro-active');
-    const gateReady = intro?.classList.contains('is-gate');
-
-    // Stessa procedura desktop/mobile: dopo la sigla (gate), oppure subito se non c’è intro
-    if (!introRunning || gateReady) {
-      showChip(banner);
-      return;
-    }
-
-    let shown = false;
-    const reveal = () => {
-      if (shown) return;
-      shown = true;
-      showChip(banner);
-    };
-
-    document.addEventListener('colorado:intro-gate', reveal, { once: true, signal });
-    // rete di sicurezza: intro chiusa senza passare dal gate
-    document.addEventListener('colorado:intro-dismissed', reveal, { once: true, signal });
   }
 
   function initCookieBanner() {
@@ -314,7 +285,7 @@
       if (panel && !panel.hidden) setPanelOpen(false);
     }, { signal });
 
-    maybeShowAfterIntro(banner, signal);
+    showChip(banner);
   }
 
   window.coloradoHasAcceptedCookies = hasAcceptedCookies;

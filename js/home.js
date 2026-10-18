@@ -864,7 +864,6 @@ function initWorkCardNavigation(signal) {
   if (!scene) return;
 
   scene.addEventListener('click', (event) => {
-    if (document.body.classList.contains('home-intro-active')) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const card = getCardAtPoint(event.clientX, event.clientY);

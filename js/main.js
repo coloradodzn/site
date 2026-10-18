@@ -15,7 +15,6 @@
   document.head.appendChild(map);
 })();
 
-// ── SESSIONE SITO (navigazione interna → niente intro in home) ──
 (function loadColoradoNav() {
   if (document.querySelector('script[data-colorado-nav]')) return;
   const script = document.createElement('script');
@@ -26,11 +25,7 @@
 
 function markSiteSession() {
   try {
-    const onHome = document.body.classList.contains('home');
-    const introPending = document.body.classList.contains('home-intro-active');
-    if (!onHome || !introPending) {
-      sessionStorage.setItem('colorado_session', '1');
-    }
+    sessionStorage.setItem('colorado_session', '1');
   } catch (err) {
     /* storage blocked */
   }

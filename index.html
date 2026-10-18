@@ -8,6 +8,8 @@
   <link rel="apple-touch-icon" href="img/Colorado180.svg" sizes="180x180">
   <title data-i18n="title.home">Colorado Design — Creative Studio</title>
   <meta name="description" content="Colorado Design — Direttore creativo che permea arte e design. Progetti multidisciplinari con visione ecosostenibile: natura al primo posto, impatto sociale concreto." data-i18n-content="desc.home">
+  <link rel="canonical" href="https://www.coloradodesign.it/">
+  <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Colorado Design">
   <meta property="og:title" content="Colorado Design — Creative Studio">
@@ -15,49 +17,40 @@
   <meta property="og:url" content="https://www.coloradodesign.it/">
   <meta property="og:image" content="https://www.coloradodesign.it/img/mainback.jpg">
   <meta property="og:locale" content="it_IT">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Colorado Design — Creative Studio">
+  <meta name="twitter:description" content="Colorado Design — Direttore creativo che permea arte e design. Progetti multidisciplinari con visione ecosostenibile: natura al primo posto, impatto sociale concreto.">
+  <meta name="twitter:image" content="https://www.coloradodesign.it/img/mainback.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Colorado Design",
+    "url": "https://www.coloradodesign.it",
+    "logo": "https://www.coloradodesign.it/img/Colorado192.svg",
+    "email": "info.coloradodesign@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Rome",
+      "addressCountry": "IT"
+    },
+    "sameAs": [
+      "https://www.instagram.com/colorado.design/",
+      "https://www.behance.net/coloradodzn",
+      "https://www.linkedin.com/in/colorado-design-977297308/"
+    ]
+  }
+  </script>
   <script src="js/seo.js"></script>
 </head>
 <body class="home">
-<script>
-(function () {
-  var SESSION_KEY = 'colorado_session';
-  var INTRO_KEY = 'colorado_intro_seen';
 
-  function isInternalHomeVisit() {
-    try {
-      if (sessionStorage.getItem(SESSION_KEY) === '1') return true;
-      var ref = document.referrer;
-      if (!ref) return false;
-      return new URL(ref).origin === window.location.origin;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  var forceIntro = false;
-  try {
-    forceIntro = new URLSearchParams(window.location.search).get('intro') === '1';
-  } catch (e) {}
-
-  var show = true;
-  try {
-    if (forceIntro) {
-      localStorage.removeItem(INTRO_KEY);
-      sessionStorage.removeItem(SESSION_KEY);
-    } else if (localStorage.getItem(INTRO_KEY) === '1') {
-      show = false;
-    }
-  } catch (e) {}
-  if (!forceIntro && isInternalHomeVisit()) show = false;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) show = false;
-  if (show) document.body.classList.add('home-intro-active');
-})();
-</script>
+  <a class="skip-link" href="#main-content" data-i18n="a11y.skip">Vai al contenuto</a>
 
   <header class="site-header">
     <nav class="navbar" aria-label="Navigazione principale" data-i18n-aria-label="a11y.mainNav">
@@ -108,7 +101,7 @@
     </nav>
   </header>
 
-  <main class="home-main">
+  <main id="main-content" class="home-main">
     <section class="home-hero" id="home-hero" data-card-count="4" aria-labelledby="home-hero-title">
       <h1 id="home-hero-title" class="visually-hidden" data-i18n="home.hero.title">Colorado — Creative Direction</h1>
 
@@ -228,32 +221,9 @@
     </section>
   </main>
 
-  <div class="home-intro" id="home-intro" role="dialog" aria-modal="true" aria-labelledby="home-intro-start" aria-hidden="true">
-    <div class="home-intro__scrim" aria-hidden="true"></div>
-
-    <div class="home-intro__video-wrap" id="home-intro-video-wrap">
-      <video class="home-intro__video" id="home-intro-video" playsinline preload="auto" aria-label="Sigla Colorado Design">
-        <source src="img/intro.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="home-intro__gate" id="home-intro-gate">
-      <div class="home-intro__inner">
-        <button type="button" class="home-intro__start" id="home-intro-start" aria-labelledby="home-intro-start-label">
-          <img class="home-intro__start-img" src="img/button.png" alt="" width="2528" height="1686" decoding="async">
-          <span class="visually-hidden" id="home-intro-start-label" data-i18n="home.intro.start">Welcome to Colorful Colorado</span>
-        </button>
-      </div>
-    </div>
-
-    <button type="button" class="home-intro__play" id="home-intro-play" data-i18n="home.intro.play">Riproduci con audio</button>
-    <button type="button" class="home-intro__skip" id="home-intro-skip" data-i18n="home.intro.skip">Skip</button>
-  </div>
-
   <script src="js/main.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/audio.js"></script>
-  <script src="js/intro.js"></script>
   <script src="js/home.js"></script>
 </body>
 </html>

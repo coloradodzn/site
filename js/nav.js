@@ -106,26 +106,7 @@
 
   function applyHomeBodyState() {
     if (!document.body.classList.contains('home')) return;
-
-    document.body.classList.remove('home-intro-active', 'home-intro-sigla', 'home-flow-complete');
-
-    let showIntro = true;
-    try {
-      if (localStorage.getItem('colorado_intro_seen') === '1') showIntro = false;
-      if (sessionStorage.getItem('colorado_session') === '1') showIntro = false;
-    } catch (err) {
-      /* storage blocked */
-    }
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) showIntro = false;
-    if (showIntro) document.body.classList.add('home-intro-active');
-
-    const intro = document.getElementById('home-intro');
-    if (intro && !showIntro) {
-      intro.classList.add('is-hidden');
-      intro.classList.remove('is-playing', 'is-gate');
-      intro.setAttribute('aria-hidden', 'true');
-    }
+    document.body.classList.remove('home-flow-complete');
   }
 
   async function navigateTo(href, push = true) {

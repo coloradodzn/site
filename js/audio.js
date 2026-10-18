@@ -319,7 +319,6 @@
       removeGestureListeners();
       return;
     }
-    if (introBlocksAmbient()) return;
 
     unlocked = true;
     try {
@@ -336,28 +335,12 @@
     document.removeEventListener('keydown', onUserGesture);
   }
 
-  function tryResumeAfterIntro() {
-    if (!document.body.classList.contains('home')) return;
-    if (introBlocksAmbient()) return;
-
-    let introSeen = false;
-    try {
-      introSeen = localStorage.getItem('colorado_intro_seen') === '1';
-    } catch (err) {
-      /* storage blocked */
-    }
-
-    if (!introSeen) return;
-
+  function tryResumeSession() {
     const session = loadSession();
     if (session && session.playing && !isMuted) {
       unlocked = true;
       playAmbient({ resume: true });
     }
-  }
-
-  function introBlocksAmbient() {
-    return document.body.classList.contains('home-intro-active');
   }
 
   function initPlaybackState() {
@@ -373,8 +356,6 @@
       audio.currentTime = sessionPlaybackTime(session);
       resumePlayback = !!(session.playing && !isMuted);
     }
-
-    if (introBlocksAmbient()) return;
 
     if (session && session.playing && !isMuted) {
       unlocked = true;
@@ -507,27 +488,6 @@
   window.addEventListener('beforeunload', saveSession);
   window.addEventListener('pagehide', saveSession);
 
-  function unlockAndStartAmbient() {
-    if (isPlaying && !isMuted) return;
-
-    unlocked = true;
-    try {
-      sessionStorage.setItem(STORAGE_UNLOCKED, '1');
-    } catch (err) {
-      /* storage blocked */
-    }
-    removeGestureListeners();
-    if (!isMuted) playAmbient();
-  }
-
-  /* Parte solo a fine sigla (o skip), non durante il video e non al click Welcome. */
-  document.addEventListener('colorado:intro-gate', unlockAndStartAmbient);
-
-  document.addEventListener('colorado:intro-dismissed', () => {
-    /* Se l’intro è già stata saltata senza gate (edge case), sblocca comunque. */
-    if (!unlocked) unlockAndStartAmbient();
-  });
-
   document.addEventListener('pointerdown', onUserGesture);
   document.addEventListener('keydown', onUserGesture);
 
@@ -536,7 +496,7 @@
   mediaObserver.observe(document.body, { childList: true, subtree: true });
 
   initPlaybackState();
-  tryResumeAfterIntro();
+  tryResumeSession();
   updateUi();
 
   /* Non chiamare i18nApply qui: sovrascriverebbe la lingua scelta dall'utente. */
